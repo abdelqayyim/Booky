@@ -1,73 +1,140 @@
-import React, { useState } from 'react'; 
-import Button from '@mui/material/Button';
-import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material'; // Burger and close icons
+import React from 'react'; 
+import Header from './Header';
+import { LOGIN_SVG } from './constants';
 
 const LandingPage = (props) => {
-  // State to manage the mobile menu modal visibility
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Toggle the modal visibility
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
-  // Close modal when clicking outside
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <div>
-      <header className="bg-white shadow">
-        <nav className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Booky</h1>
+      <Header/>
+      <main className='flex flex-col items-center gap-10'>
+            {/* Intro Section */}
+              <section className='max-w-[1200px] grid grid-cols-1 md:grid-cols-2 gap-8 h-[70vh] mt-[80px] px-6'>
+                <div className=''>
+                    <h1 className="w-full font-bold text-left mb-5 text-transparent bg-gradient-to-r from-[#3A0CA3] via-pink-500 to-red-500 bg-clip-text text-[clamp(2rem,6vw,4rem)] leading-tight">
+                        Smart Booking for Modern Services
+                    </h1>
 
-          {/* Mobile Burger Icon */}
-          <div className="lg:hidden" onClick={toggleModal}>
-            {isModalOpen ? <CloseIcon /> : <MenuIcon />} {/* Toggle burger icon to close icon */}
-          </div>
+                    <p className='text-xl'>Streamline your barbershop business with our easy-to-use platform. Accept bookings 24/7,
+                        manage your schedule, and grow your client base - all in one place.
+                    </p>
+                      
+                    {/* Buttons */}
+                    <div className='mt-5 flex flex-row gap-3'> 
+                        <button className='w-fit font-bold text-[20px] border border-[#3A0CA3] rounded-[10px] px-5 py-2 bg-[#3A0CA3] text-white transition duration-300 ease-in-out transform hover:-translate-y-[2px] hover:shadow-lg'>Signup</button>
+                        <button className='w-fit font-bold text-[20px] border border-[#3A0CA3] rounded-[10px] px-5 py-2 text-[#3A0CA3] transition duration-300 ease-in-out transform hover:-translate-y-[2px] hover:shadow-lg'>Login</button>
+                    </div>
+                    
+                  </div>
+                  
+                  {/* Image */}
+  <div className="flex justify-center">
+    <img
+      src="/your-image-path.jpg" // Replace with your image path
+      alt="Booking Illustration"
+      className="max-w-full h-auto rounded-xl shadow-lg"
+    />
+  </div>
+                
+              </section>
+            
+              {/* Types of Services Section */}
+              <section className='px-6 pb-6 pt-0 flex flex-col items-center'>
+                  <h1 className='text-center text-[clamp(2rem,6vw,4rem)] mb-5 font-bold text-left leading-[30px]'>Easy way to access services</h1>
+                  <p className='text-xl text-center'>Our platform is designed to make service booking simple and efficient for both service providers and customers.</p>
+                  <div className='mt-10 flex flex-wrap flex-row gap-y-4 justify-between w-full max-w-[1200px] m-0 p-0'>
+                      
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>  
+                         
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>  
 
-          {/* Desktop Navigation (visible only on large screens) */}
-          <ul className="hidden lg:flex gap-4">
-            <Button variant="contained" className="bg-black-50">Sign Up</Button>
-            <Button variant="contained">Contact</Button>
-          </ul>
-        </nav>
-      </header>
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>  
+                         
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>  
 
-      {/* Mobile Side Modal (Drawer) */}
-      <div
-        className={`fixed top-0 right-0 w-64 h-full bg-white shadow-lg transform ${isModalOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out z-50`}
-      >
-        {/* Close Modal Button */}
-        <div className="p-4 flex justify-end">
-          <CloseIcon className="cursor-pointer" onClick={closeModal} />
-        </div>
-        
-        {/* Menu Items */}
-        <div className="flex flex-col items-center gap-4 mt-10">
-          <Button variant="contained" className="bg-black-50">Sign Up</Button>
-          <Button variant="contained">Contact</Button>
-        </div>
-      </div>
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>  
+                         
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>  
 
-      {/* Overlay behind modal */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black opacity-50 z-40"
-          onClick={closeModal}
-        />
-      )}
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>  
+                         
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>
 
-      <main>
-        {/* Intro Section */}
-        {/* Types of Services Section */}
-        <section className="bg-red-100">
-          <div className="ml-4 flex flex-row gap-2.5 justify-center">
-            <Button variant="contained">Specialist</Button>
-            <Button variant="contained">Client</Button>
-          </div>
-        </section>
+                      <div className="bg-white rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-[1.02]
+                                        w-full sm:w-[360px] md:w-[360px] lg:w-[360px]
+                                        min-w-[360px]
+                                        h-auto sm:h-auto md:h-auto lg:h-auto
+                                        ">
+                        {LOGIN_SVG}
+                        <h3 className='text-[2.5rem] font-bold mb-3 mt-3 text'>Instant Booking</h3>
+                        <p className='text-xl'>Customers can book appointments in seconds with our streamlined booking process and QR code scanning.</p>
+                      </div>  
+                    
+                  </div>
+              </section>
       </main>
 
       <footer className="bg-gray-800 text-white py-6 mt-10 text-center">
