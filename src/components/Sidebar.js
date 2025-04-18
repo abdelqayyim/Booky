@@ -2,8 +2,7 @@ import React, { useState, useRef } from "react";
 // import { useDispatch } from "react-redux";
 // import { Link } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
-import { CALENDAR_SVG, DAHSBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
-import { Dashboard } from "@mui/icons-material";
+import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DAHSBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
 // import { setCurrentForm, setPageNotFound, FORMS } from "../redux/dataSlice";
 
 const Sidebar = () => {
@@ -22,21 +21,21 @@ const Sidebar = () => {
   };
 
   const toggleSideBar = () => {
-    setSidebarOpen((prev) => !prev);
     const side = sidebar.current;
-    // const toggle = toggleBtn.current;
-
+    
+    // If the sidebar is currently open and is now closing
+    if (sideBarOpen) {
+      Array.from(side.querySelectorAll("li.open")).forEach((li) => {
+        li.classList.remove("open");
+      });
+    }
+  
+    setSidebarOpen((prev) => !prev);
+  
     side.classList.toggle("w-60");
     side.classList.toggle("w-16");
-
-    if (!sideBarOpen) {
-        Array.from(side.querySelectorAll("li.open")).forEach((li) => {
-          li.classList.remove("open");
-          const toggleBtn = li.querySelector("button");
-          toggleBtn?.classList.remove("rotate-180");
-        });
-      }
   };
+  
 
   const sidebarItems = [
     {
@@ -81,28 +80,18 @@ const Sidebar = () => {
       },
       {
         label: "Reviews",
-        icon: REVIEWS_SVG,
+          icon: (<div className="text-white">{ REVIEWS_SVG}</div>),
         to: "/",
         onClick: () => {
           // dispatch(setPageNotFound(false));
         },
       },
-      {
-        label: "Notifications",
-        icon:NOTIFICATIONS_SVG,
-        to: "/",
-        onClick: () => {
+      { label: "Notifications", icon:NOTIFICATIONS_SVG, to: "/", onClick: () => {// dispatch(setPageNotFound(false));
+},},
+      { label: "Monetization", icon: MONETIZATION_SVG, to: "/", onClick: () => {
           // dispatch(setPageNotFound(false));
         },
-      },
-      {
-        label: "Monetization",
-        icon: MONETIZATION_SVG,
-        to: "/",
-        onClick: () => {
-          // dispatch(setPageNotFound(false));
-        },
-      },
+    },
       {
         label: "Reports",
         icon: REPORTS_SVG,
@@ -154,16 +143,9 @@ const Sidebar = () => {
               onClick={toggleSideBar}
               className="ml-auto p-2 rounded hover:bg-[#222533]"
             >
-                          <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    width="24"
-                    fill="#5f6368"
-                    className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}
-                    >
-                    <path d="M9 19 3 12l6-7 1.41 1.41L6.83 11H21v2H6.83l3.58 3.59L9 19z" />
-                    </svg>
-
+              <div className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}>
+              {SIDEBAR_ARROW_SVG}
+              </div>
             </button>
           </Tooltip>
         </li>
@@ -177,8 +159,7 @@ const Sidebar = () => {
             >
               {item.icon}
                 <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>
-                {item.subItems && <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#5f6368" className="transition-transform duration-200"> <path d="M7 10l5 5 5-5H7z" /></svg>}
-              
+                {item?.subItems && sideBarOpen && <div> <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor" className="transition-transform duration-200 group-[.open]:rotate-180"> <path d="M7 10l5 5 5-5H7z" /></svg> </div>}
             </button>
           </Tooltip>
         
