@@ -1,6 +1,5 @@
 import React, {Fragment, useState} from 'react'; 
 import Button from '@mui/material/Button';
-import NavigationIcon from '@mui/icons-material/Navigation';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material'; // Burger and close icons
 import { HOW_IT_WORKS_SVG, PRICING_SVG, LOGIN_SVG, SUPPORT_SVG, SINGUP_SVG } from './constants';
 const Header = (props) => {
