@@ -5,11 +5,11 @@ import Navbar from './Navbar';
 
 const HomePageLayout = (props)=>{
     return (
-        <div className='h-screen w-full flex flex-row'>
+        <div className='h-screen w-full flex flex-row p-[5px]'>
             {/* Sidebar */}
             <Sidebar/>
             {/* <div className='h-full bg-red-200'>Sidebar</div> */}
-            <main className='flex flex-col flex-1 bg-purple-400'>
+            <main className='flex flex-col flex-1'>
                 {/* NavBar */}
                 <Navbar/>
                 {/* FormsContainer */}

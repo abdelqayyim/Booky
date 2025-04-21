@@ -34,8 +34,7 @@ const HomePage = (props) => {
     ]
     const StatCard = ({card}) => {
         return (
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-[20px] mb-[25px]">
-                <div className='bg-white w-fit rounded-[10px] p-[20px] shadow-[0_2px_5px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0px_5px_15px_rgba(0,0,0,0.1)]'>
+            <div className='bg-white sm:w-fit w-[350px] rounded-[10px] p-[20px] shadow-[0_2px_5px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0px_5px_15px_rgba(0,0,0,0.1)]'>
                     <div className="flex justify-between items-center mb-[15px]">
                         <div className='text-[var(--secondary)] text-[14px] font-semibold'>
                             { card.title}
@@ -49,33 +48,18 @@ const HomePage = (props) => {
                         <div>{METRICS_UP_SVG}</div><span>{ card.metric}</span>
                     </div>
                 </div>
-            </div>
         )
     }
     return (
-        <div className='bg-orange-200 h-full p-[25px]'>
+        <div className='h-full p-[25px] bg-transparent'>
             {/* Page Title and Filter */}
-            <div className='mb-[20px] bg-blue-200'>
-                <h1 className='text-[24px] font-bold'>Dashboard</h1>
+            <div className='mb-[10px]'>
+                <h1 className='text-[45px] font-bold'>Dashboard</h1>
                 <button></button>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-[20px] mb-[25px]">
-                {/* <div className='bg-white w-fit rounded-[10px] p-[20px] shadow-[0_2px_5px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0px_5px_15px_rgba(0,0,0,0.1)]'>
-                    <div className="flex justify-between items-center mb-[15px]">
-                        <div className='text-[var(--secondary)] text-[14px]'>
-                            Total Bookings
-                        </div>
-                        <div className="bg-[rgba(79,70,229,0.1)] text-[var(--primary)]">
-
-                        </div>
-                    </div>
-                    <div className='text-[24px] font-bold mb-[5px]'>8,492</div>
-                    <div className='text-[var(--success)] flex flex-row gap-[5px]'>
-                        <div>arrow</div><span>12.5% from last month</span>
-                    </div>
-                </div> */}
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-[20px] mb-[15px] justify-items-center">
                 {stats.map((card) => <StatCard card={ card} />)}
             </div>
         </div>

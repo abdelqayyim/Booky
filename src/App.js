@@ -9,7 +9,7 @@ import HomePage from './pages/HomePage';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100 text-gray-800">
+      <div className="min-h-screen bg-[#f9fafb] text-gray-800">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path='/home' element={<HomePageLayout />} >

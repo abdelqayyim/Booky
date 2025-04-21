@@ -55,7 +55,7 @@ const Sidebar = () => {
         },
       },
       {
-        label: "Provides",
+        label: "Providers",
         icon: STOREFRONT_SVG,
         to: "/",
         onClick: () => {
@@ -132,7 +132,7 @@ const Sidebar = () => {
   return (
     <nav
       ref={sidebar}
-      className="w-16 h-screen bg-[#11121a] border-r border-[#42434a] text-[#e6e6ef] transition-all duration-300 overflow-hidden sticky top-0"
+      className="hidden sm:block w-16 mr-[5px] rounded h-full bg-[var(--dark)] border-r border-none text-black transition-all duration-300 overflow-hidden sticky top-0"
     >
       <ul className="list-none p-2 space-y-2">
         <li className="flex items-center justify-end mb-4">
@@ -141,7 +141,7 @@ const Sidebar = () => {
             <button
               ref={toggleBtn}
               onClick={toggleSideBar}
-              className="ml-auto p-2 rounded hover:bg-[#222533]"
+              className="ml-auto p-3 rounded hover:bg-[#4f46e5] hover:text-white text-white"
             >
               <div className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}>
               {SIDEBAR_ARROW_SVG}
@@ -155,7 +155,7 @@ const Sidebar = () => {
           <Tooltip title={sideBarOpen ? "" : item.label} placement="right">
             <button
               onClick={toggleSubMenu}
-              className="flex items-center gap-3 w-full p-3 rounded hover:bg-[#222533] text-left"
+              className="flex items-center gap-3 w-full p-3 rounded hover:bg-[#4f46e5] hover:text-white text-white text-left"
             >
               {item.icon}
                 <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>
@@ -170,7 +170,7 @@ const Sidebar = () => {
                   <a
                     href="#"
                     onClick={subItem.onClick}
-                    className="block p-3 pl-10 hover:bg-[#222533] rounded"
+                    className="block p-3 pl-10 hover:bg-[#4f46e5] hover:text-white text-white  rounded"
                   >
                     {subItem.label}
                   </a>
