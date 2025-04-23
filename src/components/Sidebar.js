@@ -1,12 +1,16 @@
 import React, { useState, useRef } from "react";
-// import { useDispatch } from "react-redux";
-// import { Link } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
 import ThemeToggle from "./ThemeToggle";
+import { useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
-//   const dispatch = useDispatch();
+  const location = useLocation();
+   // Remove the leading slash
+   const currentPath = location.pathname.startsWith('/')
+   ? location.pathname.slice(1)
+   : location.pathname;
+ 
   const sidebar = useRef();
   const toggleBtn = useRef();
   const [sideBarOpen, setSidebarOpen] = useState(false);
@@ -158,8 +162,11 @@ const Sidebar = () => {
           <li key={index} className="group">
           <Tooltip title={sideBarOpen ? "" : item.label} placement="right">
             <button
-              onClick={toggleSubMenu}
-              className="flex items-center gap-3 w-full p-3 rounded hover:bg-[#4f46e5] hover:text-white text-white text-left"
+                onClick={toggleSubMenu}
+                className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[#4f46e5] 
+                            hover:text-white text-white text-left ${currentPath === item.label.toLowerCase()? "bg-[#4f46e5]":""}
+                            
+                            `}
             >
               {item.icon}
                 <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>

@@ -4,6 +4,7 @@ import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import SendIcon from '@mui/icons-material/Send';
 import Overlay from "../components/Overlay";
 import SearchBar from '../components/Searchbar';
+import ThemeToggle from '../components/ThemeToggle';
 const Navbar = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,70 +28,80 @@ const Navbar = (props) => {
     {
       text: "Dashboard",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: DASHBOARD_SVG,
       onClick: () => { }
     },
     {
       text: "Users",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: USERS_SVG,
       onClick: () => { }
     },
     {
       text: "Providers",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: STOREFRONT_SVG,
       onClick: () => { }
     },
     {
       text: "Appointments",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: CALENDAR_SVG,
       onClick: () => { }
     },
     {
       text: "Disputes",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: DISPUTES_SVG,
       onClick: () => { }
     },
     {
       text: "Reviews",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: REVIEWS_SVG,
       onClick: () => { }
     },
     {
       text: "Notifications",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: NOTIFICATIONS_SVG,
       onClick: () => { }
     },
     {
       text: "Monetization",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: MONETIZATION_SVG,
       onClick: () => { }
     },
     {
       text: "Reports",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: REPORTS_SVG,
       onClick: () => { }
     },
     {
       text: "Settings",
       icon: CHECKMARK_SVG,
-      backgroundColor: "white",
+      backgroundColor: "transparent",
+      textColor: "white",
       logo: SETTINGS_SVG,
       onClick: () => { }
     },
@@ -116,11 +127,15 @@ const Navbar = (props) => {
         {/* Menu Drop Down */}
         {/* Dropdown Overlay */}
         <Overlay isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <div className={`bg-white flex flex-col rounded-r-2xl fixed top-0 left-0 w-64 h-full shadow-lg transform transition-all duration-500 ease-out z-50
-                          ${isModalOpen ? 'translate-x-0 opacity-100 shadow-[4px_0_10px_rgba(0,0,0,0.15)]' : '-translate-x-full opacity-0'}`}>
-            {/* Close btn */}
-            <div className='w-full mt-2 flex flex-row justify-end' onClick={() => { setIsModalOpen(false) }}> <div className="mr-3 bg-[var(--secondary)] text-white w-[40px] h-[40px] flex flex-col items-center justify-center rounded m-0"><CloseIcon /></div> </div>
-            <div className='flex-1 my-[10px] overflow-y-scroll flex flex-col gap-[5px]'>{mobileSidebarBtns.map((btn) => foldedNarbarBtn(btn))}</div>
+          <div className={`bg-[var(--dark)] flex flex-col rounded-r-2xl fixed top-0 left-0 w-64 h-full shadow-lg transform transition-all duration-500 ease-out z-50
+                          ${isModalOpen ? 'translate-x-0 opacity-100 shadow-[4px_0_10px_rgba(0,0,0,0.15)]' : '-translate-x-full opacity-0'} justify-between`}>
+            <div>
+              {/* Close btn */}
+              <div className='w-full mt-2 flex flex-row justify-end' onClick={() => { setIsModalOpen(false) }}> <div className="mr-3 bg-[var(--secondary)] text-white w-[40px] h-[40px] flex flex-col items-center justify-center rounded m-0"><CloseIcon /></div> </div>
+              <div className='flex-1 my-[10px] overflow-y-scroll flex flex-col gap-[5px]'>{mobileSidebarBtns.map((btn) => foldedNarbarBtn(btn))}</div>
+            </div>
+           
+            <ThemeToggle/>
           </div>
         </Overlay>
         

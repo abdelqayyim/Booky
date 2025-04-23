@@ -1,7 +1,7 @@
 import React from 'react'; 
 import { CHECKED_CALENDAR_SVG, METRICS_UP_SVG, ACTIVE_USERS_SVG, STOREFRONT_SVG, DOLLAR_SIGN_SVG } from './constants';
 
-const HomePage = (props) => {
+const DashboardPage = (props) => {
     const stats = [
         {
             title: "Total Bookings",
@@ -59,11 +59,11 @@ const HomePage = (props) => {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-[20px] mb-[15px] justify-items-center">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-[20px] mb-[15px] ">
                 {stats.map((card) => <StatCard card={ card} />)}
             </div>
         </div>
     )
 };
 
-export default HomePage;
+export default DashboardPage;

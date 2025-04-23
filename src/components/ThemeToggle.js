@@ -6,13 +6,13 @@ export default function ThemeToggle() {
 
   const modeBtns = [
     {
-      logo:  LIGHT_MODE_SVG ,
+      logo: DARK_MODE_SVG,
       onClick: ()=>{setIsDark((prev) => !prev)}
     },
     {
-      logo: DARK_MODE_SVG,
+      logo:  LIGHT_MODE_SVG ,
       onClick: ()=>{setIsDark((prev) => !prev)}
-    }
+    },
   ]
 
   return (
@@ -23,7 +23,8 @@ export default function ThemeToggle() {
       {modeBtns.map((btn) => {
         return (
           <div
-            className={`flex flex-col items-center justify-center text-white p-3 w-full transition-transform duration-300 ${isDark ? "-translate-y-[100%]": ""} rounded  hover:bg-[#4f46e5]`}
+            className={`flex flex-col items-center justify-center text-white p-3 w-full transition-transform 
+                      duration-300 ${isDark ? "-translate-y-[100%]" : ""} rounded  md:hover:bg-[#4f46e5]`}
           >
         {   btn.logo}
           </div>
