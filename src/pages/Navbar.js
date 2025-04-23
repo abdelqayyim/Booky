@@ -1,6 +1,7 @@
 import React, {useState} from 'react'; 
-import { ARROW_RIGHT, BELL_SVG, CHECKMARK_SVG, DARK_MODE_SVG, HAMBURGER_MENU_SVG, SEARCH_SVG, SEND_SVG } from './constants';
-import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material'; 
+import { ARROW_RIGHT, BELL_SVG, CALENDAR_SVG, CHECKMARK_SVG, DARK_MODE_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SEARCH_SVG, SEND_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from './constants';
+import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
+import SendIcon from '@mui/icons-material/Send';
 const Navbar = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const SearchBar = () => {
@@ -10,6 +11,102 @@ const Navbar = (props) => {
         <input className='text-[var(--dark)] bg-transparent border-none p-[5px] w-full outline-none' placeholder='Search for users or providers...'/>
       </div>
     )
+  }
+  const mobileSidebarBtns = [
+    {
+      text: "Send Notification",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "var(--primary)",
+      textColor: "white",
+      logo:BELL_SVG , 
+      onClick: () => { }
+    },
+    {
+      text: "Approve Provider",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "var(--success)",
+      textColor: "white",
+      logo: <SendIcon/>,
+      onClick: () => { }
+    },
+    {
+      text: "Dashboard",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: DASHBOARD_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Users",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: USERS_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Providers",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: STOREFRONT_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Appointments",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: CALENDAR_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Disputes",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: DISPUTES_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Reviews",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: REVIEWS_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Notifications",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: NOTIFICATIONS_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Monetization",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: MONETIZATION_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Reports",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: REPORTS_SVG,
+      onClick: () => { }
+    },
+    {
+      text: "Settings",
+      icon: CHECKMARK_SVG,
+      backgroundColor: "white",
+      logo: SETTINGS_SVG,
+      onClick: () => { }
+    },
+  ]
+  const foldedNarbarBtn = (btn) => {
+    return (<div className={`font-bold text-[15px] rounded-md py-2 px-[15px] mx-[10px] flex flex-row items-center`}
+      style={{ backgroundColor: btn.backgroundColor, color: btn.textColor ? btn.textColor : "black " }}>
+      {btn.logo && btn.logo }
+      <div style={{ marginLeft: btn.logo ? "5px" : "0" }}>{btn.text}</div>
+    
+    </div>)
   }
   return (
     <div className='bg-white w-full h-[50px] px-0 py-0 md:px-[25px] md:py-[5px] flex flex-row overflow-x-hidden'>
@@ -24,9 +121,12 @@ const Navbar = (props) => {
         
         {/* Menu Drop Down */}
          {/* Dropdown Overlay */}
-         <div className={`bg-red-200 fixed top-0 left-0 w-64 h-full shadow-lg transform ${isModalOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out z-50`}>
-         <div className='w-full bg-gray-300 flex flex-row justify-end px-[5px]' onClick={()=>{setIsModalOpen(false)}}><CloseIcon/></div>
-</div>
+        <div className={`bg-white flex flex-col rounded-r-2xl fixed top-0 left-0 w-64 h-full shadow-lg transform transition-all duration-500 ease-out z-50
+                        ${isModalOpen ? 'translate-x-0 opacity-100 shadow-[4px_0_10px_rgba(0,0,0,0.15)]' : '-translate-x-full opacity-0'}`}>
+          {/* Close btn */}
+          <div className='w-full mt-2 flex flex-row justify-end' onClick={() => { setIsModalOpen(false) }}> <div className="mr-3 bg-[var(--secondary)] text-white w-[40px] h-[40px] flex flex-col items-center justify-center rounded m-0"><CloseIcon /></div> </div>
+          <div className='flex-1 my-[10px] overflow-y-scroll flex flex-col gap-[5px]'>{mobileSidebarBtns.map((btn) => foldedNarbarBtn(btn))}</div>
+        </div>
 
       </div>
       
