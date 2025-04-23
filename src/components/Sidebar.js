@@ -2,8 +2,7 @@ import React, { useState, useRef } from "react";
 // import { useDispatch } from "react-redux";
 // import { Link } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
-import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DAHSBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
-// import { setCurrentForm, setPageNotFound, FORMS } from "../redux/dataSlice";
+import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
 
 const Sidebar = () => {
 //   const dispatch = useDispatch();
@@ -40,7 +39,7 @@ const Sidebar = () => {
   const sidebarItems = [
     {
       label: "Dashboard",
-      icon: DAHSBOARD_SVG,
+      icon: DASHBOARD_SVG,
       to: "/",
       onClick: () => {
         // dispatch(setPageNotFound(false));
@@ -132,7 +131,10 @@ const Sidebar = () => {
   return (
     <nav
       ref={sidebar}
-      className="hidden sm:block w-16 mr-[5px] rounded h-full bg-[var(--dark)] border-r border-none text-black transition-all duration-300 overflow-hidden sticky top-0"
+      className={`hidden md:block mr-[5px] ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} rounded h-full 
+              bg-[var(--dark)] border-r border-none text-black 
+              transition-all duration-300 overflow-hidden sticky top-0`
+      }
     >
       <ul className="list-none p-2 space-y-2">
         <li className="flex items-center justify-end mb-4">

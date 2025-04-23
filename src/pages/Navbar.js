@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { ARROW_RIGHT, BELL_SVG, CALENDAR_SVG, CHECKMARK_SVG, DARK_MODE_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SEARCH_SVG, SEND_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from './constants';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import SendIcon from '@mui/icons-material/Send';
+import Overlay from "../components/Overlay";
 const Navbar = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const SearchBar = () => {
@@ -120,13 +121,16 @@ const Navbar = (props) => {
         }
         
         {/* Menu Drop Down */}
-         {/* Dropdown Overlay */}
-        <div className={`bg-white flex flex-col rounded-r-2xl fixed top-0 left-0 w-64 h-full shadow-lg transform transition-all duration-500 ease-out z-50
-                        ${isModalOpen ? 'translate-x-0 opacity-100 shadow-[4px_0_10px_rgba(0,0,0,0.15)]' : '-translate-x-full opacity-0'}`}>
-          {/* Close btn */}
-          <div className='w-full mt-2 flex flex-row justify-end' onClick={() => { setIsModalOpen(false) }}> <div className="mr-3 bg-[var(--secondary)] text-white w-[40px] h-[40px] flex flex-col items-center justify-center rounded m-0"><CloseIcon /></div> </div>
-          <div className='flex-1 my-[10px] overflow-y-scroll flex flex-col gap-[5px]'>{mobileSidebarBtns.map((btn) => foldedNarbarBtn(btn))}</div>
-        </div>
+        {/* Dropdown Overlay */}
+        <Overlay isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <div className={`bg-white flex flex-col rounded-r-2xl fixed top-0 left-0 w-64 h-full shadow-lg transform transition-all duration-500 ease-out z-50
+                          ${isModalOpen ? 'translate-x-0 opacity-100 shadow-[4px_0_10px_rgba(0,0,0,0.15)]' : '-translate-x-full opacity-0'}`}>
+            {/* Close btn */}
+            <div className='w-full mt-2 flex flex-row justify-end' onClick={() => { setIsModalOpen(false) }}> <div className="mr-3 bg-[var(--secondary)] text-white w-[40px] h-[40px] flex flex-col items-center justify-center rounded m-0"><CloseIcon /></div> </div>
+            <div className='flex-1 my-[10px] overflow-y-scroll flex flex-col gap-[5px]'>{mobileSidebarBtns.map((btn) => foldedNarbarBtn(btn))}</div>
+          </div>
+        </Overlay>
+        
 
       </div>
       
