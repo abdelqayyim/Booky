@@ -3,6 +3,7 @@ import React, { useState, useRef } from "react";
 // import { Link } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
+import ThemeToggle from "./ThemeToggle";
 
 const Sidebar = () => {
 //   const dispatch = useDispatch();
@@ -132,8 +133,9 @@ const Sidebar = () => {
     <nav
       ref={sidebar}
       className={`hidden md:block mr-[5px] ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} rounded h-full 
-              bg-[var(--dark)] border-r border-none text-black 
+              bg-[var(--dark)] border-r border-none text-black md:flex md:flex-col md:justify-between
               transition-all duration-300 overflow-hidden sticky top-0`
+              
       }
     >
       <ul className="list-none p-2 space-y-2">
@@ -184,6 +186,8 @@ const Sidebar = () => {
         
         ))}
       </ul>
+
+      <ThemeToggle/>
     </nav>
   );
 };
