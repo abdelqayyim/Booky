@@ -3,7 +3,7 @@ import './App.css';
 
 import LandingPage from './pages/LandingPage';
 import NotFound from './pages/NotFound';
-import HomePageLayout from './pages/HomePageLayout';
+import Layout from './pages/Layout';
 import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
 import ProvidersPage from './pages/ProvidersPage';
@@ -17,13 +17,13 @@ import SettingsPages from './pages/SettingsPages';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-[#f9fafb] text-gray-800">
+      <div className="min-h-screen bg-[var(--bg-color)] text-gray-800">
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<LandingPage />} />
 
           {/* Protected Routes (wrapped in shared layout) */}
-          <Route path="/" element={<HomePageLayout />}>
+          <Route path="/" element={<Layout />}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="providers" element={<ProvidersPage />} />

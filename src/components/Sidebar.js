@@ -50,7 +50,7 @@ const Sidebar = () => {
     { label: "Users", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
     { label: "Providers", icon: STOREFRONT_SVG, to: "/", onClick: () => navigate('/providers')},
     { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes')},
-    { label: "Reviews", icon: (<div className="text-white">{ REVIEWS_SVG}</div>), to: "/", onClick: () => navigate('/reviews')},
+    { label: "Reviews", icon:REVIEWS_SVG, to: "/", onClick: () => navigate('/reviews')},
     { label: "Monetization", icon: MONETIZATION_SVG, to: "/", onClick: () => navigate('/monetization')},
     {label: "Reports", icon: REPORTS_SVG, to: "/", onClick: () => navigate('/reports')},
     { label: "Settings", icon:SETTINGS_SVG, subItems: [
@@ -90,7 +90,7 @@ const Sidebar = () => {
     <nav
   ref={sidebar}
   className={`hidden md:block mr-[5px] ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} 
-      rounded h-full bg-[var(--dark)] border-r border-none text-black md:flex md:flex-col
+      rounded h-full bg-[var(--component-primary)] border-r border-none md:flex md:flex-col
       transition-all duration-300 sticky top-0 overflow-y-auto`}
 >
   <div className="flex flex-col justify-between h-full">
@@ -103,7 +103,7 @@ const Sidebar = () => {
           <button
             ref={toggleBtn}
             onClick={toggleSideBar}
-            className="ml-auto p-3 rounded hover:bg-[#4f46e5] hover:text-white text-white"
+            className="ml-auto p-3 rounded hover:bg-[var(--primary-hover)] hover:text-[var(--text-primary] text-[var(--text-primary)]"
           >
             <div className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}>
               {SIDEBAR_ARROW_SVG}
@@ -122,8 +122,8 @@ const Sidebar = () => {
                     item.onClick?.();
                   }
                 }}
-                className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[#4f46e5] 
-                            hover:text-white text-white text-left ${currentPath === item.label.toLowerCase()? "bg-[#4f46e5]":""}
+                className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[var(--primary-hover)]
+                            hover:text-[var(--text-primary)] text-[var(--text-primary)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}
                             
                             `}
             >
@@ -140,7 +140,7 @@ const Sidebar = () => {
                   <a
                     href="#"
                     onClick={subItem.onClick}
-                    className="block p-3 pl-10 hover:bg-[#4f46e5] hover:text-white text-white  rounded"
+                    className="block p-3 pl-10 hover:bg-[var(--primary)] hover:text-[var(--text-primary)] text-[var(--text-primary)]  rounded"
                   >
                     {subItem.label}
                   </a>

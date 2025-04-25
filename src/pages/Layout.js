@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
-const HomePageLayout = (props) => {
+const Layout = (props) => {
   return (
     <div className="h-screen w-full flex flex-row p-[5px]">
       {/* Sidebar */}
@@ -21,4 +21,4 @@ const HomePageLayout = (props) => {
   );
 };
 
-export default HomePageLayout;
+export default Layout;

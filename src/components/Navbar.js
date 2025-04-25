@@ -31,7 +31,7 @@ const Navbar = (props) => {
       text: "Send Notification",
       icon: CHECKMARK_SVG,
       backgroundColor: "var(--primary)",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: BELL_SVG,
       onClick: () => navigate('/dashboard'),
     },
@@ -39,7 +39,7 @@ const Navbar = (props) => {
       text: "Approve Provider",
       icon: CHECKMARK_SVG,
       backgroundColor: "var(--success)",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: <SendIcon />,
       onClick: () => navigate('/providers'),
     },
@@ -47,7 +47,7 @@ const Navbar = (props) => {
       text: "Dashboard",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: DASHBOARD_SVG,
       onClick: () => navigate('/dashboard'),
     },
@@ -55,7 +55,7 @@ const Navbar = (props) => {
       text: "Users",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: USERS_SVG,
       onClick: () => navigate('/users'),
     },
@@ -63,7 +63,7 @@ const Navbar = (props) => {
       text: "Providers",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: STOREFRONT_SVG,
       onClick: () => navigate('/providers'),
     },
@@ -71,7 +71,7 @@ const Navbar = (props) => {
       text: "Appointments",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: CALENDAR_SVG,
       onClick: () => navigate('/appointments'),
     },
@@ -79,7 +79,7 @@ const Navbar = (props) => {
       text: "Disputes",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: DISPUTES_SVG,
       onClick: () => navigate('/disputes'),
     },
@@ -87,7 +87,7 @@ const Navbar = (props) => {
       text: "Reviews",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: REVIEWS_SVG,
       onClick: () => navigate('/reviews'),
     },
@@ -95,7 +95,7 @@ const Navbar = (props) => {
       text: "Notifications",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: NOTIFICATIONS_SVG,
       onClick: () => navigate('/notifications'),
     },
@@ -103,7 +103,7 @@ const Navbar = (props) => {
       text: "Monetization",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: MONETIZATION_SVG,
       onClick: () => navigate('/monetization'),
     },
@@ -111,7 +111,7 @@ const Navbar = (props) => {
       text: "Reports",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: REPORTS_SVG,
       onClick: () => navigate('/reports'),
     },
@@ -119,7 +119,7 @@ const Navbar = (props) => {
       text: "Settings",
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
-      textColor: "white",
+      textColor: "var(--text-opposite-primary)",
       logo: SETTINGS_SVG,
       onClick: () => navigate('/dashboard'),
     },
@@ -141,18 +141,18 @@ const Navbar = (props) => {
     );
   };
   return (
-    <div className="bg-white w-full h-[50px] px-0 py-0 md:px-[25px] md:py-[5px] flex flex-row overflow-x-hidden">
+    <div className="bg-[var(--component-primary)] w-full h-[50px] px-0 py-0 md:px-[25px] md:py-[5px] flex flex-row overflow-x-hidden rounded">
       <div className="flex flex-row items-center justify-between md:hidden w-full z-50 relative">
         {/* For Mobile View */}
         <div
-          className="h-full w-[50px] mr-[5px] flex flex-col items-center justify-center"
+          className="h-full w-[50px] mr-[5px] flex flex-col items-center justify-center text-[var(--text-primary)]"
           onClick={() => {
             setIsModalOpen((prev) => !prev);
           }}
         >
           <MenuIcon />
         </div>
-        {!isModalOpen && <div className="text-bold">Booky </div>}
+        {!isModalOpen && <div className="text-bold text-[var(--text-primary)]">Booky </div>}
         {!isModalOpen && (
           <div className="w-[35px] h-[35px] rounded-full bg-[var(--primary)] text-white flex flex-col items-center justify-center mr-[10px]">
             A
@@ -204,15 +204,19 @@ const Navbar = (props) => {
             Approve Provider
           </button>
           <button
-            className="bg-transparent hover:bg-[#dde0e4] flex flex-row text-[var(--secondary)] 
-                            px-[10px] rounded-[8px] border border-[var(--secondary)] font-[500] cursor-pointer
-                            items-center gap-[8px] transition-colors duration-200 text-xs"
-          >
-            <div>
-              <SendIcon />
-            </div>
-            Send Notification
-          </button>
+  className="relative group bg-transparent hover:bg-transparent flex flex-row text-[var(--secondary)] 
+    px-[10px] rounded-[8px] border border-[var(--secondary)] font-[500] cursor-pointer
+    items-center gap-[8px] transition-colors duration-200 text-xs overflow-hidden"
+>
+  {/* Ripple effect */}
+  <div className="absolute inset-0 bg-gray-200 scale-0 rounded-full opacity-0 group-hover:animate-ripple z-0" />
+
+  {/* Button content */}
+  <div className="z-10 flex items-center gap-[8px]">
+    <SendIcon />
+    <div className="text-[var(--secondary)]"> Send Notification </div>
+  </div>
+</button>
         </div>
 
         <div className="flex-1 flex flex-row justify-end">
@@ -221,19 +225,26 @@ const Navbar = (props) => {
           onClick={() => navigate("/notifications")}
         >
           <div className="absolute inset-0 bg-gray-200 scale-0 rounded-full opacity-0 group-hover:animate-ripple z-0 cursor-pointer" />
-          <div className="z-10 cursor-pointer">{BELL_SVG}</div>
-        </div>
-          <div className="w-fit flex flex-row items-center p-[5px] rounded hover:bg-gray-200 hover:cursor-pointer">
-            <div className="w-[35px] h-[35px] rounded-full bg-[var(--primary)] text-white flex flex-col items-center justify-center">
-              A
-            </div>
-            <div className="mx-2">
-              <div className="text-[14px] font-bold">Admin User</div>
-              <div className="text-[var(--secondary)] text-[12px]">
-                System Admin
+          <div className="z-10 cursor-pointer text-[var(--text-primary)]">{BELL_SVG}</div>
+          </div>
+          
+          <div
+            className="relative group w-fit flex flex-row items-center p-[5px] rounded cursor-pointer overflow-hidden"
+          >
+            {/* Ripple Background */}
+            <div className="absolute inset-0 bg-gray-200 scale-0 rounded-full opacity-0 group-hover:animate-ripple z-0" />
+
+            {/* Content on Top */}
+            <div className="relative z-10 flex flex-row items-center">
+              <div className="w-[35px] h-[35px] rounded-full bg-[var(--primary)] text-white flex flex-col items-center justify-center">
+                A
               </div>
+              <div className="mx-2">
+                <div className="text-[14px] font-bold text-[var(--text-primary)]">Admin User</div>
+                <div className="text-[var(--text-secondary)] text-[12px]">System Admin</div>
+              </div>
+              <div className="rotate-90 text-[var(--text-primary)]">{ARROW_RIGHT}</div>
             </div>
-            <div className="rotate-90">{ARROW_RIGHT}</div>
           </div>
         </div>
       </div>

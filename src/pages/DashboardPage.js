@@ -1,57 +1,81 @@
-import React from 'react'; 
-import { CHECKED_CALENDAR_SVG, METRICS_UP_SVG, ACTIVE_USERS_SVG, STOREFRONT_SVG, DOLLAR_SIGN_SVG } from './constants';
-
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { ROLES } from '../redux/user/userSlice';
+import { CHECKED_CALENDAR_SVG, ACTIVE_USERS_SVG, STOREFRONT_SVG, DOLLAR_SIGN_SVG } from './constants';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import StatCard from '../components/StatCard';
+import StarIcon from '@mui/icons-material/Star';
 const DashboardPage = (props) => {
-    const stats = [
+    // const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.user);
+    // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+    
+    const adminStats = [
         {
             title: "Total Bookings",
+            value: 6,
             logo: CHECKED_CALENDAR_SVG,
             metric: "12.5% from last month",
             color: "#4f46e5",
-            backgroundColor: "rgba(79,70,229,0.1)"
         },
         {
             title: "Active Users",
+            value: 6,
             logo: ACTIVE_USERS_SVG,
             metric: "12.5% from last month",
             color: "#10b981",
-            backgroundColor: "rgba(16, 185, 129, 0.1)"
         },
         {
             title: "Active Providers",
+            value: 6,
             logo: STOREFRONT_SVG,
             metric: "12.5% from last month",
             color: "#f59e0b",
-            backgroundColor: "rgba(245, 158, 11, 0.1)"
         },
         {
             title: "Revenue",
+            value: 6,
             logo: DOLLAR_SIGN_SVG,
             metric: "12.5% from last month",
             color: "#ef4444",
-            backgroundColor: "rgba(239, 68, 68, 0.1)"
         }
     ]
-    const StatCard = ({card}) => {
+    const providerStats = [
+        {
+            title: "Total Bookings",
+            value: 6,
+            logo: <CalendarMonthIcon/>,
+            metric: "12.5% from last month",
+            color: "#4f46e5",
+        },
+        {
+            title: "Completed This Month",
+            value: 42,
+            logo: <CheckCircleIcon/>,
+            metric: "12.5% from last month",
+            color: "#10b981",
+        },
+        {
+            title: "Reviews",
+            value: 4.2,
+            logo: <StarIcon/>,
+            metric: "12.5% from last month",
+            color: "#f59e0b",
+        },
+        {
+            title: "Monthly Revenue",
+            value: "$3,840",
+            logo: DOLLAR_SIGN_SVG,
+            metric: "12.5% from last month",
+            color: "#ef4444",
+        }
+    ]
+
+    const adminView = () => {
         return (
-            <div className='bg-white sm:w-fit w-[350px] rounded-[10px] p-[20px] shadow-[0_2px_5px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-[5px] hover:shadow-[0px_5px_15px_rgba(0,0,0,0.1)]'>
-                    <div className="flex justify-between items-center mb-[15px]">
-                        <div className='text-[var(--secondary)] text-[14px] font-semibold'>
-                            { card.title}
-                        </div>
-                        <div className="flex flex-col items-center justify-center rounded text-[var(--primary)] w-[40px] h-[40px]" style={{color: card.color, backgroundColor: card.backgroundColor}}>
-                            {card.logo}
-                        </div>
-                    </div>
-                    <div className='text-[24px] font-bold mb-[5px]'>8,492</div>
-                    <div className='text-[var(--success)] flex flex-row gap-[2px] text-sm items-center'>
-                        <div>{METRICS_UP_SVG}</div><span>{ card.metric}</span>
-                    </div>
-                </div>
-        )
-    }
-    return (
-        <div className='h-full p-[25px] bg-transparent'>
+            <div className='h-full p-[25px] bg-transparent'>
             {/* Page Title and Filter */}
             <div className='mb-[10px]'>
                 <h1 className='text-[45px] font-bold'>Dashboard</h1>
@@ -59,11 +83,36 @@ const DashboardPage = (props) => {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-[20px] mb-[15px] ">
-                {stats.map((card) => <StatCard card={ card} />)}
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-fr gap-[20px] mb-[15px]">
+            {adminStats.map((card, index) => <StatCard key={index} card={ card} />)}
             </div>
         </div>
-    )
+        )
+    }
+    const providerView = () => {
+        return (
+            <div className='h-full p-[25px] bg-transparent'>
+                {/* Page Title and Filter */}
+                <div className='mb-[10px]'>
+                    <h1 className='text-[var(--text-primary)] text-[45px] font-bold'>Dashboard</h1>
+                    <button></button>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-fr gap-[20px] mb-[15px]">
+                {providerStats.map((card, index) => <StatCard key={index} card={ card} />)}
+                </div>
+            </div>
+        )
+    }
+    const clientView = () => {
+        return (
+            <div>Client View</div>
+        )
+    }
+
+    const view = user.role === ROLES.ADMIN ? adminView() : user.role === ROLES.PROVIDER ? providerView() : clientView();
+    return view;
 };
 
 export default DashboardPage;
