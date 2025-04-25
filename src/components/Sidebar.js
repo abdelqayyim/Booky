@@ -3,8 +3,10 @@ import Tooltip from "@mui/material/Tooltip";
 import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
 import ThemeToggle from "./ThemeToggle";
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
+    const navigate = useNavigate();
   const location = useLocation();
    // Remove the leading slash
    const currentPath = location.pathname.startsWith('/')
@@ -42,72 +44,16 @@ const Sidebar = () => {
   
 
   const sidebarItems = [
-    {
-      label: "Dashboard",
-      icon: DASHBOARD_SVG,
-      to: "/",
-      onClick: () => {
-        // dispatch(setPageNotFound(false));
-      },
-      },
-      {
-        label: "Users",
-        icon: USERS_SVG,
-        to: "/",
-        onClick: () => {
-          // dispatch(setPageNotFound(false));
-        },
-      },
-      {
-        label: "Providers",
-        icon: STOREFRONT_SVG,
-        to: "/",
-        onClick: () => {
-          // dispatch(setPageNotFound(false));
-        },
-      },
-      {
-        label: "Appointments",
-        icon: CALENDAR_SVG,
-        to: "/",
-        onClick: () => {
-          // dispatch(setPageNotFound(false));
-        },
-      },
-      {
-        label: "Disputes",
-        icon: DISPUTES_SVG,
-        to: "/",
-        onClick: () => {
-          // dispatch(setPageNotFound(false));
-        },
-      },
-      {
-        label: "Reviews",
-          icon: (<div className="text-white">{ REVIEWS_SVG}</div>),
-        to: "/",
-        onClick: () => {
-          // dispatch(setPageNotFound(false));
-        },
-      },
-      { label: "Notifications", icon:NOTIFICATIONS_SVG, to: "/", onClick: () => {// dispatch(setPageNotFound(false));
-},},
-      { label: "Monetization", icon: MONETIZATION_SVG, to: "/", onClick: () => {
-          // dispatch(setPageNotFound(false));
-        },
-    },
-      {
-        label: "Reports",
-        icon: REPORTS_SVG,
-        to: "/",
-        onClick: () => {
-          // dispatch(setPageNotFound(false));
-        },
-      },
-    {
-      label: "Settings",
-      icon:SETTINGS_SVG,
-      subItems: [
+    { label: "Dashboard", icon: DASHBOARD_SVG, to: "/", onClick: () => navigate('/dashboard'), },
+    { label: "Notifications", icon: NOTIFICATIONS_SVG, to: "/", onClick: () => navigate('/notifications') },
+    { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
+    { label: "Users", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
+    { label: "Providers", icon: STOREFRONT_SVG, to: "/", onClick: () => navigate('/providers')},
+    { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes')},
+    { label: "Reviews", icon: (<div className="text-white">{ REVIEWS_SVG}</div>), to: "/", onClick: () => navigate('/reviews')},
+    { label: "Monetization", icon: MONETIZATION_SVG, to: "/", onClick: () => navigate('/monetization')},
+    {label: "Reports", icon: REPORTS_SVG, to: "/", onClick: () => navigate('/reports')},
+    { label: "Settings", icon:SETTINGS_SVG, subItems: [
         {
           label: "Course",
           onClick: (e) => {
@@ -128,41 +74,54 @@ const Sidebar = () => {
             e.preventDefault();
             // dispatch(setCurrentForm(FORMS.CREATE_NOTE));
           },
+      },
+      {
+        label: "Note",
+        onClick: (e) => {
+          e.preventDefault();
+          // dispatch(setCurrentForm(FORMS.CREATE_NOTE));
         },
+      },
       ],
     },
   ];
 
   return (
     <nav
-      ref={sidebar}
-      className={`hidden md:block mr-[5px] ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} rounded h-full 
-              bg-[var(--dark)] border-r border-none text-black md:flex md:flex-col md:justify-between
-              transition-all duration-300 overflow-hidden sticky top-0`
-              
-      }
-    >
-      <ul className="list-none p-2 space-y-2">
-        <li className="flex items-center justify-end mb-4">
-          <img src="https://via.placeholder.com/32" alt="Logo" className="w-8 h-8" />
-          <Tooltip title={sideBarOpen ? "Close" : "Expand"} placement="right">
-            <button
-              ref={toggleBtn}
-              onClick={toggleSideBar}
-              className="ml-auto p-3 rounded hover:bg-[#4f46e5] hover:text-white text-white"
-            >
-              <div className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}>
+  ref={sidebar}
+  className={`hidden md:block mr-[5px] ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} 
+      rounded h-full bg-[var(--dark)] border-r border-none text-black md:flex md:flex-col
+      transition-all duration-300 sticky top-0 overflow-y-auto`}
+>
+  <div className="flex flex-col justify-between h-full">
+    
+    {/* Top section with logo and items */}
+    <ul className="list-none p-2 space-y-2">
+      <li className="flex items-center justify-end mb-4">
+        <img src="https://via.placeholder.com/32" alt="Logo" className="w-8 h-8" />
+        <Tooltip title={sideBarOpen ? "Close" : "Expand"} placement="right">
+          <button
+            ref={toggleBtn}
+            onClick={toggleSideBar}
+            className="ml-auto p-3 rounded hover:bg-[#4f46e5] hover:text-white text-white"
+          >
+            <div className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}>
               {SIDEBAR_ARROW_SVG}
-              </div>
-            </button>
-          </Tooltip>
-        </li>
+            </div>
+          </button>
+        </Tooltip>
+      </li>
 
-        {sidebarItems.map((item, index) => (
+      {sidebarItems.map((item, index) => (
           <li key={index} className="group">
           <Tooltip title={sideBarOpen ? "" : item.label} placement="right">
             <button
-                onClick={toggleSubMenu}
+                onClick={(event) => {
+                  toggleSubMenu(event);
+                  if (!item.subItems || item.subItems.length === 0) {
+                    item.onClick?.();
+                  }
+                }}
                 className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[#4f46e5] 
                             hover:text-white text-white text-left ${currentPath === item.label.toLowerCase()? "bg-[#4f46e5]":""}
                             
@@ -174,7 +133,7 @@ const Sidebar = () => {
             </button>
           </Tooltip>
         
-          <ul className="grid grid-rows-[0fr] group-[.open]:grid-rows-[1fr] transition-all duration-300 overflow-hidden">
+          <ul className="grid grid-rows-[0fr] group-[.open]:grid-rows-[1fr] transition-all duration-300">
             <div className="overflow-hidden">
               {item.subItems?.map((subItem, subIndex) => (
                 <li key={subIndex}>
@@ -192,10 +151,16 @@ const Sidebar = () => {
         </li>
         
         ))}
-      </ul>
+    </ul>
 
-      <ThemeToggle/>
-    </nav>
+    {/* Bottom section for ThemeToggle */}
+    <div className="p-2">
+      <ThemeToggle showLabel={sideBarOpen} />
+    </div>
+
+  </div>
+</nav>
+
   );
 };
 
