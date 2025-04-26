@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 import LandingPage from './pages/LandingPage';
@@ -17,7 +17,7 @@ import SettingsPages from './pages/SettingsPages';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-[var(--bg-color)] text-gray-800">
+      <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)]">
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<LandingPage />} />

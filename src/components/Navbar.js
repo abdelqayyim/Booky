@@ -4,7 +4,6 @@ import {
   BELL_SVG,
   CALENDAR_SVG,
   CHECKMARK_SVG,
-  DARK_MODE_SVG,
   DASHBOARD_SVG,
   DISPUTES_SVG,
   MONETIZATION_SVG,
@@ -15,10 +14,10 @@ import {
   STOREFRONT_SVG,
   USERS_SVG,
 } from "../pages/constants";
+import NotificationBell from "./NotificationBell";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import SendIcon from "@mui/icons-material/Send";
 import Overlay from "./Overlay";
-import SearchBar from "./Searchbar";
 import ThemeToggle from "./ThemeToggle";
 import { useNavigate } from 'react-router-dom';
 
@@ -142,17 +141,18 @@ const Navbar = (props) => {
   };
   return (
     <div className="bg-[var(--component-primary)] w-full h-[50px] px-0 py-0 md:px-[25px] md:py-[5px] flex flex-row overflow-x-hidden rounded">
+      
       <div className="flex flex-row items-center justify-between md:hidden w-full z-50 relative">
         {/* For Mobile View */}
         <div
-          className="h-full w-[50px] mr-[5px] flex flex-col items-center justify-center text-[var(--text-primary)]"
+          className="h-full w-[50px] mr-[5px] flex flex-col items-center justify-center"
           onClick={() => {
             setIsModalOpen((prev) => !prev);
           }}
         >
           <MenuIcon />
         </div>
-        {!isModalOpen && <div className="text-bold text-[var(--text-primary)]">Booky </div>}
+        {!isModalOpen && <div className="text-bold">Booky </div>}
         {!isModalOpen && (
           <div className="w-[35px] h-[35px] rounded-full bg-[var(--primary)] text-white flex flex-col items-center justify-center mr-[10px]">
             A
@@ -225,7 +225,7 @@ const Navbar = (props) => {
           onClick={() => navigate("/notifications")}
         >
           <div className="absolute inset-0 bg-gray-200 scale-0 rounded-full opacity-0 group-hover:animate-ripple z-0 cursor-pointer" />
-          <div className="z-10 cursor-pointer text-[var(--text-primary)]">{BELL_SVG}</div>
+            <NotificationBell count={ 3} />
           </div>
           
           <div
@@ -240,10 +240,10 @@ const Navbar = (props) => {
                 A
               </div>
               <div className="mx-2">
-                <div className="text-[14px] font-bold text-[var(--text-primary)]">Admin User</div>
+                <div className="text-[14px] font-bold">Admin User</div>
                 <div className="text-[var(--text-secondary)] text-[12px]">System Admin</div>
               </div>
-              <div className="rotate-90 text-[var(--text-primary)]">{ARROW_RIGHT}</div>
+              <div className="rotate-90">{ARROW_RIGHT}</div>
             </div>
           </div>
         </div>

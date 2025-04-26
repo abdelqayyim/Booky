@@ -1,9 +1,10 @@
 import React, { useState, useRef } from "react";
 import Tooltip from "@mui/material/Tooltip";
-import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, NOTIFICATIONS_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
+import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
 import ThemeToggle from "./ThemeToggle";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import NotificationBell from "./NotificationBell";
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Sidebar = () => {
 
   const sidebarItems = [
     { label: "Dashboard", icon: DASHBOARD_SVG, to: "/", onClick: () => navigate('/dashboard'), },
-    { label: "Notifications", icon: NOTIFICATIONS_SVG, to: "/", onClick: () => navigate('/notifications') },
+    { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
     { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
     { label: "Users", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
     { label: "Providers", icon: STOREFRONT_SVG, to: "/", onClick: () => navigate('/providers')},
@@ -94,7 +95,7 @@ const Sidebar = () => {
       transition-all duration-300 sticky top-0 overflow-y-auto`}
 >
   <div className="flex flex-col justify-between h-full">
-    
+    {/* Bigger Screens */}
     {/* Top section with logo and items */}
     <ul className="list-none p-2 space-y-2">
       <li className="flex items-center justify-end mb-4">
@@ -103,7 +104,7 @@ const Sidebar = () => {
           <button
             ref={toggleBtn}
             onClick={toggleSideBar}
-            className="ml-auto p-3 rounded hover:bg-[var(--primary-hover)] hover:text-[var(--text-primary] text-[var(--text-primary)]"
+            className="ml-auto p-3 rounded hover:bg-[var(--primary-hover)]"
           >
             <div className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}>
               {SIDEBAR_ARROW_SVG}
@@ -117,13 +118,13 @@ const Sidebar = () => {
           <Tooltip title={sideBarOpen ? "" : item.label} placement="right">
             <button
                 onClick={(event) => {
-                  toggleSubMenu(event);
-                  if (!item.subItems || item.subItems.length === 0) {
+                toggleSubMenu(event);
+                if (!item.subItems || item.subItems.length === 0) {
                     item.onClick?.();
                   }
                 }}
                 className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[var(--primary-hover)]
-                            hover:text-[var(--text-primary)] text-[var(--text-primary)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}
+                            text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}
                             
                             `}
             >
@@ -140,7 +141,7 @@ const Sidebar = () => {
                   <a
                     href="#"
                     onClick={subItem.onClick}
-                    className="block p-3 pl-10 hover:bg-[var(--primary)] hover:text-[var(--text-primary)] text-[var(--text-primary)]  rounded"
+                    className="block p-3 pl-10 hover:bg-[var(--primary)] rounded"
                   >
                     {subItem.label}
                   </a>

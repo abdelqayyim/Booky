@@ -14,14 +14,14 @@ const StatCard = ({ card }) => {
     hover:shadow-[0px_5px_15px_rgba(0,0,0,0.1)]'>
                 
                     <div className="flex justify-between items-center mb-[15px]">
-                        <div className='text-[var(--text-primary)] text-[14px] font-semibold'>
+                        <div className='text-[14px] font-semibold'>
                             { card.title}
                         </div>
                         <div className="flex flex-col items-center justify-center rounded text-[var(--primary)] w-[40px] h-[40px]" style={{color: card.color, backgroundColor: hexToRGBA(card.color)}}>
                             {card.logo}
                         </div>
                     </div>
-                <div className='text-[var(--text-primary)] text-[24px] font-bold mb-[5px]'>{card.value }</div>
+                <div className='text-[24px] font-bold mb-[5px]'>{card.value }</div>
                     <div className='text-[var(--success)] flex flex-row gap-[2px] text-sm items-center'>
                         <div>{METRICS_UP_SVG}</div><span>{ card.metric}</span>
                 </div>
