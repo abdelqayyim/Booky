@@ -40,7 +40,7 @@ export default function ThemeToggle({ showLabel }) {
         }}
       >
         {modeBtns.map((btn, index) => (
-          <div key={btn.label} className=" text-[var(--text-opposite-primary)] md:text-[var(--text-primary)] w-full h-[56px] flex items-center px-3 gap-3">
+          <div key={btn.label} className={`text-[var(--text-opposite-primary)] md:text-[var(--text-primary)] w-full h-[56px] flex items-center px-3 gap-3`}>
             {btn.logo}
             <span className={showLabel ? "block flex-grow text-left" : "hidden"}>
               {btn.label}

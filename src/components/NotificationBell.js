@@ -1,8 +1,8 @@
 import React from 'react';
 
-const NotificationBell = ({ count = 0 }) => {
+const NotificationBell = ({ count = 0, bg }) => {
   return (
-    <div className="relative w-fit text-[var(--text-primary)]">
+    <div className={`relative w-fit text-[${bg}]`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         height="24px"

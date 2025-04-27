@@ -7,7 +7,6 @@ import {
   DASHBOARD_SVG,
   DISPUTES_SVG,
   MONETIZATION_SVG,
-  NOTIFICATIONS_SVG,
   REPORTS_SVG,
   REVIEWS_SVG,
   SETTINGS_SVG,
@@ -20,7 +19,6 @@ import SendIcon from "@mui/icons-material/Send";
 import Overlay from "./Overlay";
 import ThemeToggle from "./ThemeToggle";
 import { useNavigate } from 'react-router-dom';
-
 const Navbar = (props) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -95,7 +93,7 @@ const Navbar = (props) => {
       icon: CHECKMARK_SVG,
       backgroundColor: "transparent",
       textColor: "var(--text-opposite-primary)",
-      logo: NOTIFICATIONS_SVG,
+      logo: <NotificationBell count={3} bg={"var(--text-opposite-primary)" } />,
       onClick: () => navigate('/notifications'),
     },
     {
@@ -225,7 +223,7 @@ const Navbar = (props) => {
           onClick={() => navigate("/notifications")}
         >
           <div className="absolute inset-0 bg-gray-200 scale-0 rounded-full opacity-0 group-hover:animate-ripple z-0 cursor-pointer" />
-            <NotificationBell count={ 3} />
+            <NotificationBell count={ 3} bg={"var(--text-primary)" } />
           </div>
           
           <div
