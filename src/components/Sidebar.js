@@ -118,11 +118,15 @@ const Sidebar = () => {
           <Tooltip title={sideBarOpen ? "" : item.label} placement="right">
             <button
                 onClick={(event) => {
-                toggleSubMenu(event);
+                
                 if (!item.subItems || item.subItems.length === 0) {
+                  // If there are no sub items then do no expand sidebar
                     item.onClick?.();
-                  }
-                }}
+                } else {
+                  toggleSubMenu(event);
+                }
+              }}
+              
                 className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[var(--primary-hover)]
                             text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}
                             

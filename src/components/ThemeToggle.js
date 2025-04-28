@@ -2,16 +2,16 @@ import { useState, useEffect } from 'react';
 import { DARK_MODE_SVG, LIGHT_MODE_SVG } from '../pages/constants';
 
 export default function ThemeToggle({ showLabel }) {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(localStorage.getItem("booky-theme") === "dark");
 
   useEffect(() => {
     const html = document.documentElement;
     if (isDark) {
       html.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      localStorage.setItem('booky-theme', 'dark');
     } else {
       html.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      localStorage.setItem('booky-theme', 'light');
     }
   }, [isDark]);
 
