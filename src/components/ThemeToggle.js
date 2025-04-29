@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { DARK_MODE_SVG, LIGHT_MODE_SVG } from '../pages/constants';
 
 export default function ThemeToggle({ showLabel }) {
-  const [isDark, setIsDark] = useState(localStorage.getItem("booky-theme") === "dark");
+  const [isDark, setIsDark] = useState(localStorage.getItem("booky-theme") === "dark"? true : false);
 
   useEffect(() => {
     const html = document.documentElement;

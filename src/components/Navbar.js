@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  ARROW_RIGHT,
   BELL_SVG,
   CALENDAR_SVG,
   CHECKMARK_SVG,
@@ -19,6 +18,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Overlay from "./Overlay";
 import ThemeToggle from "./ThemeToggle";
 import { useNavigate } from 'react-router-dom';
+import ProfileDropdown from "./ProfileDropdown";
 const Navbar = (props) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -121,7 +121,7 @@ const Navbar = (props) => {
       onClick: () => navigate('/dashboard'),
     },
   ];
-  const foldedNarbarBtn = (btn) => {
+  const foldedNarbarBtn = (btn, key) => {
     return (
       <div
         className={`font-bold text-[15px] rounded-md py-2 px-[15px] mx-[10px] flex flex-row items-center`}
@@ -129,6 +129,7 @@ const Navbar = (props) => {
           backgroundColor: btn.backgroundColor,
           color: btn.textColor ? btn.textColor : "black ",
         }}
+        key={key}
         onClick={() => { btn.onClick();  setIsModalOpen((prev) => !prev);}
 }
       >
@@ -138,7 +139,7 @@ const Navbar = (props) => {
     );
   };
   return (
-    <div className="bg-[var(--component-primary)] w-full h-[50px] px-0 py-0 md:px-[25px] md:py-[5px] flex flex-row overflow-x-hidden rounded">
+    <div className="bg-[var(--component-primary)] w-full h-[50px] px-0 py-0 md:px-[25px] md:py-[5px] flex flex-row  rounded">
       
       <div className="flex flex-row items-center justify-between md:hidden w-full z-50 relative">
         {/* For Mobile View */}
@@ -178,7 +179,7 @@ const Navbar = (props) => {
 
   {/* Scrollable button list */}
   <div className="flex-1 my-[10px] overflow-y-auto flex flex-col gap-[5px] px-3">
-    {mobileSidebarBtns.map((btn) => foldedNarbarBtn(btn))}
+    {mobileSidebarBtns.map((btn, key) => foldedNarbarBtn(btn,key))}
   </div>
 
   {/* Theme toggle fixed at bottom */}
@@ -226,24 +227,8 @@ const Navbar = (props) => {
             <NotificationBell count={ 3} bg={"var(--text-primary)" } />
           </div>
           
-          <div
-            className="relative group w-fit flex flex-row items-center p-[5px] rounded cursor-pointer overflow-hidden"
-          >
-            {/* Ripple Background */}
-            <div className="absolute inset-0 bg-gray-200 scale-0 rounded-full opacity-0 group-hover:animate-ripple z-0" />
-
-            {/* Content on Top */}
-            <div className="relative z-10 flex flex-row items-center">
-              <div className="w-[35px] h-[35px] rounded-full bg-[var(--primary)] text-white flex flex-col items-center justify-center">
-                A
-              </div>
-              <div className="mx-2">
-                <div className="text-[14px] font-bold">Admin User</div>
-                <div className="text-[var(--text-secondary)] text-[12px]">System Admin</div>
-              </div>
-              <div className="rotate-90">{ARROW_RIGHT}</div>
-            </div>
-          </div>
+          <ProfileDropdown />
+          
         </div>
       </div>
     </div>

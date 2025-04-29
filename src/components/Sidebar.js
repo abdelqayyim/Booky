@@ -46,7 +46,7 @@ const Sidebar = () => {
 
   const sidebarItems = [
     { label: "Dashboard", icon: DASHBOARD_SVG, to: "/", onClick: () => navigate('/dashboard'), },
-    { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
+    // { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
     { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
     { label: "Users", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
     { label: "Providers", icon: STOREFRONT_SVG, to: "/", onClick: () => navigate('/providers')},
@@ -117,20 +117,18 @@ const Sidebar = () => {
           <li key={index} className="group">
           <Tooltip title={sideBarOpen ? "" : item.label} placement="right">
             <button
-                onClick={(event) => {
-                
+              onClick={(event) => {
                 if (!item.subItems || item.subItems.length === 0) {
                   // If there are no sub items then do no expand sidebar
-                    item.onClick?.();
+                  item.onClick?.();
+                  if (sideBarOpen) {
+                    toggleSideBar()
+                  }
                 } else {
                   toggleSubMenu(event);
                 }
               }}
-              
-                className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[var(--primary-hover)]
-                            text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}
-                            
-                            `}
+              className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[var(--primary-hover)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}`}
             >
               {item.icon}
                 <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>
@@ -144,7 +142,7 @@ const Sidebar = () => {
                 <li key={subIndex}>
                   <a
                     href="#"
-                    onClick={subItem.onClick}
+                    onClick={(event) => { subItem.onClick(event); toggleSideBar() }}
                     className="block p-3 pl-10 hover:bg-[var(--primary)] rounded"
                   >
                     {subItem.label}

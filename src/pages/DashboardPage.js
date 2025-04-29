@@ -6,6 +6,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import StatCard from '../components/StatCard';
 import StarIcon from '@mui/icons-material/Star';
+import ProfileDropdown from '../components/ProfileDropdown';
 const DashboardPage = (props) => {
     // const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
@@ -100,7 +101,8 @@ const DashboardPage = (props) => {
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-fr gap-[20px] mb-[15px]">
-                {providerStats.map((card, index) => <StatCard key={index} card={ card} />)}
+                    {providerStats.map((card, index) => <StatCard key={index} card={card} />)}
+                    {/* <ProfileDropdown/> */}
                 </div>
             </div>
         )
