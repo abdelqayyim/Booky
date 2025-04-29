@@ -92,7 +92,7 @@ const Sidebar = () => {
   ref={sidebar}
   className={`hidden md:block mr-[5px] ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} 
       rounded h-full bg-[var(--component-primary)] border-r border-none md:flex md:flex-col
-      transition-all duration-300 sticky top-0 overflow-y-auto`}
+      transition-all duration-300 sticky top-0 overflow-y-auto hide-scrollbar`}
 >
   <div className="flex flex-col justify-between h-full">
     {/* Bigger Screens */}
@@ -128,7 +128,7 @@ const Sidebar = () => {
                   toggleSubMenu(event);
                 }
               }}
-              className={`flex items-center gap-3 w-full p-3 rounded hover:bg-[var(--primary-hover)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}`}
+              className={`flex items-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-hover)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}`}
             >
               {item.icon}
                 <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>
@@ -143,7 +143,7 @@ const Sidebar = () => {
                   <a
                     href="#"
                     onClick={(event) => { subItem.onClick(event); toggleSideBar() }}
-                    className="block p-3 pl-10 hover:bg-[var(--primary)] rounded"
+                    className="block p-2 pl-10 hover:bg-[var(--primary)] rounded"
                   >
                     {subItem.label}
                   </a>
