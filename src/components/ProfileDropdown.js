@@ -3,7 +3,7 @@ import Dropdown from './Dropdown';
 import { ARROW_RIGHT } from '../pages/constants';
 
 export default function ProfileDropdown() {
-  const [isOpen, setIsOpen] = useState(true); // Initial state is false, change to true to test if it works
+  const [isOpen, setIsOpen] = useState(false); // Initial state is false, change to true to test if it works
 
   const avatar = (
     <div className="relative group w-fit flex flex-row items-center p-[5px] rounded cursor-pointer overflow-hidden">
