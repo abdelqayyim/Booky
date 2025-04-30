@@ -128,7 +128,7 @@ const Sidebar = () => {
                   toggleSubMenu(event);
                 }
               }}
-              className={`flex items-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-hover)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}`}
+              className={`flex items-center justify-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-hover)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}`}
             >
               {item.icon}
                 <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>

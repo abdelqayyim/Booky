@@ -13,11 +13,12 @@ export default function Dropdown({
 }) {
   // Map position prop to Tailwind classes
   const positionClasses = {
-    bottom: 'top-full mt-1 left-0',
-    top: 'bottom-full mb-1 left-0',
-    left: 'right-full mr-1 top-0',
-    right: 'left-full ml-1 top-0',
+    bottom: 'top-full mt-1 left-1/2 transform -translate-x-1/2',
+    top: 'bottom-full mb-1 left-1/2 transform -translate-x-1/2',
+    left: 'right-full mr-1 top-1/2 transform -translate-y-1/2',
+    right: 'left-full ml-1 top-1/2 transform -translate-y-1/2',
   };
+  
 
   const handleOutsideClick = useCallback(
     (e) => {
