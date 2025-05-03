@@ -11,6 +11,7 @@ import {
   isSameMonth,
   isSameDay
 } from 'date-fns';
+import AppointmentCard from './AppointmentCard';
 
 // Mock data for appointments
 const mockAppointments = [
@@ -42,7 +43,13 @@ const mockAppointments = [
     duration: 75
   }
 ];
-
+const getAppointmentsForDay = (day) => {
+  const appointmentsForDay = mockAppointments.filter((appointment) => {
+    const appointmentDate = new Date(appointment.date); // normalize
+    return isSameDay(appointmentDate, day);
+  });
+  return appointmentsForDay.length;
+};
 // Mock data for schedules
 const mockSchedules = [
   {
@@ -107,6 +114,9 @@ function Calendar() {
         <span className="text-lg font-semibold">{format(currentMonth, 'MMMM')}</span>
         <span className="text-lg font-semibold text-[gray]"> {format(currentMonth, 'yyyy')}</span>
       </div>
+      <div className='bg-red-200 flex-1'>
+          <button>Today</button>
+      </div>
       <div>
         <button onClick={prevMonth} className="text-xl font-bold border w-10 rounded-l">←</button>
         <button onClick={nextMonth} className="text-xl font-bold border w-10 rounded-r">→</button>
@@ -115,6 +125,7 @@ function Calendar() {
   );
 
   const renderDays = () => {
+    // WEEKDAYS
     const days = [];
     const dateFormat = 'EEE';
     const startDate = startOfWeek(currentMonth);
@@ -151,6 +162,7 @@ function Calendar() {
         const hasAppointments = appointments.some(appt => 
           isSameDay(new Date(appt.date), cloneDay)
         );
+        const numberOfAppointments = getAppointmentsForDay(day);
 
         days.push(
           <div
@@ -162,12 +174,12 @@ function Calendar() {
           >
             <div className={`
               rounded relative
-              ${isToday ? "bg-red-300" : ""} 
-              ${isSelected ? 'bg-[#4f46e51a] text-[var(--primary)]' : 'hover:bg-[#4f46e51a] hover:text-[var(--primary)]'}
+              ${isSelected ? 'bg-[#4f46e770] text-[var(--text-primary)]' : 'hover:bg-[#4f46e51a] hover:text-[var(--primary)]'}
               flex items-center justify-center
               h-[40px] w-[40px]
               `}>
-              <span>{format(day, 'd')}</span>
+{   numberOfAppointments > 0 &&           <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 min-w-[16px] px-1 flex items-center justify-center">{ getAppointmentsForDay(day)}</div>
+}              <span>{format(day, 'd')}</span>
               {hasAppointments && isCurrentMonth && (
                 <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[var(--primary)] rounded-full"></span>
               )}
@@ -228,7 +240,7 @@ function Calendar() {
 
   return (
     <div className='h-full w-full flex flex-row relative'>
-      <div className='relative bg-[var(--component-primary)] w-[400px] mr-2 rounded'>
+      <div className='relative bg-[var(--component-primary)] w-[500px] mr-2 rounded'>
         <div>
           <div className='flex flex-row justify-center bg-[var(--toggle-background)] flex-1 h-[40px] rounded-xl 
           mx-[5px] mt-[10px]'>
@@ -259,21 +271,7 @@ function Calendar() {
               ) : (
                 <div className="space-y-4">
                   {todaysAppointments.map(appointment => (
-                    <div key={appointment.id} className="flex items-center p-3 rounded-lg bg-[var(--bg-color)] shadow-sm">
-                      <img 
-                        src={appointment.clientImage} 
-                        alt={appointment.clientName} 
-                        className="w-10 h-10 rounded-full mr-3"
-                      />
-                      <div className="flex-1">
-                        <h3 className="font-medium">{appointment.clientName}</h3>
-                        <p className="text-sm text-[var(--text-secondary)]">{appointment.service}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium">{appointment.time}</p>
-                        <p className="text-sm text-[var(--text-secondary)]">{appointment.duration} min</p>
-                      </div>
-                    </div>
+                    <AppointmentCard appointment={appointment}/>
                   ))}
                 </div>
               )}
