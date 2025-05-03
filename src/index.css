@@ -14,6 +14,9 @@
 
   --text-opposite-primary: rgba(227,227,227,1);
 
+  --toggle-background: #EFEFEF;
+  --toggle-button-background: #FFFFFF;
+
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
@@ -33,6 +36,9 @@
   --text-secondary: rgba(227,227,227,0.7);
 
   --text-opposite-primary: rgba(43,46,72,1);
+
+  --toggle-background: #2c2f36;              /* Dark gray background */
+  --toggle-button-background: #4f46e5;  
 
   --success: #34d399;       /* Brighter green */
   --warning: #fbbf24;       /* Brighter amber */
