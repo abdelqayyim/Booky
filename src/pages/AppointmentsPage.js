@@ -1,6 +1,11 @@
-import React from 'react'; 
+import React from 'react';
+import { format, compareAsc, getDaysInMonth } from "date-fns";
+import Calendar from '../components/Calendar';
 
-const AppointmentsPage = (props)=>{
+const AppointmentsPage = (props) => {
+  const today = format(new Date(), "EEEE MMM d");
+  console.log(`today`, today);
+  console.log(getDaysInMonth(today));
   return (
     <div className='h-full flex flex-col items-center p-[25px] bg-transparent'>
     {/* Page Title and Filter */}
@@ -8,9 +13,9 @@ const AppointmentsPage = (props)=>{
         <h1 className='text-[45px] font-bold'>Appointments</h1>
         <button></button>
     </div>
-    <div className='w-full flex-1 bg-red-400'>
+    <div className='w-full flex-1'>
         {/* Appointment Details */}
-        HH
+        <Calendar/>
     </div>
 
 </div>

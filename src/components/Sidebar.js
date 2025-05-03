@@ -54,37 +54,30 @@ const Sidebar = () => {
     { label: "Reviews", icon:REVIEWS_SVG, to: "/", onClick: () => navigate('/reviews')},
     { label: "Monetization", icon: MONETIZATION_SVG, to: "/", onClick: () => navigate('/monetization')},
     {label: "Reports", icon: REPORTS_SVG, to: "/", onClick: () => navigate('/reports')},
-    { label: "Settings", icon:SETTINGS_SVG, subItems: [
-        {
-          label: "Course",
-          onClick: (e) => {
-            e.preventDefault();
-            // dispatch(setCurrentForm(FORMS.CREATE_COURSE));
-          },
-          },
-          {
-            label: "Hello World",
-            onClick: (e) => {
-              e.preventDefault();
-              // dispatch(setCurrentForm(FORMS.CREATE_COURSE));
-            },
-          },
-        {
-          label: "Note",
-          onClick: (e) => {
-            e.preventDefault();
-            // dispatch(setCurrentForm(FORMS.CREATE_NOTE));
-          },
-      },
-      {
-        label: "Note",
-        onClick: (e) => {
-          e.preventDefault();
-          // dispatch(setCurrentForm(FORMS.CREATE_NOTE));
-        },
-      },
-      ],
-    },
+    // { label: "Settings", icon:SETTINGS_SVG, subItems: [
+    //     {
+    //       label: "Course",
+    //       onClick: (e) => {
+    //         e.preventDefault();
+    //         // dispatch(setCurrentForm(FORMS.CREATE_COURSE));
+    //       },
+    //       },
+    //       {
+    //         label: "Hello World",
+    //         onClick: (e) => {
+    //           e.preventDefault();
+    //           // dispatch(setCurrentForm(FORMS.CREATE_COURSE));
+    //         },
+    //       },
+    //     {
+    //       label: "Note",
+    //       onClick: (e) => {
+    //         e.preventDefault();
+    //         // dispatch(setCurrentForm(FORMS.CREATE_NOTE));
+    //       },
+    //   },
+    //   ],
+    // },
   ];
 
   return (
