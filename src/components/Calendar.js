@@ -138,7 +138,7 @@ function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentOption, setCurrentOption] = useState(OPTIONS.APPOINTMENTS);
-  const [currentCalendarView, setCurrentCalendarView] = useState(CALENDAR_VIEWS.MONTH);
+  const [currentCalendarView, setCurrentCalendarView] = useState(CALENDAR_VIEWS.DAY);
   const [appointments] = useState(mockAppointments);
   const [schedules] = useState(mockSchedules);
   const [isAddingSchedule, setIsAddingSchedule] = useState(false);
