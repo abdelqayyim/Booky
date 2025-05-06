@@ -20,6 +20,8 @@ import {
   addYears,
   subYears,
   getYear,
+  isToday,
+  getMinutes,
   getMonth,
   getDate,
   parseISO,
@@ -337,25 +339,33 @@ function Calendar() {
   // Render day view with hourly slots
   const renderDayView = () => {
     const hours = [];
-    const dayStart = setHours(setMinutes(startOfDay(currentDate), 0), 8); // Start at 8 AM
-    const dayAppointments = getAppointmentsForDay(currentDate, appointments);
-
-    for (let i = 0; i < 12; i++) { // Show 12 hours (8 AM to 8 PM)
-      const hour = addDays(dayStart, 0);
-      const hourFormatted = format(addHours(hour, i), 'h:mm a');
-      
+    const dayStart = startOfDay(currentDate); // Start at 00:00
+    const isCurrentDay = isToday(currentDate);
+  
+    for (let i = 0; i < 24; i++) {
+      const hour = addHours(dayStart, i);
+      const hourFormatted = format(hour, 'h:mm a');
+  
       hours.push(
-        <div key={i} className="flex border-t border-gray-200">
+        <div key={i} className="relative flex border-t border-gray-200 h-[60px]">
           <div className="w-20 py-3 text-right pr-3 text-sm text-[var(--text-secondary)]">
             {hourFormatted}
           </div>
-          <div className="flex-1 min-h-[60px] hover:bg-[var(--bg-color-hover)]">
-            {/* Placeholder for appointments at this hour */}
+          <div className="flex-1 relative">
+            {/* Placeholder for appointments */}
+            
+            {/* Red line indicator (conditionally rendered) */}
+            {isCurrentDay && getHours(new Date()) === i && (
+              <div
+                className="absolute left-0 right-0 h-[2px] bg-red-500 z-10"
+                style={{ top: `${(getMinutes(new Date()) / 60) * 100}%` }}
+              />
+            )}
           </div>
         </div>
       );
     }
-
+  
     return (
       <div className="mt-4">
         <div className="text-lg font-semibold mb-4">
@@ -363,20 +373,6 @@ function Calendar() {
         </div>
         <div className="border rounded-lg overflow-hidden">
           {hours}
-        </div>
-        <div className="mt-4 space-y-4">
-          <h3 className="font-medium">Appointments</h3>
-          {dayAppointments.length === 0 ? (
-            <div className="text-center py-6 text-[var(--text-secondary)]">
-              No appointments for this day
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {dayAppointments.map(appointment => (
-                <AppointmentCard key={appointment.id} appointment={appointment} />
-              ))}
-            </div>
-          )}
         </div>
       </div>
     );
