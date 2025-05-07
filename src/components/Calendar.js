@@ -10,26 +10,17 @@ import {
   subMonths,
   isSameMonth,
   isSameDay,
-  startOfDay,
-  endOfDay,
-  getHours,
-  setHours,
-  setMinutes,
   addWeeks,
   subWeeks,
   addYears,
   subYears,
   getYear,
-  isToday,
-  getMinutes,
   getMonth,
-  getDate,
-  parseISO,
-  getDay,
-  addHours
 } from 'date-fns';
 import DayView from './Calendar/DayView';
 import WeekView from './Calendar/WeekView';
+import AppointmentCard from './AppointmentCard';
+import MonthView from './Calendar/MonthView';
 
 // Mock data for appointments
 const mockAppointments = [
@@ -102,20 +93,6 @@ const mockSchedules = [
   }
 ];
 
-// Component for rendering appointments in day and week views
-const AppointmentCard = ({ appointment }) => (
-  <div key={appointment.id} className="p-3 rounded-lg bg-[var(--bg-color)] shadow-sm flex items-center space-x-3">
-    <img src={appointment.clientImage} alt={appointment.clientName} className="w-10 h-10 rounded-full" />
-    <div className="flex-1">
-      <h3 className="font-medium">{appointment.clientName}</h3>
-      <p className="text-sm text-[var(--text-secondary)]">{appointment.service}</p>
-    </div>
-    <div className="text-right">
-      <div className="font-medium">{appointment.time}</div>
-      <div className="text-sm text-[var(--text-secondary)]">{appointment.duration} min</div>
-    </div>
-  </div>
-);
 
 // Helper function to get appointments for a specific day
 const getAppointmentsForDay = (day, appointments) => {
@@ -336,113 +313,6 @@ function Calendar() {
     }
 
     return <div>{rows}</div>;
-  };
-
-  // Render day view with hourly slots
-  const renderDayView = () => {
-    const hours = [];
-    const dayStart = startOfDay(currentDate); // Start at 00:00
-    const isCurrentDay = isToday(currentDate);
-  
-    for (let i = 0; i < 24; i++) {
-      const hour = addHours(dayStart, i);
-      const hourFormatted = format(hour, 'h:mm a');
-  
-      hours.push(
-        <div key={i} className="relative flex border-t border-gray-200 h-[60px]">
-          <div className="w-20 py-3 text-right pr-3 text-sm text-[var(--text-secondary)]">
-            {hourFormatted}
-          </div>
-          <div className="flex-1 relative">
-            {/* Placeholder for appointments */}
-            
-            {/* Red line indicator (conditionally rendered) */}
-            {isCurrentDay && getHours(new Date()) === i && (
-              <div
-                className="absolute left-0 right-0 h-[2px] bg-red-500 z-10"
-                style={{ top: `${(getMinutes(new Date()) / 60) * 100}%` }}
-              />
-            )}
-          </div>
-        </div>
-      );
-    }
-  
-    return (
-      <div className="mt-4">
-        <div className="text-lg font-semibold mb-4">
-          {format(currentDate, 'EEEE, MMMM d, yyyy')}
-        </div>
-        <div className="border rounded-lg overflow-hidden">
-          {hours}
-        </div>
-      </div>
-    );
-  };
-
-  // Render week view with days as columns
-  const renderWeekView = () => {
-    const weekStart = startOfWeek(currentDate);
-    const days = [];
-    const dayNames = [];
-
-    // Create day headers
-    for (let i = 0; i < 7; i++) {
-      const day = addDays(weekStart, i);
-      const isToday = isSameDay(day, new Date());
-      const isSelected = isSameDay(day, selectedDate);
-      
-      dayNames.push(
-        <div 
-          key={i} 
-          className={`flex-1 text-center py-2 cursor-pointer
-            ${isToday ? 'bg-[var(--primary-light)]' : ''}
-            ${isSelected ? 'border-b-2 border-[var(--primary)]' : ''}
-          `}
-          onClick={() => onDateClick(day)}
-        >
-          <div className="text-sm font-medium">{format(day, 'EEE')}</div>
-          <div className={`text-lg ${isSelected ? 'font-bold' : ''}`}>{format(day, 'd')}</div>
-        </div>
-      );
-    }
-
-    // Create day columns with appointments
-    for (let i = 0; i < 7; i++) {
-      const day = addDays(weekStart, i);
-      const dayAppointments = getAppointmentsForDay(day, appointments);
-      
-      days.push(
-        <div key={i} className="flex-1 min-h-[200px] border-r last:border-r-0">
-          {dayAppointments.length > 0 ? (
-            <div className="px-1 py-2">
-              {dayAppointments.map(appointment => (
-                <div 
-                  key={appointment.id} 
-                  className="mb-2 p-1 bg-[var(--primary-light)] rounded text-xs overflow-hidden"
-                >
-                  <div className="font-semibold">{appointment.time}</div>
-                  <div className="truncate">{appointment.clientName}</div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="h-full flex items-center justify-center text-sm text-[var(--text-secondary)]">
-              No events
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    return (
-      <div className="mt-4">
-        <div className="border rounded-lg overflow-hidden">
-          <div className="flex border-b">{dayNames}</div>
-          <div className="flex h-[300px]">{days}</div>
-        </div>
-      </div>
-    );
   };
 
   // Render year view with months as grid
@@ -683,15 +553,12 @@ function Calendar() {
         </div>
       </div>
 
-      <div className="w-full rounded-md overflow-hidden bg-[var(--component-primary)]">
+      <div className="flex flex-col h-full w-full rounded-md overflow-hidden bg-[var(--component-primary)]">
         {renderHeader()}
         
         {/* Render different calendar views based on selection */}
         {currentCalendarView === CALENDAR_VIEWS.MONTH && (
-          <>
-            {renderDays()}
-            {renderMonthCells()}
-          </>
+          <MonthView currentDate={new Date()} selectedDate={selectedDate} appointments={appointments} onDateClick={ onDateClick} />
         )}
         
         {currentCalendarView === CALENDAR_VIEWS.DAY && (
