@@ -28,6 +28,8 @@ import {
   getDay,
   addHours
 } from 'date-fns';
+import DayView from './Calendar/DayView';
+import WeekView from './Calendar/WeekView';
 
 // Mock data for appointments
 const mockAppointments = [
@@ -694,13 +696,19 @@ function Calendar() {
         
         {currentCalendarView === CALENDAR_VIEWS.DAY && (
           <div className="p-4">
-            {renderDayView()}
+            {/* {renderDayView()} */}
+            <DayView currentDate={currentDate} appointments={appointments}/>
           </div>
         )}
         
         {currentCalendarView === CALENDAR_VIEWS.WEEK && (
           <div className="p-4">
-            {renderWeekView()}
+            <WeekView
+              currentDate={new Date()}
+              appointments={appointments}
+              selectedDate={new Date()}
+              onDateClick={(day) => setSelectedDate(day)}
+            />
           </div>
         )}
         
