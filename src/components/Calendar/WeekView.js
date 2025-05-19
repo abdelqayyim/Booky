@@ -115,7 +115,7 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick }) => {
   
 
   return (
-    <div className="mt-4">
+    <div>
       <div className="border rounded-lg overflow-hidden">
         {/* Day headers */}
         <div className="flex border-b bg-gray-50">

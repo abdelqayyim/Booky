@@ -68,7 +68,7 @@ export default function Dropdown({
             item.onClick && item.onClick();
             setIsOpen(false); // Close dropdown after an item is clicked
           }}
-          className={`block text-left w-full ${index === 0? "border-t-rounded":""} px-4 py-2 text-sm hover:bg-gray-100 ${itemClassName} ${item.className || ''}`}
+          className={`block text-left w-full ${index === 0? "border-t-rounded":""} px-4 py-2 text-sm hover:bg-gray-100 ${itemClassName} ${item.className || ''} bg-white`}
         >
           {item.label}
         </button>

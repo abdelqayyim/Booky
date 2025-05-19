@@ -84,10 +84,10 @@ const DayView = ({ currentDate, appointments }) => {
     });
   
     return (
-      <div className="mt-4">
-        <div className="text-lg font-semibold mb-4">
+      <div>
+        {/* <div className="text-lg font-semibold mb-4">
           {format(currentDate, 'EEEE, MMMM d, yyyy')}
-        </div>
+        </div> */}
         <div className="border rounded-lg overflow-hidden relative" style={{ height: `${24 * 60}px` }}>
           {appointmentElements}
           {hours}

@@ -21,6 +21,9 @@ import DayView from './Calendar/DayView';
 import WeekView from './Calendar/WeekView';
 import AppointmentCard from './AppointmentCard';
 import MonthView from './Calendar/MonthView';
+import YearView from './Calendar/YearView.js';
+import Dropdown from './Dropdown.js';
+import Overlay from './Overlay.js';
 
 // Mock data for appointments
 const mockAppointments = [
@@ -115,6 +118,14 @@ function Calendar() {
     YEAR: "Year",
     SCHEDULE: "Schedule"
   };
+
+  const VIEWS = [
+    { label: 'DAY', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.DAY)  },
+    { label: 'WEEK', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.WEEK)  },
+    { label: 'MONTH', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.MONTH)  },
+    { label: 'YEAR', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.YEAR) },
+    { label: 'SCHEDULE', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.SCHEDULE)  }
+  ]
   
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -128,6 +139,7 @@ function Calendar() {
     startTime: "09:00 AM",
     endTime: "05:00 PM"
   });
+  const [openCalendarViewOptions, setOpenCalendarViewOptions] = useState(false);
 
   // Toggle component for switching between options
   const renderToggle = (options, height, width, currentValue) => (
@@ -217,142 +229,21 @@ function Calendar() {
 
     return (
       <div className="flex justify-between items-center p-4 bg-[var(--component-primary)]">
-        <div>
-          <span className="text-lg font-semibold">{headerTitle}</span>
-        </div>
-        <div className="flex-1 h-full flex flex-row items-center px-2">
-          <button 
-            className="border h-fit w-fit border-black p-1 rounded-lg font-bold mr-2" 
-            onClick={navigateToday}
-          >
-            Today
-          </button>
-          {renderToggle(CALENDAR_VIEWS_OPTIONS, "h-[40px]", "w-2/3", currentCalendarView)}
-        </div>
-        <div>
-          <button onClick={navigatePrev} className="text-xl font-bold border w-10 rounded-l">←</button>
-          <button onClick={navigateNext} className="text-xl font-bold border w-10 rounded-r">→</button>
-        </div>
-      </div>
-    );
-  };
-
-  // Day names header for month view
-  const renderDays = () => {
-    const days = [];
-    const dateFormat = 'EEE';
-    const startDate = startOfWeek(currentDate);
-
-    for (let i = 0; i < 7; i++) {
-      days.push(
-        <div key={i} className="text-center font-medium text-sm text-[var(--text-primary)] flex-1">
-          {format(addDays(startDate, i), dateFormat)}
-        </div>
-      );
-    }
-
-    return <div className="flex">{days}</div>;
-  };
-
-  // Render month view calendar cells
-  const renderMonthCells = () => {
-    const monthStart = startOfMonth(currentDate);
-    const monthEnd = endOfMonth(monthStart);
-    const startDate = startOfWeek(monthStart);
-    const endDate = endOfWeek(monthEnd);
-
-    const rows = [];
-    let days = [];
-    let day = startDate;
-
-    while (day <= endDate) {
-      for (let i = 0; i < 7; i++) {
-        const cloneDay = day;
-        const isCurrentMonth = isSameMonth(day, monthStart);
-        const isToday = isSameDay(day, new Date());
-        const isSelected = isSameDay(day, selectedDate);
-        
-        // Count appointments for the day
-        const appointmentsCount = getAppointmentsForDay(day, appointments).length;
-
-        days.push(
-          <div
-            key={day}
-            onClick={() => onDateClick(cloneDay)}
-            className={`flex-1 h-[70px] w-[70px] flex items-center justify-center cursor-pointer
-              ${!isCurrentMonth ? 'text-[var(--text-opposite-primary)]' : 'text-[var(--text-primary)]'}
-            `}
-          >
-            <div className={`
-              rounded relative
-              ${isSelected ? 'bg-[#4f46e770] text-[var(--text-primary)]' : 'hover:bg-[#4f46e51a] hover:text-[var(--primary)]'}
-              flex items-center justify-center
-              h-[40px] w-[40px]
-              `}>
-              {appointmentsCount > 0 && (
-                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 min-w-[16px] px-1 flex items-center justify-center">
-                  {appointmentsCount}
-                </div>
-              )}
-              <span>{format(day, 'd')}</span>
-              {appointmentsCount > 0 && isCurrentMonth && (
-                <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[var(--primary)] rounded-full"></span>
-              )}
-            </div>
+        <div className='flex flex-row '>
+          <button className="border h-fit w-fit border-black p-1 rounded-2xl font-bold mr-2" onClick={navigateToday}>Today</button>
+          <div className='mr-2'>
+            <button onClick={navigatePrev} className="text-xl font-bold border w-10 rounded-l">←</button>
+            <button onClick={navigateNext} className="text-xl font-bold border w-10 rounded-r">→</button>
           </div>
-        );
-        day = addDays(day, 1);
-      }
-
-      rows.push(
-        <div className="flex" key={day}>
-          {days}
         </div>
-      );
-      days = [];
-    }
+        
+        <div><span className="text-lg font-semibold">{headerTitle}</span></div>
 
-    return <div>{rows}</div>;
-  };
-
-  // Render year view with months as grid
-  const renderYearView = () => {
-    const year = getYear(currentDate);
-    const months = [];
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
-
-    for (let month = 0; month < 12; month++) {
-      const firstDayOfMonth = new Date(year, month, 1);
-      const isCurrentMonthAndYear = month === currentMonth && year === currentYear;
-      const isSelectedMonth = month === getMonth(selectedDate) && year === getYear(selectedDate);
-      
-      months.push(
-        <div 
-          key={month} 
-          className={`
-            p-4 rounded-lg cursor-pointer
-            ${isCurrentMonthAndYear ? 'bg-[var(--primary-light)]' : 'hover:bg-[var(--bg-color-hover)]'}
-            ${isSelectedMonth ? 'border-2 border-[var(--primary)]' : ''}
-          `}
-          onClick={() => {
-            const newDate = new Date(year, month, 1);
-            setCurrentDate(newDate);
-            setSelectedDate(newDate);
-            setCurrentCalendarView(CALENDAR_VIEWS.MONTH);
-          }}
-        >
-          <div className="text-center font-medium">{format(firstDayOfMonth, 'MMMM')}</div>
-        </div>
-      );
-    }
-
-    return (
-      <div className="mt-4">
-        <div className="text-xl font-semibold mb-4 text-center">{year}</div>
-        <div className="grid grid-cols-3 gap-4">
-          {months}
-        </div>
+        <Dropdown
+          items={VIEWS}
+          trigger={<div className='hover:cursor-pointer border p-1 rounded-2xl border-black'>{currentCalendarView}</div>}
+          isOpen={openCalendarViewOptions} setIsOpen={setOpenCalendarViewOptions}
+        />
       </div>
     );
   };
@@ -437,8 +328,8 @@ function Calendar() {
   const selectedDateAppointments = getAppointmentsForDay(selectedDate, appointments);
 
   return (
-    <div className='h-full w-full flex flex-row relative'>
-      <div className='relative bg-[var(--component-primary)] w-[500px] mr-2 rounded'>
+    <div className='h-full w-full flex flex-row relative bg-red-200'>
+      <div className='relative bg-[var(--component-primary)] w-[500px] mr-2 rounded-md'>
         <div className='mt-[10px]'>
           {renderToggle(TAB_OPTIONS, "h-[40px]", "", currentOption)}
         </div>
@@ -581,7 +472,13 @@ function Calendar() {
         
         {currentCalendarView === CALENDAR_VIEWS.YEAR && (
           <div className="p-4">
-            {renderYearView()}
+            <YearView
+              currentDate={new Date()}
+              setCurrentDate={setCurrentDate}
+              setSelectedDate={setSelectedDate}
+              CALENDAR_VIEWS={CALENDAR_VIEWS}
+              setCurrentCalendarView={setCurrentCalendarView}
+            />
           </div>
         )}
         
