@@ -4,7 +4,7 @@ import { Clock, Calendar } from "lucide-react";
 const AppointmentCard = ({ appointment }) => {
   return (
     <div className="max-w-md mx-auto">
-      <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex">
+      <div className="bg-[var(--bg-color)] rounded-xl shadow-md overflow-hidden border-none border-gray-100 flex">
         {/* Left accent color bar */}
 
         <div className="flex-1">
@@ -17,11 +17,11 @@ const AppointmentCard = ({ appointment }) => {
 
               {/* Client and Service Info */}
               <div className="ml-4">
-                <h3 className="font-bold text-gray-800 text-lg">
+                <h3 className="font-bold text-[var(--secondary)] text-lg">
                   {appointment.clientName}
                 </h3>
                 <div className="flex items-center mt-1">
-                  <p className="text-sm text-gray-600">{appointment.service}</p>
+                  <p className="text-sm text-[var(--secondary)]">{appointment.service}</p>
                 </div>
               </div>
             </div>
@@ -29,14 +29,14 @@ const AppointmentCard = ({ appointment }) => {
             {/* Time and Duration Info */}
             <div className="mt-4 pt-3 border-t border-gray-100">
               <div className="flex items-center justify-between">
-                <div className="flex items-center text-gray-600">
+                <div className="flex items-center text-[var(--secondary)]">
                   <Clock size={16} className="mr-1" />
                   <span className="text-sm font-medium">
                     {appointment.time}
                   </span>
                 </div>
 
-                <div className="flex items-center text-gray-600">
+                <div className="flex items-center text-[var(--secondary)]">
                   <Calendar size={16} className="mr-1" />
                   <span className="text-sm">
                     {appointment.duration} minutes
@@ -47,7 +47,7 @@ const AppointmentCard = ({ appointment }) => {
           </div>
 
           {/* Card Footer */}
-          <div className="bg-gray-50 px-4 py-3 flex justify-between items-center">
+          <div className="bg-[var(--bg-color-secondary)] px-4 py-3 flex justify-between items-center">
             <span
               className={`text-xs bg-[#F1E9FB] font-medium uppercase px-2 py-1 rounded-full text-purple-700`}
             >

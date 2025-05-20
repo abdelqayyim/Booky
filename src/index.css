@@ -5,8 +5,9 @@
 .light-mode{
   --primary: #4f46e5;
   --primary-hover: rgba(79, 70, 229, 0.85);
-  --secondary: #6b7280;
+  --secondary: #000000;
   --bg-color: #F1F3F4;
+  --bg-color-secondary: #d3d4d5;
 
   --component-primary: rgb(255,255,255);
   --text-primary: rgba(43,46,72,1);
@@ -30,6 +31,7 @@
   --primary-hover: rgba(79, 70, 229, 0.85);
   --secondary: #E3E3E3;
   --bg-color: rgba(13,15,17,1);
+  --bg-color-secondary: rgb(30, 35, 40);
 
   --component-primary: rgba(25,29,35,1);
   --text-primary: rgba(227,227,227,1);

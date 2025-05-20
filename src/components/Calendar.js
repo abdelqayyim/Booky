@@ -265,6 +265,7 @@ function Calendar() {
         <div><span className="text-lg font-semibold">{headerTitle}</span></div>
 
         <Dropdown
+          itemClassName={`bg-[var(--secondary)]`}
           items={VIEWS}
           trigger={
             <div className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] flex-1 rounded-xl 
