@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
-  startOfMonth,
-  endOfMonth,
   startOfWeek,
   endOfWeek,
   addDays,
@@ -14,8 +12,8 @@ import {
   subWeeks,
   addYears,
   subYears,
-  getYear,
-  getMonth,
+  subDays,
+  isWithinInterval
 } from 'date-fns';
 import DayView from './Calendar/DayView';
 import WeekView from './Calendar/WeekView';
@@ -23,7 +21,6 @@ import AppointmentCard from './AppointmentCard';
 import MonthView from './Calendar/MonthView';
 import YearView from './Calendar/YearView.js';
 import Dropdown from './Dropdown.js';
-import Overlay from './Overlay.js';
 
 // Mock data for appointments
 const mockAppointments = [
@@ -34,7 +31,7 @@ const mockAppointments = [
     service: "Hair Coloring",
     time: "09:00 AM",
     date: new Date(),
-    duration: 90
+    duration: 90,
   },
   {
     id: 2,
@@ -43,7 +40,7 @@ const mockAppointments = [
     service: "Men's Haircut",
     time: "11:30 AM",
     date: new Date(),
-    duration: 45
+    duration: 45,
   },
   {
     id: 3,
@@ -52,8 +49,36 @@ const mockAppointments = [
     service: "Manicure & Pedicure",
     time: "02:15 PM",
     date: new Date(),
-    duration: 75
-  }
+    duration: 75,
+  },
+  {
+    id: 4,
+    clientName: "Michael Chen",
+    clientImage: "/api/placeholder/50/50",
+    service: "Men's Haircut",
+    time: "05:30 PM",
+    date: new Date(),
+    duration: 45,
+  },
+  // Appointments for tomorrow
+  {
+    id: 5,
+    clientName: "Emily Davis",
+    clientImage: "/api/placeholder/50/50",
+    service: "Facial Treatment",
+    time: "10:00 AM",
+    date: addDays(new Date(), 1),
+    duration: 60,
+  },
+  {
+    id: 6,
+    clientName: "John Smith",
+    clientImage: "/api/placeholder/50/50",
+    service: "Beard Trim",
+    time: "04:00 PM",
+    date: addDays(new Date(), 1),
+    duration: 30,
+  },
 ];
 
 // Mock data for schedules
@@ -95,15 +120,6 @@ const mockSchedules = [
     endTime: "03:00 PM"
   }
 ];
-
-
-// Helper function to get appointments for a specific day
-const getAppointmentsForDay = (day, appointments) => {
-  return appointments.filter((appointment) => {
-    const appointmentDate = new Date(appointment.date);
-    return isSameDay(appointmentDate, day);
-  });
-};
 
 function Calendar() {
   const OPTIONS = {
@@ -181,12 +197,14 @@ function Calendar() {
   const navigatePrev = () => {
     switch (currentCalendarView) {
       case CALENDAR_VIEWS.DAY:
-        setCurrentDate(subMonths(currentDate, 0, 1));
-        setSelectedDate(subMonths(currentDate, 0, 1));
+        const prevDay = subDays(currentDate, 1);
+        setCurrentDate(prevDay);
+        setSelectedDate(prevDay);
         break;
       case CALENDAR_VIEWS.WEEK:
-        setCurrentDate(subWeeks(currentDate, 1));
-        setSelectedDate(subWeeks(currentDate, 1));
+        const prevWeek = subWeeks(currentDate, 1);
+        setCurrentDate(prevWeek);
+        setSelectedDate(prevWeek);
         break;
       case CALENDAR_VIEWS.MONTH:
         setCurrentDate(subMonths(currentDate, 1));
@@ -203,11 +221,8 @@ function Calendar() {
     setCurrentDate(new Date());
     setSelectedDate(new Date());
   };
-
-  // Header component with navigation controls
-  const renderHeader = () => {
+  const renderHeaderTitle = () => {
     let headerTitle = "";
-    
     switch (currentCalendarView) {
       case CALENDAR_VIEWS.DAY:
         headerTitle = format(currentDate, 'EEEE, MMMM d, yyyy');
@@ -226,22 +241,36 @@ function Calendar() {
       default:
         headerTitle = format(currentDate, 'MMMM yyyy');
     }
+    return headerTitle;
+  }
+
+  // Header component with navigation controls
+  const renderHeader = () => {
+    let headerTitle = renderHeaderTitle();
 
     return (
       <div className="flex justify-between items-center p-4 bg-[var(--component-primary)]">
         <div className='flex flex-row '>
-          <button className="border h-fit w-fit border-black p-1 rounded-2xl font-bold mr-2" onClick={navigateToday}>Today</button>
-          <div className='mr-2'>
-            <button onClick={navigatePrev} className="text-xl font-bold border w-10 rounded-l">←</button>
-            <button onClick={navigateNext} className="text-xl font-bold border w-10 rounded-r">→</button>
+          <div onClick={navigateToday} className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] flex-1 rounded-xl 
+              mx-[5px]`}><div className={`w-fit h-fit px-2 py-1 flex flex-col items-center justify-center font-semibold bg-[var(--toggle-button-background)] shadow-md rounded-xl`}>Today</div>
           </div>
+
+          <div className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] rounded-xl mx-[5px]`}>
+            <button onClick={navigatePrev} className="text-xl font-bold border w-10 bg-[var(--toggle-button-background)] shadow-md rounded-xl mr-1">←</button>
+            <button onClick={navigateNext} className="text-xl font-bold border w-10 bg-[var(--toggle-button-background)] shadow-md rounded-xl">→</button>
+          </div>
+
         </div>
         
         <div><span className="text-lg font-semibold">{headerTitle}</span></div>
 
         <Dropdown
           items={VIEWS}
-          trigger={<div className='hover:cursor-pointer border p-1 rounded-2xl border-black'>{currentCalendarView}</div>}
+          trigger={
+            <div className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] flex-1 rounded-xl 
+              mx-[5px]`}><div className={`w-fit h-fit px-2 py-1 flex flex-col items-center justify-center font-semibold bg-[var(--toggle-button-background)] shadow-md rounded-xl`}>{currentCalendarView}</div>
+            </div>
+          }
           isOpen={openCalendarViewOptions} setIsOpen={setOpenCalendarViewOptions}
         />
       </div>
@@ -282,6 +311,81 @@ function Calendar() {
     );
   };
 
+  const filterAppointmentsByView = (view, currentDate, appointments) => {
+    switch (view) {
+      case CALENDAR_VIEWS.DAY:
+        return appointments.filter(appt =>
+          isSameDay(new Date(appt.date), currentDate)
+        );
+      case CALENDAR_VIEWS.WEEK:
+        return appointments.filter(appt =>
+          isWithinInterval(new Date(appt.date), {
+            start: startOfWeek(currentDate, { weekStartsOn: 0 }),
+            end: endOfWeek(currentDate, { weekStartsOn: 0 }),
+          })
+        );
+      case CALENDAR_VIEWS.MONTH:
+        return appointments.filter(appt =>
+          isSameMonth(new Date(appt.date), currentDate)
+        );
+      default:
+        return appointments;
+    }
+  };
+  
+  const filteredAppointments = useMemo(
+    () => filterAppointmentsByView(currentCalendarView, currentDate, appointments),
+    [currentCalendarView, currentDate, appointments]
+  );
+
+  // Render Calendar View
+  const renderCalendarView = () => {
+    switch (currentCalendarView) {
+      case CALENDAR_VIEWS.MONTH:
+        return (
+          <MonthView
+            currentDate={currentDate}
+            selectedDate={selectedDate}
+            appointments={filteredAppointments}
+            onDateClick={onDateClick}
+          />
+        );
+      case CALENDAR_VIEWS.DAY:
+        return (
+          <div className="p-4 overflow-y-scroll hide-scrollbar h-full">
+            <DayView currentDate={currentDate} appointments={filteredAppointments} />
+          </div>
+        );
+      case CALENDAR_VIEWS.WEEK:
+        return (
+          <div className="p-4 overflow-y-scroll hide-scrollbar h-full">
+            <WeekView
+              currentDate={currentDate}
+              appointments={filteredAppointments}
+              selectedDate={currentDate}
+              onDateClick={(day) => setSelectedDate(day)}
+            />
+          </div>
+        );
+      case CALENDAR_VIEWS.YEAR:
+        return (
+          <div className="p-4 overflow-y-scroll hide-scrollbar h-full">
+            <YearView
+              currentDate={new Date()}
+              setCurrentDate={setCurrentDate}
+              setSelectedDate={setSelectedDate}
+              CALENDAR_VIEWS={CALENDAR_VIEWS}
+              setCurrentCalendarView={setCurrentCalendarView}
+            />
+          </div>
+        );
+      case CALENDAR_VIEWS.SCHEDULE:
+        return <div className="p-4">{renderScheduleView()}</div>;
+      default:
+        return null;
+    }
+  };
+  
   // Handler for date clicks
   const onDateClick = (day) => {
     setSelectedDate(day);
@@ -302,13 +406,6 @@ function Calendar() {
     }
   }));
 
-  const CALENDAR_VIEWS_OPTIONS = Object.values(CALENDAR_VIEWS).map(option => ({
-    title: option,
-    onClick: () => {
-      setCurrentCalendarView(option);
-    }
-  }));
-
   // Schedule management handlers
   const handleAddSchedule = () => {
     setIsAddingSchedule(true);
@@ -320,34 +417,30 @@ function Calendar() {
 
   const handleSaveSchedule = () => {
     // In a real app, you would save this to your backend
-    console.log("New schedule:", newSchedule);
     setIsAddingSchedule(false);
   };
 
-  // Get appointments for the selected date
-  const selectedDateAppointments = getAppointmentsForDay(selectedDate, appointments);
-
   return (
-    <div className='h-full w-full flex flex-row relative bg-red-200'>
-      <div className='relative bg-[var(--component-primary)] w-[500px] mr-2 rounded-md'>
-        <div className='mt-[10px]'>
+    <div className='h-full w-full flex flex-row relative'>
+      <div className='relative bg-[var(--component-primary)] w-[500px] mr-2 rounded-md overflow-y-scroll hide-scrollbar'>
+        <div className='sticky top-0 z-10 bg-[var(--component-primary)] pt-[10px]'>
           {renderToggle(TAB_OPTIONS, "h-[40px]", "", currentOption)}
         </div>
 
         <div className="p-4">
           {currentOption === OPTIONS.APPOINTMENTS && (
-            <div className="mt-4">
-              <h2 className="text-lg font-semibold mb-4">
-                {format(selectedDate, 'EEEE, MMMM d, yyyy')}
+            <div className="">
+              <h2 className="flex flex-row justify-center sticky top-[50px] z-10 bg-[var(--component-primary)] text-lg font-semibold mb-4 px-4 pt-2 pb-2">
+                {renderHeaderTitle()}
               </h2>
               
-              {selectedDateAppointments.length === 0 ? (
+              {filteredAppointments.length === 0 ? (
                 <div className="text-center py-6 text-[var(--text-secondary)]">
-                  No appointments for this day
+                  No appointments for this {currentCalendarView}
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {selectedDateAppointments.map(appointment => (
+                  {filteredAppointments.map(appointment => (
                     <AppointmentCard key={appointment.id} appointment={appointment} />
                   ))}
                 </div>
@@ -447,46 +540,7 @@ function Calendar() {
       <div className="flex flex-col h-full w-full rounded-md overflow-hidden bg-[var(--component-primary)]">
         {renderHeader()}
         
-        {/* Render different calendar views based on selection */}
-        {currentCalendarView === CALENDAR_VIEWS.MONTH && (
-          <MonthView currentDate={new Date()} selectedDate={selectedDate} appointments={appointments} onDateClick={ onDateClick} />
-        )}
-        
-        {currentCalendarView === CALENDAR_VIEWS.DAY && (
-          <div className="p-4">
-            {/* {renderDayView()} */}
-            <DayView currentDate={currentDate} appointments={appointments}/>
-          </div>
-        )}
-        
-        {currentCalendarView === CALENDAR_VIEWS.WEEK && (
-          <div className="p-4">
-            <WeekView
-              currentDate={new Date()}
-              appointments={appointments}
-              selectedDate={new Date()}
-              onDateClick={(day) => setSelectedDate(day)}
-            />
-          </div>
-        )}
-        
-        {currentCalendarView === CALENDAR_VIEWS.YEAR && (
-          <div className="p-4">
-            <YearView
-              currentDate={new Date()}
-              setCurrentDate={setCurrentDate}
-              setSelectedDate={setSelectedDate}
-              CALENDAR_VIEWS={CALENDAR_VIEWS}
-              setCurrentCalendarView={setCurrentCalendarView}
-            />
-          </div>
-        )}
-        
-        {currentCalendarView === CALENDAR_VIEWS.SCHEDULE && (
-          <div className="p-4">
-            {renderScheduleView()}
-          </div>
-        )}
+        {renderCalendarView()}
       </div>
     </div>
   );
