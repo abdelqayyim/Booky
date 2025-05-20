@@ -256,8 +256,8 @@ function Calendar() {
           </div>
 
           <div className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] rounded-xl mx-[5px]`}>
-            <button onClick={navigatePrev} className="text-xl font-bold border w-10 bg-[var(--toggle-button-background)] shadow-md rounded-xl mr-1">←</button>
-            <button onClick={navigateNext} className="text-xl font-bold border w-10 bg-[var(--toggle-button-background)] shadow-md rounded-xl">→</button>
+            <button onClick={navigatePrev} className="text-xl font-bold  border-none w-10 bg-[var(--toggle-button-background)] shadow-md rounded-xl mr-1">←</button>
+            <button onClick={navigateNext} className="text-xl font-bold border-none w-10 bg-[var(--toggle-button-background)] shadow-md rounded-xl">→</button>
           </div>
 
         </div>
