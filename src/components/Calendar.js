@@ -4,8 +4,6 @@ import {
   endOfWeek,
   addDays,
   format,
-  addMonths,
-  subMonths,
   isSameMonth,
   isSameDay,
   addWeeks,
@@ -184,7 +182,7 @@ function Calendar() {
         setSelectedDate(addWeeks(currentDate, 1));
         break;
       case CALENDAR_VIEWS.MONTH:
-        setCurrentDate(addMonths(currentDate, 1));
+        setCurrentDate(addYears(currentDate, 1));
         break;
       case CALENDAR_VIEWS.YEAR:
         setCurrentDate(addYears(currentDate, 1));
@@ -207,7 +205,7 @@ function Calendar() {
         setSelectedDate(prevWeek);
         break;
       case CALENDAR_VIEWS.MONTH:
-        setCurrentDate(subMonths(currentDate, 1));
+        setCurrentDate(subYears(currentDate, 1));
         break;
       case CALENDAR_VIEWS.YEAR:
         setCurrentDate(subYears(currentDate, 1));
@@ -265,7 +263,7 @@ function Calendar() {
         <div><span className="text-lg font-semibold">{headerTitle}</span></div>
 
         <Dropdown
-          itemClassName={`bg-[var(--secondary)]`}
+          itemClassName={`bg-[var(--toggle-background)] hover:bg-[var(--bg-color-secondary)]`}
           items={VIEWS}
           trigger={
             <div className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] flex-1 rounded-xl 
@@ -349,12 +347,14 @@ function Calendar() {
             selectedDate={selectedDate}
             appointments={filteredAppointments}
             onDateClick={onDateClick}
+            setCurrentDate={setCurrentDate}
           />
+          
         );
       case CALENDAR_VIEWS.DAY:
         return (
           <div className="p-4 overflow-y-scroll hide-scrollbar h-full">
-            <DayView currentDate={currentDate} appointments={filteredAppointments} />
+            <DayView currentDate={currentDate} setCurrentDate={setCurrentDate} appointments={filteredAppointments} />
           </div>
         );
       case CALENDAR_VIEWS.WEEK:
@@ -540,7 +540,6 @@ function Calendar() {
 
       <div className="flex flex-col h-full w-full rounded-md overflow-hidden bg-[var(--component-primary)]">
         {renderHeader()}
-        
         {renderCalendarView()}
       </div>
     </div>

@@ -5,20 +5,22 @@ import {
   addHours,
   isToday,
   getHours,
-  getMinutes
+  getMinutes,
+  addDays,
+  subDays,
+  isSameDay
 } from 'date-fns';
 
-const DayView = ({ currentDate, appointments }) => {
-  const [now, setNow] = useState(currentDate);
+const DayView = ({ currentDate, appointments, setCurrentDate }) => {
+  const [now, setNow] = useState(new Date());
   const scrollRef = useRef(null);
   const containerRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(null);
+  const [visibleRangeStart, setVisibleRangeStart] = useState(subDays(currentDate, 3));
 
   // Update current time every 30 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(new Date());
-    }, 30000);
+    const interval = setInterval(() => setNow(new Date()), 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -28,7 +30,7 @@ const DayView = ({ currentDate, appointments }) => {
       const resize = () => {
         setContainerHeight(containerRef.current.getBoundingClientRect().height);
       };
-      resize(); // Initial
+      resize();
       window.addEventListener('resize', resize);
       return () => window.removeEventListener('resize', resize);
     }
@@ -43,6 +45,48 @@ const DayView = ({ currentDate, appointments }) => {
       scrollRef.current.scrollTop = scrollTop;
     }
   }, [currentDate, now, containerHeight]);
+
+  // 🔽 Date Selector Bar
+  const renderDateSelector = () => {
+    const days = [];
+    for (let i = 0; i < 10; i++) {
+      const day = addDays(visibleRangeStart, i);
+      const isSelected = isSameDay(day, currentDate);
+
+      days.push(
+        <button
+          key={i}
+          onClick={() => setCurrentDate(day)}
+          className={`px-3 py-2 rounded-md text-sm font-medium shadow-sm 
+            ${isSelected
+              ? 'bg-[var(--toggle-button-background)] border border-black-200 text-[var(--secondary)]'
+              : 'bg-[var(--toggle-background)] text-[var(--secondary)] hover:bg-[var(--toggle-button-background)]'
+            }`}
+        >
+          <div className="text-xs">{format(day, 'EEE')}</div>
+          <div className="text-sm">{format(day, 'd')}</div>
+        </button>
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-between px-4 py-2 bg-[var(--component-primary)] border-b border-gray-200">
+        <button
+          onClick={() => setVisibleRangeStart(subDays(visibleRangeStart, 1))}
+          className="text-xl px-2 py-1 rounded hover:bg-[var(--toggle-background)]"
+        >
+          ←
+        </button>
+        <div className="flex gap-2 overflow-x-auto">{days}</div>
+        <button
+          onClick={() => setVisibleRangeStart(addDays(visibleRangeStart, 1))}
+          className="text-xl px-2 py-1 rounded hover:bg-[var(--toggle-background)]"
+        >
+          →
+        </button>
+      </div>
+    );
+  };
 
   const renderDayView = () => {
     const hours = [];
@@ -108,6 +152,8 @@ const DayView = ({ currentDate, appointments }) => {
 
     return (
       <div ref={containerRef} className="h-full flex flex-col">
+        {renderDateSelector()}
+
         {containerHeight && (
           <div
             ref={scrollRef}

@@ -7,12 +7,11 @@ import {
   isThisWeek,
 } from 'date-fns';
 
-const WeekView = ({ currentDate, appointments, selectedDate, onDateClick }) => {
-  const now = currentDate;
+const WeekView = ({ currentDate, appointments, selectedDate, onDateClick, setCurrentDate }) => {
   const containerRef = useRef(null);
   const scrollRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(0);
-  const weekStart = startOfWeek(currentDate, { weekStartsOn: 0 });
+  const [visibleWeekStart] = useState(startOfWeek(currentDate, { weekStartsOn: 0 }));
 
   // Measure available height dynamically
   useEffect(() => {
@@ -28,52 +27,29 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick }) => {
 
   // Scroll to current hour if current week
   useEffect(() => {
-    if (isThisWeek(now, { weekStartsOn: 0 }) && scrollRef.current) {
+    if (isThisWeek(currentDate, { weekStartsOn: 0 }) && scrollRef.current) {
+      const now = new Date();
       const nowMinutes = now.getHours() * 60 + now.getMinutes();
-      const offset = 120; // scroll ~2 hours above current time
+      const offset = 120;
       scrollRef.current.scrollTop = Math.max(nowMinutes - offset, 0);
     }
-  }, [containerHeight]);
+  }, [containerHeight, currentDate]);
 
   const getAppointmentsForDay = (date) =>
     appointments.filter(appt => isSameDay(appt.date, date));
 
-  const renderDayHeaders = () => (
-    <>
-      <div className="w-16 border-r bg-gray-50" />
-      {Array.from({ length: 7 }).map((_, i) => {
-        const day = addDays(weekStart, i);
-        const isToday = isSameDay(day, now);
-        const isSelected = isSameDay(day, selectedDate);
 
-        return (
-          <div
-            key={i}
-            className={`flex-1 text-center py-2 cursor-pointer border-b
-              ${isToday ? 'bg-[var(--primary-light)]' : ''}
-              ${isSelected ? 'border-b-2 border-[var(--primary)]' : ''}`}
-            onClick={() => onDateClick(day)}
-          >
-            <div className="text-sm font-medium">{format(day, 'EEE')}</div>
-            <div className={`text-lg ${isSelected ? 'font-bold' : ''}`}>{format(day, 'd')}</div>
-          </div>
-        );
-      })}
-    </>
-  );
-
-  const renderTimeLabels = () => (
+  const renderTimeLabels = () =>
     Array.from({ length: 24 }).map((_, hour) => (
       <div key={hour} className="h-[60px] text-xs text-right pr-1 py-1 text-gray-500">
         {format(new Date().setHours(hour, 0, 0, 0), 'h a')}
       </div>
-    ))
-  );
+    ));
 
   const renderDayColumns = () => {
     return Array.from({ length: 7 }).map((_, i) => {
-      const day = addDays(weekStart, i);
-      const isToday = isSameDay(day, now);
+      const day = addDays(visibleWeekStart, i);
+      const isToday = isSameDay(day, new Date());
       const dayAppointments = getAppointmentsForDay(day);
 
       const apptBlocks = dayAppointments.map((appt) => {
@@ -108,6 +84,7 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick }) => {
         />
       ));
 
+      const now = new Date();
       const nowMinutes = now.getHours() * 60 + now.getMinutes();
       const timeIndicator = isToday ? (
         <div
@@ -134,19 +111,23 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick }) => {
     <div ref={containerRef} className="h-full flex flex-col">
       <div className="border rounded-lg overflow-hidden flex-1 flex flex-col">
         <div className="flex border-b bg-gray-50">
-          {renderDayHeaders()}
+          {/* Column Headers */}
+          <div className="w-16 border-r bg-gray-50" />
+          {Array.from({ length: 7 }).map((_, i) => {
+            const day = addDays(visibleWeekStart, i);
+            return (
+              <div key={i} className="flex-1 text-center py-2 border-b">
+                <div className="text-sm font-medium">{format(day, 'EEE')}</div>
+                <div className="text-lg">{format(day, 'd')}</div>
+              </div>
+            );
+          })}
         </div>
 
-        <div
-          className="flex overflow-x-auto flex-1 hide-scrollbar"
-          ref={scrollRef}
-        >
-          {/* Time column */}
+        <div className="flex overflow-x-auto flex-1 hide-scrollbar" ref={scrollRef}>
           <div className="w-16 border-r text-xs bg-white" style={{ height: '1440px' }}>
             {renderTimeLabels()}
           </div>
-
-          {/* Days */}
           {renderDayColumns()}
         </div>
       </div>
