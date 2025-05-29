@@ -96,10 +96,10 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick, setCur
       return (
         <div
           key={i}
-          className="flex-1 relative border-r last:border-r-0 bg-white"
+          className="flex-1 relative border-r last:border-r-0 bg-[var(--component-primary)]"
           style={{ height: '1440px' }}
         >
-          {hourLines}
+          {/* {hourLines} */}
           {apptBlocks}
           {timeIndicator}
         </div>
@@ -112,11 +112,11 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick, setCur
       <div className="border rounded-lg overflow-hidden flex-1 flex flex-col">
         <div className="flex border-b bg-gray-50">
           {/* Column Headers */}
-          <div className="w-16 border-r bg-gray-50" />
+          <div className="w-16 border-r bg-[var(--component-primary)]" />
           {Array.from({ length: 7 }).map((_, i) => {
             const day = addDays(visibleWeekStart, i);
             return (
-              <div key={i} className="flex-1 text-center py-2 border-b">
+              <div key={i} className="flex-1 text-center py-2 bg-[var(--component-primary)]">
                 <div className="text-sm font-medium">{format(day, 'EEE')}</div>
                 <div className="text-lg">{format(day, 'd')}</div>
               </div>
@@ -125,7 +125,7 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick, setCur
         </div>
 
         <div className="flex overflow-x-auto flex-1 hide-scrollbar" ref={scrollRef}>
-          <div className="w-16 border-r text-xs bg-white" style={{ height: '1440px' }}>
+          <div className="w-16 border-r text-xs bg-[var(--component-primary)]" style={{ height: '1440px' }}>
             {renderTimeLabels()}
           </div>
           {renderDayColumns()}

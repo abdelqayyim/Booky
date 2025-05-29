@@ -111,7 +111,7 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
                 style={{ top: `${(minutes / 60) * 100}%` }}
               />
             )}
-            <div className="absolute top-1/2 left-0 right-0 border-t border-dashed border-gray-300 z-0"></div>
+            {/* <div className="absolute top-1/2 left-0 right-0 border-t borddasheder- border-gray-300 z-0"></div> */}
           </div>
         </div>
       );
