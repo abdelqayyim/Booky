@@ -25,6 +25,8 @@
   --dark: #111827;
   --sidebar-width: 250px;
   --header-height: 60px;
+
+  --appointment-color: #89CFF0;
 }
 .dark {
   --primary: #4f46e5;
@@ -49,6 +51,8 @@
   --dark: #f9fafb;          /* Nearly white instead of nearly black */
   --sidebar-width: 250px;
   --header-height: 60px;
+
+  --appointment-color: #4f46e5; 
 }
 html, body, #root {
   height: 100%;

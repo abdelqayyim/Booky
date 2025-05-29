@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ARROW_UP, ARROW_DOWN } from '../../pages/constants';
+import { Tooltip } from '@mui/material';
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export default function OverrideSchedule({ weekStartDate, days }) {
@@ -10,18 +11,20 @@ export default function OverrideSchedule({ weekStartDate, days }) {
   weekEnd.setDate(weekStart.getDate() + 6);
 
   return (
-    <div className="border rounded-lg p-4 bg-white shadow-sm">
+    <div className="border rounded-lg p-4 bg-[var(--bg-color-secondary)] shadow-sm">
       {/* Header */}
       <div className="flex justify-between items-center mb-2">
-        <div className="text-sm text-[var(--text-secondary)] font-semibold">
+        <div className="text-sm text-[var(--text-primary)] font-semibold">
           Week: {weekStart.toLocaleDateString()} - {weekEnd.toLocaleDateString()}
         </div>
+        <Tooltip title={isOpen ? "Close" : "Expand"} placement="bottom">
         <button
           onClick={() => setIsOpen(prev => !prev)}
-          className="text-sm px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700"
+          className="text-sm px-2 py-1 rounded-md bg-[var(--toggle-background)] text-[var(--text-primary)]"
         >
           <div>{isOpen ? ARROW_UP : ARROW_DOWN}</div>
         </button>
+        </Tooltip>
       </div>
 
       

@@ -64,14 +64,14 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick, setCur
         return (
           <div
             key={appt.id}
-            className="absolute left-1 right-1 bg-blue-300 text-white rounded-md p-1 text-xs shadow-md overflow-hidden"
+            className="absolute left-1 right-1 bg-[var(--appointment-color)] text-white rounded-md p-1 text-xs shadow-md overflow-hidden"
             style={{
               top: `${totalMinutes}px`,
               height: `${appt.duration}px`,
             }}
           >
-            <div className="font-semibold truncate">{appt.clientName}</div>
-            <div className="text-[10px] truncate">{appt.service}</div>
+            <div className="font-semibold truncate text-[var(--text-primary)]">{appt.clientName}</div>
+            <div className="text-[10px] truncate text-[var(--text-secondary)]">{appt.service}</div>
           </div>
         );
       });

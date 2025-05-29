@@ -138,14 +138,14 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
       return (
         <div
           key={appt.id}
-          className="absolute z-10 left-20 right-2 bg-blue-200 rounded-md p-2 text-sm shadow-md overflow-hidden"
+          className="absolute z-10 left-20 right-2 bg-[var(--appointment-color)] rounded-md p-2 text-sm shadow-md overflow-hidden"
           style={{
             top: `${top}px`,
             height: `${height}px`,
           }}
         >
-          <div className="font-semibold">{appt.clientName}</div>
-          <div className="text-xs text-gray-600">{appt.service}</div>
+          <div className="font-semibold text-[var(--text-primary)]">{appt.clientName}</div>
+          <div className="text-xs text-[var(--text-secondary)]">{appt.service}</div>
         </div>
       );
     });
@@ -153,7 +153,6 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
     return (
       <div ref={containerRef} className="h-full flex flex-col">
         {renderDateSelector()}
-
         {containerHeight && (
           <div
             ref={scrollRef}

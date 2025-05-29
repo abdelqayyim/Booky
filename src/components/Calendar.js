@@ -21,6 +21,7 @@ import YearView from './Calendar/YearView.js';
 import Dropdown from './Dropdown.js';
 import OverrideSchedule from './Calendar/OverrideSchedule.js';
 import { ARROW_UP, ARROW_DOWN, EDIT_BUTTON, ADD_BUTTON } from '../pages/constants.js';
+import Tooltip from "@mui/material/Tooltip";
 
 // Mock data for appointments
 const mockAppointments = [
@@ -410,7 +411,7 @@ function Calendar() {
         );
       case CALENDAR_VIEWS.DAY:
         return (
-          <div className="p-4 overflow-y-scroll hide-scrollbar h-full">
+          <div className="px-4 overflow-y-scroll hide-scrollbar h-full">
             <DayView currentDate={currentDate} setCurrentDate={setCurrentDate} appointments={filteredAppointments} />
           </div>
         );
@@ -512,25 +513,31 @@ function Calendar() {
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Default Schedule</h2>
               <div className="flex gap-2">
-                <button
+                  <Tooltip title={isDefaultOpen ? "Close" : "Expand"} placement="bottom">
+                  <button
                   onClick={() => setIsDefaultOpen(!isDefaultOpen)}
-                  className="text-sm px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  className="text-sm px-2 py-1 rounded-md bg-[var(--toggle-background)] hover:bg-gray-200 text-[var(--text-primary)]"
                   >
                     <div>{isDefaultOpen ? ARROW_UP : ARROW_DOWN}</div>
-                    
                 </button>
-                <button
+                </Tooltip>
+                  <Tooltip title='Edit' placement="bottom">
+                  <button
                   onClick={() => handleEditSchedule(null)}
-                  className="bg-gray-200 hover:bg-gray-300 text-sm text-gray-700 px-3 py-1 rounded-md"
+                  className="bg-[var(--toggle-background)] text-sm text-[var(--text-primary)] px-3 py-1 rounded-md"
                 >
                   {EDIT_BUTTON}
                 </button>
-                <button 
+                  </Tooltip>
+                  <Tooltip title='Add' placement="bottom">
+                  <button 
                   onClick={handleAddSchedule}
                   className="bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white px-3 py-1 rounded-md text-sm"
                 >
                   {ADD_BUTTON}
                 </button>
+                  </Tooltip>
+                
               </div>
             </div>
 
