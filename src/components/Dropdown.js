@@ -20,15 +20,11 @@ export default function Dropdown({
   };
   
 
-  const handleOutsideClick = useCallback(
-    (e) => {
-      // Close the dropdown when clicking outside
-      if (!e.target.closest('.dropdown-container') && !e.target.closest('.relative')) {
-        setIsOpen(false);
-      }
-    },
-    [setIsOpen]
-  );
+  const handleOutsideClick = useCallback((e) => {
+    if (!e.target.closest('.dropdown-container')) {
+      setIsOpen(false);
+    }
+  }, [setIsOpen]);
 
   useEffect(() => {
     if (isOpen) {

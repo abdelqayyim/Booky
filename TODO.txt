@@ -1,4 +1,9 @@
 Todo:
-  - Appointments Page
-    - 
+  - Forms schema (overlay, then window)
+  - Work on create schedule
 Done:
+
+
+
+Keep in mind:
+  - Should only be able to a week's schedule to up 3 months in advance

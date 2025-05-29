@@ -19,6 +19,8 @@ import AppointmentCard from './AppointmentCard';
 import MonthView from './Calendar/MonthView';
 import YearView from './Calendar/YearView.js';
 import Dropdown from './Dropdown.js';
+import OverrideSchedule from './Calendar/OverrideSchedule.js';
+import { ARROW_UP, ARROW_DOWN, EDIT_BUTTON, ADD_BUTTON } from '../pages/constants.js';
 
 // Mock data for appointments
 const mockAppointments = [
@@ -119,6 +121,41 @@ const mockSchedules = [
   }
 ];
 
+const mockDefaultSchedules = {
+  userId: "user_001",
+  weekStartDate: null, // null = default
+  days: {
+    Monday: [
+      { startTime: "08:00", endTime: "10:00" },
+      { startTime: "14:00", endTime: "17:00" },
+    ],
+    Tuesday: [{ startTime: "09:00", endTime: "17:00" }],
+    Wednesday: [{ startTime: "09:00", endTime: "17:00" }],
+    Thursday: [{ startTime: "10:00", endTime: "18:00" }],
+    Friday: [{ startTime: "09:00", endTime: "15:00" }],
+    Saturday: [],
+    Sunday: [],
+  },
+}
+const mockOverrideSchedules = [
+  {
+    userId: "user_001",
+    weekStartDate: "2025-06-08", // Sunday
+    days: {
+      Monday: [
+        { startTime: "10:00", endTime: "12:00" }, // shortened
+        { startTime: "13:00", endTime: "14:00" },
+      ],
+      Tuesday: [], // no availability (override default)
+      Wednesday: [{ startTime: "10:00", endTime: "16:00" }],
+      // Thursday to Sunday inherit default
+    },
+  },
+];
+
+
+
+
 function Calendar() {
   const OPTIONS = {
     APPOINTMENTS: "Appointments",
@@ -146,7 +183,7 @@ function Calendar() {
   const [currentOption, setCurrentOption] = useState(OPTIONS.APPOINTMENTS);
   const [currentCalendarView, setCurrentCalendarView] = useState(CALENDAR_VIEWS.DAY);
   const [appointments] = useState(mockAppointments);
-  const [schedules] = useState(mockSchedules);
+  const [schedules] = useState({default: mockDefaultSchedules, overrideSchedule: mockOverrideSchedules});
   const [isAddingSchedule, setIsAddingSchedule] = useState(false);
   const [newSchedule, setNewSchedule] = useState({
     day: "Monday",
@@ -154,6 +191,9 @@ function Calendar() {
     endTime: "05:00 PM"
   });
   const [openCalendarViewOptions, setOpenCalendarViewOptions] = useState(false);
+  const [isDefaultOpen, setIsDefaultOpen] = useState(true);
+  const [openOverrides, setOpenOverrides] = useState({}); // key: weekStartDate, value: boolean
+
 
   // Toggle component for switching between options
   const renderToggle = (options, height, width, currentValue) => (
@@ -213,6 +253,23 @@ function Calendar() {
       default:
         break;
     }
+  };
+
+  const handleEditSchedule = (weekStartDate) => {
+    if (weekStartDate === null) {
+      // Editing the default schedule
+      console.log("Edit default schedule");
+    } else {
+      console.log("Edit override schedule for week:", weekStartDate);
+    }
+  
+    // Set state to open edit modal/form
+  };
+  const toggleOverride = (weekStartDate) => {
+    setOpenOverrides(prev => ({
+      ...prev,
+      [weekStartDate]: !prev[weekStartDate],
+    }));
   };
 
   const navigateToday = () => {
@@ -449,30 +506,72 @@ function Calendar() {
             </div>
           )}
 
-          {currentOption === OPTIONS.SCHEDULE && !isAddingSchedule && (
-            <div className="mt-4">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Your Schedule</h2>
+        {currentOption === OPTIONS.SCHEDULE && !isAddingSchedule && (
+          <div className="mt-4">
+            {/* Default Schedule Header */}
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold">Default Schedule</h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsDefaultOpen(!isDefaultOpen)}
+                  className="text-sm px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  >
+                    <div>{isDefaultOpen ? ARROW_UP : ARROW_DOWN}</div>
+                    
+                </button>
+                <button
+                  onClick={() => handleEditSchedule(null)}
+                  className="bg-gray-200 hover:bg-gray-300 text-sm text-gray-700 px-3 py-1 rounded-md"
+                >
+                  {EDIT_BUTTON}
+                </button>
                 <button 
                   onClick={handleAddSchedule}
                   className="bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white px-3 py-1 rounded-md text-sm"
                 >
-                  Add New
+                  {ADD_BUTTON}
                 </button>
               </div>
-              
-              <div className="space-y-2">
-                {schedules.map(schedule => (
-                  <div key={schedule.id} className="flex justify-between items-center p-3 rounded-lg bg-[var(--bg-color)] shadow-sm">
-                    <div className="font-medium">{schedule.day}</div>
-                    <div className="text-[var(--text-secondary)]">
-                      {schedule.startTime} - {schedule.endTime}
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
-          )}
+
+            {/* Default Schedule Display */}
+            {isDefaultOpen && (
+              <div className="space-y-2">
+                {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => {
+                  const blocks = schedules.default.days[day] || [];
+                  return (
+                    <div key={day} className="p-3 rounded-lg bg-[var(--bg-color)] shadow-sm">
+                      <div className="font-medium mb-1">{day}</div>
+                      {blocks.length > 0 ? (
+                        <div className="space-y-1">
+                          {blocks.map((block, idx) => (
+                            <div key={idx} className="text-sm text-[var(--text-secondary)]">
+                              {block.startTime} - {block.endTime}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-sm text-[var(--text-secondary)] italic">No hours</div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Override Schedules */}
+              <div>
+                <div className='my-2 font-bold'>You Overrides</div>
+              {schedules.overrideSchedule.map((override, i) => (
+                <OverrideSchedule
+                  key={override.weekStartDate}
+                  weekStartDate={override.weekStartDate}
+                  days={override.days}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
           {currentOption === OPTIONS.SCHEDULE && isAddingSchedule && (
             <div className="mt-4">
