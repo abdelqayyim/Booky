@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   startOfWeek,
   endOfWeek,
@@ -22,6 +23,9 @@ import Dropdown from './Dropdown.js';
 import OverrideSchedule from './Calendar/OverrideSchedule.js';
 import { ARROW_UP, ARROW_DOWN, EDIT_BUTTON, ADD_BUTTON } from '../pages/constants.js';
 import Tooltip from "@mui/material/Tooltip";
+import CustomButton from './CustomButton.js';
+import { FORMS } from '../components/Forms/FormsContainer.js'
+import { setCurrentForm } from '../redux/ui/uiSlice.js';
 
 // Mock data for appointments
 const mockAppointments = [
@@ -153,10 +157,6 @@ const mockOverrideSchedules = [
     },
   },
 ];
-
-
-
-
 function Calendar() {
   const OPTIONS = {
     APPOINTMENTS: "Appointments",
@@ -170,15 +170,7 @@ function Calendar() {
     YEAR: "Year",
     SCHEDULE: "Schedule"
   };
-
-  const VIEWS = [
-    { label: 'DAY', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.DAY)  },
-    { label: 'WEEK', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.WEEK)  },
-    { label: 'MONTH', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.MONTH)  },
-    { label: 'YEAR', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.YEAR) },
-    { label: 'SCHEDULE', onClick: () => setCurrentCalendarView(CALENDAR_VIEWS.SCHEDULE)  }
-  ]
-  
+  const dispatch = useDispatch();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentOption, setCurrentOption] = useState(OPTIONS.APPOINTMENTS);
@@ -195,6 +187,24 @@ function Calendar() {
   const [isDefaultOpen, setIsDefaultOpen] = useState(true);
   const [openOverrides, setOpenOverrides] = useState({}); // key: weekStartDate, value: boolean
 
+  const allViews = [
+    { label: 'DAY', value: CALENDAR_VIEWS.DAY },
+    { label: 'WEEK', value: CALENDAR_VIEWS.WEEK },
+    { label: 'MONTH', value: CALENDAR_VIEWS.MONTH },
+    { label: 'YEAR', value: CALENDAR_VIEWS.YEAR },
+    { label: 'SCHEDULE', value: CALENDAR_VIEWS.SCHEDULE }
+  ];
+
+  const VIEWS = allViews
+  .filter(view => view.value !== currentCalendarView)
+  .map(view => ({
+    label: view.label,
+    onClick: () => setCurrentCalendarView(view.value)
+  }));
+
+  const handleCreateEvent = () => {
+    dispatch(setCurrentForm(FORMS.CREATE_EVENT))
+  }
 
   // Toggle component for switching between options
   const renderToggle = (options, height, width, currentValue) => (
@@ -308,7 +318,7 @@ function Calendar() {
       <div className="flex justify-between items-center p-4 bg-[var(--component-primary)]">
         <div className='flex flex-row '>
           <div onClick={navigateToday} className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] flex-1 rounded-xl 
-              mx-[5px]`}><div className={`w-fit h-fit px-2 py-1 flex flex-col items-center justify-center font-semibold bg-[var(--toggle-button-background)] shadow-md rounded-xl`}>Today</div>
+              mx-[5px]`}><div className={`w-fit h-fit px-2 py-1 flex flex-col items-center justify-center font-semibold bg-[var(--toggle-button-background)] shadow-md rounded-xl cursor-pointer`}>Today</div>
           </div>
 
           <div className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] rounded-xl mx-[5px]`}>
@@ -320,16 +330,28 @@ function Calendar() {
         
         <div><span className="text-lg font-semibold">{headerTitle}</span></div>
 
-        <Dropdown
-          itemClassName={`bg-[var(--toggle-background)] hover:bg-[var(--bg-color-secondary)]`}
-          items={VIEWS}
-          trigger={
-            <div className={`p-1 flex flex-row justify-center bg-[var(--toggle-background)] flex-1 rounded-xl 
-              mx-[5px]`}><div className={`w-fit h-fit px-2 py-1 flex flex-col items-center justify-center font-semibold bg-[var(--toggle-button-background)] shadow-md rounded-xl`}>{currentCalendarView}</div>
-            </div>
-          }
-          isOpen={openCalendarViewOptions} setIsOpen={setOpenCalendarViewOptions}
-        />
+        <div className='flex flex-row items-center justify-center'>
+          <CustomButton
+            icon={ADD_BUTTON}
+            onClick={handleCreateEvent}
+            tooltipTitle="Add"
+            tooltipPlacement="bottom"
+            colorScheme="primary"
+            height="35px"
+            width="45px"
+          />
+
+          <Dropdown
+            itemClassName={`bg-[var(--toggle-background)] hover:bg-[var(--bg-color-secondary)]`}
+            items={VIEWS}
+            trigger={
+              <div className={`cursor-pointer p-1 flex flex-row justify-center bg-[var(--toggle-background)] flex-1 rounded-xl 
+                mx-[5px]`}><div className={`w-fit h-fit px-2 py-1 flex flex-col items-center justify-center font-semibold bg-[var(--toggle-button-background)] shadow-md rounded-xl`}>{currentCalendarView}</div>
+              </div>
+            }
+            isOpen={openCalendarViewOptions} setIsOpen={setOpenCalendarViewOptions}
+          />
+        </div>
       </div>
     );
   };
@@ -469,6 +491,7 @@ function Calendar() {
   const handleAddSchedule = () => {
     setIsAddingSchedule(true);
   };
+
 
   const handleScheduleChange = (field, value) => {
     setNewSchedule(prev => ({ ...prev, [field]: value }));
