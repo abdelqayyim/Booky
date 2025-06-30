@@ -1,7 +1,10 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentForm } from "../redux/ui/uiSlice";
 import { Clock, Calendar } from "lucide-react";
-
+import { FORMS } from "./Forms/FormsContainer";
 const AppointmentCard = ({ appointment }) => {
+  const dispatch = useDispatch()
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-[var(--bg-color)] rounded-xl shadow-md overflow-hidden border-none border-gray-100 flex">
@@ -54,10 +57,10 @@ const AppointmentCard = ({ appointment }) => {
               Upcoming
             </span>
             <div className="space-x-2">
-              <button className="text-gray-500 hover:text-gray-700 text-sm">
+              <button className="text-gray-500 hover:text-gray-700 text-sm" onClick={()=>dispatch(setCurrentForm(FORMS.RESCHEDULE_EVENT))}>
                 Reschedule
               </button>
-              <button className="text-red-500 hover:text-red-700 text-sm">
+              <button className="text-red-500 hover:text-red-700 text-sm" onClick={()=>dispatch(setCurrentForm(FORMS.CANCEL_EVENT))}>
                 Cancel
               </button>
             </div>

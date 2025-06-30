@@ -1,17 +1,12 @@
-import React from 'react'; 
-import Overlay from '../Overlay';
+import React from 'react';
+import PopUpFormSkeleton from './PopUpFormSkeleton';
 
 const CreateEventForm = () => {
   return (
-    <Overlay isOpen={true}>
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded shadow-lg text-black text-lg">
-          HELLOP WORLD
-        </div>
-      </div>
-    </Overlay>
+    <PopUpFormSkeleton formTitle={"Create Event"}>
+      <div>Hello world</div>
+    </PopUpFormSkeleton>
   );
 };
-
 
 export default CreateEventForm;
