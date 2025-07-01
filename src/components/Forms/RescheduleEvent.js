@@ -123,7 +123,7 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
             className="w-full px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-medium flex items-center justify-center space-x-2"
           >
             <RefreshCw size={18} />
-            <span>Re-Schedule Event</span>
+            <span>Send Re-Schedule Request</span>
           </button>
         </div>
       </div>
