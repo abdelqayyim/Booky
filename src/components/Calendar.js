@@ -159,7 +159,8 @@ const mockOverrideSchedules = [
 ];
 function Calendar() {
   const OPTIONS = {
-    APPOINTMENTS: "Appointments",
+    BOOKINGS: "Bookings",
+    // Bookings: "Bookings",
     SCHEDULE: "Schedule"
   };
   
@@ -173,7 +174,7 @@ function Calendar() {
   const dispatch = useDispatch();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [currentOption, setCurrentOption] = useState(OPTIONS.APPOINTMENTS);
+  const [currentOption, setCurrentOption] = useState(OPTIONS.BOOKINGS);
   const [currentCalendarView, setCurrentCalendarView] = useState(CALENDAR_VIEWS.DAY);
   const [appointments] = useState(mockAppointments);
   const [schedules] = useState({default: mockDefaultSchedules, overrideSchedule: mockOverrideSchedules});
@@ -510,7 +511,7 @@ function Calendar() {
         </div>
 
         <div className="p-4">
-          {currentOption === OPTIONS.APPOINTMENTS && (
+          {currentOption === OPTIONS.BOOKINGS && (
             <div className="">
               <h2 className="flex flex-row justify-center sticky top-[50px] z-10 bg-[var(--component-primary)] text-lg font-semibold mb-4 px-4 pt-2 pb-2">
                 {renderHeaderTitle()}

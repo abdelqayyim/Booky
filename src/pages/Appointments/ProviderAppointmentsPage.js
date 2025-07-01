@@ -1,7 +1,7 @@
 import React from 'react';
-import Calendar from '../components/Calendar';
+import Calendar from '../../components/Calendar';
 
-const AppointmentsPage = (props) => {
+const ProviderAppointmentsPage = (props) => {
   return (
     <div className='h-full flex flex-col items-center pl-[10px] pt-[5px] bg-transparent'>
     {/* Page Title and Filter */}
@@ -12,9 +12,8 @@ const AppointmentsPage = (props) => {
         {/* Appointment Details */}
         <Calendar/>
     </div>
-
 </div>
   )
 };
 
-export default AppointmentsPage;
+export default ProviderAppointmentsPage;

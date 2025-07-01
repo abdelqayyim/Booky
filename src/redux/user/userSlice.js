@@ -13,12 +13,6 @@ const initialState = {
   status: RESPONSE_STATUS.IDLE,    
   error: null,
 }
-// const initialState = {
-//   user: null,        // will store user object (e.g., { id, name, email })
-//   isLoggedIn: false, // helpful for conditional rendering
-//   status: RESPONSE_STATUS.IDLE,    // loading status: 'idle' | 'loading' | 'succeeded' | 'failed'
-//   error: null,       // holds any error message
-// };
 
 const userSlice = createSlice({
   name: 'user',
