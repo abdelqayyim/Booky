@@ -31,34 +31,35 @@ function App() {
 
           {/* Protected Routes (wrapped in shared layout) */}
           <Route path="/" element={<Layout />}>
+            
+            {/* Dashboard Pages */}
             <Route path="dashboard" element={<DashboardPage />} />
+
+            {/* Users Pages */}
             <Route path="users" element={<UsersPage />} />
+
+            {/* Providers Pages */}
             <Route path="providers" element={<ProvidersPage />} />
 
+            {/* Appointments Pages */}
+            <Route path="appointments" element={ user?.role === ROLES.PROVIDER ? (<ProviderAppointmentsPage />) : user?.role === ROLES.CLIENT ? (<ClientAppointmentsPage />) : user?.role === ROLES.ADMIN ? (<AdminAppointmentsPage /> ) : ( <NotFound /> )}/>
 
-            <Route
-  path="appointments"
-  element={
-    user?.role === ROLES.PROVIDER ? (
-      <ProviderAppointmentsPage />
-    ) : user?.role === ROLES.CLIENT ? (
-      <ClientAppointmentsPage />
-    ) : user?.role === ROLES.ADMIN ? (
-      <AdminAppointmentsPage />
-    ) : (
-      <NotFound />
-    )
-  }
-/>
-
-
-
+            {/* Disputes Pages */}
             <Route path="disputes" element={<DisputesPage />} />
+
+            {/* Reviews Pages */}
             <Route path="reviews" element={<ReviewsPage />} />
+
+            {/* Notifications Pages */}
             <Route path="notifications" element={<NotificationsPage />} />
+
+            {/* Monetization Pages */}
             <Route path="monetization" element={<MonetizationPage />} />
 
+            {/* Reports Pages */}
             <Route path="reports" element={<ReportsPage />} />
+            
+            {/* Settings Pages */}
             <Route path="settings" element={<SettingsPages />} />
 
           </Route>
