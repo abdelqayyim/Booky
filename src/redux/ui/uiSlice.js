@@ -10,7 +10,6 @@ export const ROLES = {ADMIN: "admin", PROVIDER:"provider", CLIENT:"client"}
 const initialState = {
   uiMode: "light",
   currentForm: null,
-
 }
 
 const uiSlice = createSlice({
@@ -26,9 +25,9 @@ const uiSlice = createSlice({
     },
     setCurrentForm(state, action) {
       state.currentForm = action.payload
-    }
+    },
   },
 });
 
-export const { toggleUiMode, setCurrentForm } = uiSlice.actions;
+export const { toggleUiMode, setCurrentForm, setSelectedAppointment } = uiSlice.actions;
 export default uiSlice.reducer;

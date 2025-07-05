@@ -11,6 +11,7 @@ const initialState = {
   user: { id: 122343242, role: ROLES.PROVIDER, name: {firstName: "Abdel Qayyim", lastName:"Maazou Yahaya"}, email:"jackLeKing@gmail.com" },        
   isLoggedIn: true, 
   status: RESPONSE_STATUS.IDLE,    
+  selectedAppointment: null,
   error: null,
 }
 
@@ -33,8 +34,11 @@ const userSlice = createSlice({
     setError(state, action) {
       state.error = action.payload;
     },
+    setSelectedAppointment(state, action) {
+      state.selectedAppointment = action.payload
+    }
   },
 });
 
-export const { login, logout, setStatus, setError } = userSlice.actions;
+export const { login, logout, setStatus, setError,setSelectedAppointment } = userSlice.actions;
 export default userSlice.reducer;

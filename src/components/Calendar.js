@@ -37,6 +37,12 @@ const mockAppointments = [
     time: "09:00 AM",
     date: new Date(),
     duration: 90,
+    phone: "(555) 123-4567",
+    email: "sarah.johnson@email.com",
+    location: "Downtown Salon - Chair 3",
+    price: 150,
+    notes: "Client prefers natural blonde highlights. Allergic to ammonia-based products.",
+    status: "confirmed"
   },
   {
     id: 2,
@@ -46,6 +52,12 @@ const mockAppointments = [
     time: "11:30 AM",
     date: new Date(),
     duration: 45,
+    phone: "(555) 987-6543",
+    email: "m.chen@email.com",
+    location: "Main Floor - Station 2",
+    price: 35,
+    notes: "Regular client - usual fade cut with trim on top.",
+    status: "confirmed"
   },
   {
     id: 3,
@@ -55,6 +67,12 @@ const mockAppointments = [
     time: "02:15 PM",
     date: new Date(),
     duration: 75,
+    phone: "(555) 456-7890",
+    email: "jessica.w@email.com",
+    location: "Nail Studio - Table 1",
+    price: 65,
+    notes: "Requested gel polish in coral pink. Has sensitive skin.",
+    status: "confirmed"
   },
   {
     id: 4,
@@ -64,8 +82,13 @@ const mockAppointments = [
     time: "05:30 PM",
     date: new Date(),
     duration: 45,
+    phone: "(555) 987-6543",
+    email: "m.chen@email.com",
+    location: "Main Floor - Station 2",
+    price: 35,
+    notes: "Follow-up appointment for touch-up.",
+    status: "confirmed"
   },
-  // Appointments for tomorrow
   {
     id: 5,
     clientName: "Emily Davis",
@@ -74,6 +97,12 @@ const mockAppointments = [
     time: "10:00 AM",
     date: addDays(new Date(), 1),
     duration: 60,
+    phone: "(555) 321-0987",
+    email: "emily.davis@email.com",
+    location: "Spa Room A",
+    price: 90,
+    notes: "First-time client. Oily skin type, looking for deep cleansing treatment.",
+    status: "pending"
   },
   {
     id: 6,
@@ -83,7 +112,13 @@ const mockAppointments = [
     time: "04:00 PM",
     date: addDays(new Date(), 1),
     duration: 30,
-  },
+    phone: "(555) 654-3210",
+    email: "john.smith@email.com",
+    location: "Barber Station",
+    price: 25,
+    notes: "Prefers classic professional look. Regular maintenance trim.",
+    status: "confirmed"
+  }
 ];
 
 // Mock data for schedules
