@@ -52,6 +52,14 @@ const ProviderDashboardPage = (props) => {
     );
   };
 
+  // {filteredAppointments.map((appointment) => (
+  //   <AppointmentCard
+  //     key={appointment.id}
+  //     appointment={appointment}
+  //     bgColor="bg-white"
+  //   />
+  // ))}
+
   const filteredAppointments = useMemo(() => {
     return appointments.filter((appt) =>
       isSameDay(new Date(appt.date), currentDate)
@@ -61,46 +69,45 @@ const ProviderDashboardPage = (props) => {
   console.log(`filteredAppointments`, filteredAppointments);
 
   return (
-    <div className="h-full flex flex-col p-[25px] bg-transparent">
-      {/* Page Title and Filter */}
-      <div className="mb-[10px]">
-        <h1 className="text-[var(--text-primary)] text-[45px] font-bold">
-          Dashboard
-        </h1>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-fr gap-[20px] mb-[15px]">
-        {providerStats.map((card, index) => (
-          <StatCard key={index} card={card} />
-        ))}
-      </div>
-
-      {/* This will grow to fill the remaining vertical space */}
-      <div className="w-full flex-grow flex flex-row overflow-scroll hide-scrollbar">
-        <div className="w-[350px] rounded-md relative">
-  {/* Sticky Header */}
-  <div className="sticky top-0 z-10 bg-[var(--component-primary)] font-bold text-[var(--secondary)] text-lg pl-2 py-2">
-    Appointments
+    <div className="h-full flex flex-col px-[25px] bg-transparent overflow-hidden">
+  {/* Page Title and Filter */}
+  <div className="mb-[10px]">
+    <h1 className="text-[var(--text-primary)] text-[45px] font-bold">
+      Dashboard
+    </h1>
   </div>
 
-  {/* Spacer to simulate bottom margin below the sticky element */}
-  <div className="h-4" />
-
-  {/* Appointment List */}
-  <div className="space-y-4">
-    {filteredAppointments.map((appointment) => (
-      <AppointmentCard
-        key={appointment.id}
-        appointment={appointment}
-        bgColor="bg-white"
-      />
+  {/* Stats Grid */}
+  <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-fr gap-[20px] mb-[15px]">
+    {providerStats.map((card, index) => (
+      <StatCard key={index} card={card} />
     ))}
+  </div>
+
+  {/* This will grow to fill the remaining vertical space */}
+  <div className="h-full w-full flex flex-row overflow-hidden">
+    {/* Left panel */}
+    <div className="w-[300px] flex flex-col mr-6 h-full ">
+      <div className="mb-2 font-bold text-[var(--secondary)] text-lg sticky top-0 z-10 pt-2 pb-2">
+        Appointments
+      </div>
+
+      <div className="overflow-y-auto flex-grow pb-4 hide-scrollbar space-y-4">
+        {filteredAppointments.map((appointment) => (
+          <AppointmentCard
+            key={appointment.id}
+            appointment={appointment}
+            bgColor="bg-[var(--component-primary)]"
+          />
+        ))}
+      </div>
+    </div>
+
+    {/* Right panel */}
+    <div className="flex-1 bg-red-200 ">Hello</div>
   </div>
 </div>
 
-      </div>
-    </div>
   );
 };
 
