@@ -7,56 +7,44 @@ import { setSelectedAppointment } from "../redux/user/userSlice";
 
 const AppointmentCard = ({ appointment, bgColor }) => {
   const dispatch = useDispatch();
-  
-  const displayInformation = (e) => {
-    // Prevent triggering when clicking the three-dot menu
-    if (e.target.closest('.menu-button')) {
-      return;
-    }
-    
-    dispatch(setSelectedAppointment({
-      ...appointment,
-      date: new Date(appointment.date).toISOString()  // serialize date
-    }));
-    dispatch(setCurrentForm(FORMS.APPOINTMENT_DETAIL_POP_UP));
-  };
 
   const handleMenuClick = (e) => {
     e.stopPropagation(); // Prevent card click
-    dispatch(setSelectedAppointment({
-      ...appointment,
-      date: new Date(appointment.date).toISOString()  // serialize date
-    }));
+    dispatch(
+      setSelectedAppointment({
+        ...appointment,
+        date: new Date(appointment.date).toISOString(), // serialize date
+      })
+    );
     dispatch(setCurrentForm(FORMS.APPOINTMENT_DETAIL_POP_UP));
   };
 
   return (
     <div className="w-full">
-      <div onClick={handleMenuClick} className={`${bgColor} rounded-xl shadow-md overflow-hidden border-none border-gray-100 flex cursor-pointer hover:shadow-lg transition-shadow`} >
+      <div
+        onClick={handleMenuClick}
+        className={`${bgColor} rounded-xl shadow-md overflow-hidden border-none border-gray-100 flex cursor-pointer hover:shadow-lg transition-shadow`}
+      >
         <div className="flex-1">
           <div className="p-4 relative">
-            {/* Three-dot menu button */}
-            {/* <button 
-              className="menu-button absolute top-3 right-3 p-1 rounded-full hover:bg-gray-300 transition-colors"
-              onClick={handleMenuClick}
-              aria-label="View appointment details"
-            >
-              <MoreVertical size={16} className="text-gray-500" />
-            </button> */}
-
-            <div className="flex items-center pr-8"> {/* Added right padding to avoid overlap with menu */}
+            <div className="flex items-center pr-8">
+              {" "}
+              {/* Added right padding to avoid overlap with menu */}
               {/* Profile Image */}
               <div className="w-[35px] h-[35px] rounded-full bg-[var(--primary)] text-white flex flex-col items-center justify-center">
-                {appointment.clientName ? appointment.clientName.charAt(0) : 'A'}
+                {appointment.clientName
+                  ? appointment.clientName.charAt(0)
+                  : "A"}
               </div>
-
               {/* Client and Service Info */}
               <div className="ml-4">
                 <h3 className="font-bold text-[var(--secondary)] text-lg">
                   {appointment.clientName}
                 </h3>
                 <div className="flex items-center mt-1">
-                  <p className="text-sm text-[var(--secondary)]">{appointment.service}</p>
+                  <p className="text-sm text-[var(--secondary)]">
+                    {appointment.service}
+                  </p>
                 </div>
               </div>
             </div>
@@ -89,8 +77,8 @@ const AppointmentCard = ({ appointment, bgColor }) => {
               Upcoming
             </span>
             <div className="space-x-2">
-              <button 
-                className="text-gray-500 hover:text-gray-700 text-sm" 
+              <button
+                className="text-gray-500 hover:text-gray-700 text-sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   dispatch(setCurrentForm(FORMS.RESCHEDULE_EVENT));
@@ -98,8 +86,8 @@ const AppointmentCard = ({ appointment, bgColor }) => {
               >
                 Reschedule
               </button>
-              <button 
-                className="text-red-500 hover:text-red-700 text-sm" 
+              <button
+                className="text-red-500 hover:text-red-700 text-sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   dispatch(setCurrentForm(FORMS.CANCEL_EVENT));
@@ -114,5 +102,4 @@ const AppointmentCard = ({ appointment, bgColor }) => {
     </div>
   );
 };
-
 export default AppointmentCard;
