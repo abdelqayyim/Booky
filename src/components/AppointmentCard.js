@@ -5,7 +5,7 @@ import { Clock, Calendar, MoreVertical } from "lucide-react";
 import { FORMS } from "./Forms/FormsContainer";
 import { setSelectedAppointment } from "../redux/user/userSlice";
 
-const AppointmentCard = ({ appointment }) => {
+const AppointmentCard = ({ appointment, bgColor }) => {
   const dispatch = useDispatch();
   
   const displayInformation = (e) => {
@@ -31,18 +31,18 @@ const AppointmentCard = ({ appointment }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="bg-[var(--bg-color)] rounded-xl shadow-md overflow-hidden border-none border-gray-100 flex cursor-pointer hover:shadow-lg transition-shadow" onClick={displayInformation}>
+    <div className="w-full">
+      <div onClick={handleMenuClick} className={`${bgColor} rounded-xl shadow-md overflow-hidden border-none border-gray-100 flex cursor-pointer hover:shadow-lg transition-shadow`} >
         <div className="flex-1">
           <div className="p-4 relative">
             {/* Three-dot menu button */}
-            <button 
-              className="menu-button absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 transition-colors"
+            {/* <button 
+              className="menu-button absolute top-3 right-3 p-1 rounded-full hover:bg-gray-300 transition-colors"
               onClick={handleMenuClick}
               aria-label="View appointment details"
             >
               <MoreVertical size={16} className="text-gray-500" />
-            </button>
+            </button> */}
 
             <div className="flex items-center pr-8"> {/* Added right padding to avoid overlap with menu */}
               {/* Profile Image */}

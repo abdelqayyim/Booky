@@ -5,9 +5,13 @@ import { useSelector } from 'react-redux';
 import LandingPage from './pages/LandingPage';
 import NotFound from './pages/NotFound';
 import Layout from './pages/Layout';
-import DashboardPage from './pages/DashboardPage';
+// import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
 import ProvidersPage from './pages/ProvidersPage';
+
+import ClientDashboardPage from './pages/Dashboard/ClientDashboardPage';
+import ProviderDashboardPage from './pages/Dashboard/ProviderDashboardPage';
+import AdminDashboardPage from './pages/Dashboard/AdminDashboardPage';
 
 import ProviderAppointmentsPage from './pages/Appointments/ProviderAppointmentsPage';
 import ClientAppointmentsPage from './pages/Appointments/ClientAppointmentsPage';
@@ -31,9 +35,9 @@ function App() {
 
           {/* Protected Routes (wrapped in shared layout) */}
           <Route path="/" element={<Layout />}>
-            
+
             {/* Dashboard Pages */}
-            <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="dashboard" element={ user?.role === ROLES.PROVIDER ? (<ProviderDashboardPage />) : user?.role === ROLES.CLIENT ? (<ClientDashboardPage />) : user?.role === ROLES.ADMIN ? (<AdminDashboardPage /> ) : ( <NotFound /> )}/>
 
             {/* Users Pages */}
             <Route path="users" element={<UsersPage />} />
