@@ -9,7 +9,6 @@ const NotificationsPage = (props)=>{
         <button></button>
     </div>
 
-
 </div>
   )
 };

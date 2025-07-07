@@ -10,10 +10,6 @@ import { isSameDay } from "date-fns";
 const ProviderDashboardPage = (props) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const appointments = useSelector((state) => state.user.appointments);
-  const schedules = useSelector((state) => ({
-    default: state.user.defaultSchedule,
-    overrideSchedule: state.user.overrideSchedule,
-  }));
 
   const providerStats = [
     {
@@ -65,8 +61,6 @@ const ProviderDashboardPage = (props) => {
       isSameDay(new Date(appt.date), currentDate)
     );
   });
-
-  console.log(`filteredAppointments`, filteredAppointments);
 
   return (
     <div className="h-full flex flex-col px-[25px] bg-transparent overflow-hidden">

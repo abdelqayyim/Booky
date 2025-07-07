@@ -1,18 +1,22 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
 import ThemeToggle from "./ThemeToggle";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import NotificationBell from "./NotificationBell";
+import { useSelector } from "react-redux";
+import { ROLES } from "../redux/user/userSlice";
 
 const Sidebar = () => {
+  const userRole = useSelector((state)=>state.user?.user?.role ?? null)
     const navigate = useNavigate();
   const location = useLocation();
    // Remove the leading slash
    const currentPath = location.pathname.startsWith('/')
    ? location.pathname.slice(1)
-   : location.pathname;
+     : location.pathname;
+  
  
   const sidebar = useRef();
   const toggleBtn = useRef();
@@ -44,7 +48,7 @@ const Sidebar = () => {
   };
   
 
-  const sidebarItems = [
+  const providerSidebarItems = [
     { label: "Dashboard", icon: DASHBOARD_SVG, to: "/", onClick: () => navigate('/dashboard'), },
     // { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
     { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
@@ -80,6 +84,28 @@ const Sidebar = () => {
     // },
   ];
 
+  const clientSidebarItems = [
+    { label: "Dashboard", icon: DASHBOARD_SVG, to: "/", onClick: () => navigate('/dashboard'), },
+    // { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
+    { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
+    { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes')},
+    {label: "Reports", icon: REPORTS_SVG, to: "/", onClick: () => navigate('/reports')},
+  ];
+
+  const getSidebarItems = () => {
+    switch (userRole) {
+      case ROLES.PROVIDER:
+        return providerSidebarItems;
+        break;
+      case ROLES.CLIENT:
+        return clientSidebarItems;
+      default:
+        return []
+        break;
+    }
+  }
+
+
   return (
     <nav
   ref={sidebar}
@@ -106,7 +132,7 @@ const Sidebar = () => {
         </Tooltip>
       </li>
 
-      {sidebarItems.map((item, index) => (
+      {getSidebarItems().map((item, index) => (
           <li key={index} className="group">
           <Tooltip title={sideBarOpen ? "" : item.label} placement="right">
             <button
@@ -121,7 +147,7 @@ const Sidebar = () => {
                   toggleSubMenu(event);
                 }
               }}
-              className={`flex items-center justify-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-hover)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)]":""}`}
+              className={`flex items-center justify-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-hover)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)] text-white":""}`}
             >
               {item.icon}
                 <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>
