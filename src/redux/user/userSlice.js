@@ -1,14 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 import {
   addDays,
-} from 'date-fns';
+  isSameDay,
+  isSameMonth,
+  isWithinInterval,
+  startOfWeek,
+  endOfWeek,
+} from "date-fns";
+
 export const RESPONSE_STATUS = {
   IDLE: "idle",
   LOADING: "loading",
   SUCCEEDED: "succeeded",
-  FAILED: "failed"
-}
-export const ROLES = { ADMIN: "admin", PROVIDER: "provider", CLIENT: "client" }
+  FAILED: "failed",
+};
+export const ROLES = { ADMIN: "admin", PROVIDER: "provider", CLIENT: "client" };
 // Mock data for appointments
 const mockAppointments = [
   {
@@ -23,8 +29,9 @@ const mockAppointments = [
     email: "sarah.johnson@email.com",
     location: "Downtown Salon - Chair 3",
     price: 150,
-    notes: "Client prefers natural blonde highlights. Allergic to ammonia-based products.",
-    status: "confirmed"
+    notes:
+      "Client prefers natural blonde highlights. Allergic to ammonia-based products.",
+    status: "confirmed",
   },
   {
     id: 2,
@@ -39,7 +46,7 @@ const mockAppointments = [
     location: "Main Floor - Station 2",
     price: 35,
     notes: "Regular client - usual fade cut with trim on top.",
-    status: "confirmed"
+    status: "confirmed",
   },
   {
     id: 3,
@@ -54,7 +61,7 @@ const mockAppointments = [
     location: "Nail Studio - Table 1",
     price: 65,
     notes: "Requested gel polish in coral pink. Has sensitive skin.",
-    status: "confirmed"
+    status: "confirmed",
   },
   {
     id: 4,
@@ -69,7 +76,7 @@ const mockAppointments = [
     location: "Main Floor - Station 2",
     price: 35,
     notes: "Follow-up appointment for touch-up.",
-    status: "confirmed"
+    status: "confirmed",
   },
   {
     id: 5,
@@ -83,8 +90,9 @@ const mockAppointments = [
     email: "emily.davis@email.com",
     location: "Spa Room A",
     price: 90,
-    notes: "First-time client. Oily skin type, looking for deep cleansing treatment.",
-    status: "pending"
+    notes:
+      "First-time client. Oily skin type, looking for deep cleansing treatment.",
+    status: "pending",
   },
   {
     id: 6,
@@ -99,8 +107,8 @@ const mockAppointments = [
     location: "Barber Station",
     price: 25,
     notes: "Prefers classic professional look. Regular maintenance trim.",
-    status: "confirmed"
-  }
+    status: "confirmed",
+  },
 ];
 
 // Mock data for schedules
@@ -109,38 +117,38 @@ const mockSchedules = [
     id: 1,
     day: "Monday",
     startTime: "09:00 AM",
-    endTime: "05:00 PM"
+    endTime: "05:00 PM",
   },
   {
     id: 2,
     day: "Tuesday",
     startTime: "09:00 AM",
-    endTime: "05:00 PM"
+    endTime: "05:00 PM",
   },
   {
     id: 3,
     day: "Wednesday",
     startTime: "09:00 AM",
-    endTime: "05:00 PM"
+    endTime: "05:00 PM",
   },
   {
     id: 4,
     day: "Thursday",
     startTime: "09:00 AM",
-    endTime: "07:00 PM"
+    endTime: "07:00 PM",
   },
   {
     id: 5,
     day: "Friday",
     startTime: "09:00 AM",
-    endTime: "07:00 PM"
+    endTime: "07:00 PM",
   },
   {
     id: 6,
     day: "Saturday",
     startTime: "10:00 AM",
-    endTime: "03:00 PM"
-  }
+    endTime: "03:00 PM",
+  },
 ];
 const mockDefaultSchedules = {
   userId: "user_001",
@@ -157,7 +165,7 @@ const mockDefaultSchedules = {
     Saturday: [],
     Sunday: [],
   },
-}
+};
 const mockOverrideSchedules = [
   {
     userId: "user_001",
@@ -174,24 +182,57 @@ const mockOverrideSchedules = [
   },
 ];
 const initialState = {
-  user: { id: 122343242, role: ROLES.PROVIDER, name: {firstName: "Abdel Qayyim", lastName:"Maazou Yahaya"}, email:"jackLeKing@gmail.com" },        
-  isLoggedIn: true, 
-  status: RESPONSE_STATUS.IDLE,    
+  user: {
+    id: 122343242,
+    role: ROLES.PROVIDER,
+    name: { firstName: "Abdel Qayyim", lastName: "Maazou Yahaya" },
+    email: "jackLeKing@gmail.com",
+  },
+  isLoggedIn: true,
+  status: RESPONSE_STATUS.IDLE,
   selectedAppointment: null,
   error: null,
   appointments: mockAppointments,
   schedules: mockSchedules,
   defaultSchedule: mockDefaultSchedules,
-  overrideSchedule: mockOverrideSchedules
-}
+  overrideSchedule: mockOverrideSchedules,
+};
 
+export const CALENDAR_VIEWS = {
+  DAY: "Day",
+  WEEK: "Week",
+  MONTH: "Month",
+  YEAR: "Year",
+  SCHEDULE: "Schedule",
+};
+export const filterAppointmentsByView = (view, currentDate, appointments) => {
+  switch (view) {
+    case CALENDAR_VIEWS.DAY:
+      return appointments.filter((appt) =>
+        isSameDay(new Date(appt.date), currentDate)
+      );
+    case CALENDAR_VIEWS.WEEK:
+      return appointments.filter((appt) =>
+        isWithinInterval(new Date(appt.date), {
+          start: startOfWeek(currentDate, { weekStartsOn: 0 }),
+          end: endOfWeek(currentDate, { weekStartsOn: 0 }),
+        })
+      );
+    case CALENDAR_VIEWS.MONTH:
+      return appointments.filter((appt) =>
+        isSameMonth(new Date(appt.date), currentDate)
+      );
+    default:
+      return appointments;
+  }
+};
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     login(state, action) {
       const { id, name, email } = action.payload;
-      state.user = { id, name, email }; 
+      state.user = { id, name, email };
       state.isLoggedIn = true;
     },
     logout(state) {
@@ -205,10 +246,11 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     setSelectedAppointment(state, action) {
-      state.selectedAppointment = action.payload
-    }
+      state.selectedAppointment = action.payload;
+    },
   },
 });
 
-export const { login, logout, setStatus, setError,setSelectedAppointment } = userSlice.actions;
+export const { login, logout, setStatus, setError, setSelectedAppointment } =
+  userSlice.actions;
 export default userSlice.reducer;

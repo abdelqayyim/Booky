@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import {
   format,
   startOfWeek,
@@ -6,12 +6,21 @@ import {
   isSameDay,
   isThisWeek,
 } from 'date-fns';
+import { useSelector } from "react-redux";
+import { CALENDAR_VIEWS, filterAppointmentsByView } from '../../redux/user/userSlice';
 
-const WeekView = ({ currentDate, appointments, selectedDate, onDateClick, setCurrentDate }) => {
+const WeekView = () => {
+  const currentDate = useSelector((state) => state.ui.currentDate);
   const containerRef = useRef(null);
   const scrollRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(0);
   const [visibleWeekStart] = useState(startOfWeek(currentDate, { weekStartsOn: 0 }));
+
+  const apts = useSelector((state) => state.user.appointments);
+    const appointments = useMemo(
+      () => filterAppointmentsByView(CALENDAR_VIEWS.WEEK, currentDate, apts),
+      [currentDate, apts]
+    );
 
   // Measure available height dynamically
   useEffect(() => {
@@ -75,14 +84,6 @@ const WeekView = ({ currentDate, appointments, selectedDate, onDateClick, setCur
           </div>
         );
       });
-
-      const hourLines = Array.from({ length: 24 }).map((_, hour) => (
-        <div
-          key={hour}
-          className="absolute left-0 right-0 border-t border-dashed border-gray-200"
-          style={{ top: `${hour * 60}px` }}
-        />
-      ));
 
       const now = new Date();
       const nowMinutes = now.getHours() * 60 + now.getMinutes();

@@ -1,5 +1,15 @@
+import React, { useState } from "react";
 import { format, isToday, getDaysInMonth, startOfMonth, getDay, getYear, getMonth } from 'date-fns';
-const YearView = ({currentDate, selectedDate, setCurrentDate, setSelectedDate, setCurrentCalendarView, CALENDAR_VIEWS}) => {
+import { useSelector, useDispatch } from "react-redux";
+import {
+  CALENDAR_VIEWS,
+} from "../../redux/user/userSlice";
+import { setCurrentDate } from "../../redux/ui/uiSlice";
+
+const YearView = ({ setCurrentCalendarView}) => {
+  const dispatch = useDispatch();
+  const currentDate = new Date(useSelector((state) => state.ui.currentDate));
+  const [selectedDate] = useState(currentDate);
   const year = getYear(currentDate);
   const months = [];
   const currentMonth = new Date().getMonth();
@@ -51,9 +61,7 @@ const YearView = ({currentDate, selectedDate, setCurrentDate, setSelectedDate, s
           ${isSelectedMonth ? 'border-[var(--primary)] border-2' : 'border-gray-200'}
         `}
         onClick={() => {
-          const newDate = new Date(year, month, 1);
-          setCurrentDate(newDate);
-          setSelectedDate(newDate);
+          dispatch(setCurrentDate(new Date(year, month, 1).toISOString()));
           setCurrentCalendarView(CALENDAR_VIEWS.MONTH);
         }}
       >

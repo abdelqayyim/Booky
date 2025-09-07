@@ -1,4 +1,6 @@
-import React, { useRef, useLayoutEffect, useState } from 'react';
+import React, { useRef, useLayoutEffect, useState, useMemo } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentDate } from "../../redux/ui/uiSlice";
 import {
   startOfMonth,
   endOfMonth,
@@ -9,14 +11,23 @@ import {
   isSameMonth,
   isSameDay,
 } from 'date-fns';
+import { CALENDAR_VIEWS, filterAppointmentsByView } from '../../redux/user/userSlice';
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-const MonthView = ({ currentDate, setCurrentDate, appointments, onDateClick }) => {
+const MonthView = () => {
+  const dispatch = useDispatch();
+  const currentDateString = useSelector((state) => state.ui.currentDate);
+  const currentDate = useMemo(() => new Date(currentDateString), [currentDateString]);
   const currentMonth = currentDate.getMonth();
-
   const [visibleCounts, setVisibleCounts] = useState({});
   const cellRefs = useRef({});
+
+  const apts = useSelector((state) => state.user.appointments);
+    const appointments = useMemo(
+      () => filterAppointmentsByView(CALENDAR_VIEWS.MONTH, currentDate, apts),
+      [currentDate, apts]
+    );
 
   useLayoutEffect(() => {
     const newCounts = {};
@@ -31,6 +42,16 @@ const MonthView = ({ currentDate, setCurrentDate, appointments, onDateClick }) =
     setVisibleCounts(newCounts);
   }, [currentDate, appointments]);
 
+
+  // Handler for date clicks
+    const onDateClick = (day) => {
+      // setSelectedDate(day);
+      if (!isSameMonth(day, currentDate)) {
+          dispatch(setCurrentDate(day));
+        }
+    };
+  
+
   const renderMonthSelector = () => (
     <div className="flex justify-center items-center gap-2 p-2 bg-[var(--component-primary)] rounded-t-xl">
       {MONTHS.map((month, idx) => (
@@ -39,7 +60,7 @@ const MonthView = ({ currentDate, setCurrentDate, appointments, onDateClick }) =
           onClick={() => {
             const newDate = new Date(currentDate);
             newDate.setMonth(idx);
-            setCurrentDate(newDate);
+            dispatch(setCurrentDate(newDate));
           }}
           className={`
             px-3 py-3 text-sm rounded-md font-medium shadow-sm

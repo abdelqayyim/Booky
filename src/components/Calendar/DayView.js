@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   format,
   startOfDay,
@@ -8,15 +8,31 @@ import {
   getMinutes,
   addDays,
   subDays,
-  isSameDay
-} from 'date-fns';
+  isSameDay,
+} from "date-fns";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  CALENDAR_VIEWS,
+  filterAppointmentsByView,
+} from "../../redux/user/userSlice";
+import { setCurrentDate } from "../../redux/ui/uiSlice";
 
-const DayView = ({ currentDate, appointments, setCurrentDate }) => {
+const DayView = () => {
+  const dispatch = useDispatch();
   const [now, setNow] = useState(new Date());
   const scrollRef = useRef(null);
   const containerRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(null);
-  const [visibleRangeStart, setVisibleRangeStart] = useState(subDays(currentDate, 3));
+  const currentDate = useSelector((state) => state.ui.currentDate);
+  const [visibleRangeStart, setVisibleRangeStart] = useState(
+    subDays(currentDate, 3)
+  );
+
+  const apts = useSelector((state) => state.user.appointments);
+  const appointments = useMemo(
+    () => filterAppointmentsByView(CALENDAR_VIEWS.DAY, currentDate, apts),
+    [currentDate, apts]
+  );
 
   // Update current time every 30 seconds
   useEffect(() => {
@@ -31,8 +47,8 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
         setContainerHeight(containerRef.current.getBoundingClientRect().height);
       };
       resize();
-      window.addEventListener('resize', resize);
-      return () => window.removeEventListener('resize', resize);
+      window.addEventListener("resize", resize);
+      return () => window.removeEventListener("resize", resize);
     }
   }, []);
 
@@ -46,7 +62,7 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
     }
   }, [currentDate, now, containerHeight]);
 
-  // 🔽 Date Selector Bar
+  // Date Selector Bar
   const renderDateSelector = () => {
     const days = [];
     for (let i = 0; i < 10; i++) {
@@ -56,21 +72,22 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
       days.push(
         <button
           key={i}
-          onClick={() => setCurrentDate(day)}
+          onClick={() => dispatch(setCurrentDate(day))}
           className={`px-3 py-2 rounded-md text-sm font-medium shadow-sm 
-            ${isSelected
-              ? 'bg-[var(--toggle-button-background)] border border-black-200 text-[var(--secondary)]'
-              : 'bg-[var(--toggle-background)] text-[var(--secondary)] hover:bg-[var(--toggle-button-background)]'
+            ${
+              isSelected
+                ? "bg-[var(--toggle-button-background)] border border-black-200 text-[var(--secondary)]"
+                : "bg-[var(--toggle-background)] text-[var(--secondary)] hover:bg-[var(--toggle-button-background)]"
             }`}
         >
-          <div className="text-xs">{format(day, 'EEE')}</div>
-          <div className="text-sm">{format(day, 'd')}</div>
+          <div className="text-xs">{format(day, "EEE")}</div>
+          <div className="text-sm">{format(day, "d")}</div>
         </button>
       );
     }
 
     return (
-      <div className="flex items-center justify-between px-4 py-2 bg-[var(--component-primary)] border-b border-gray-200">
+      <div className="flex items-center justify-between px-4 py-2 bg-[var(--component-primary)] border-b rounded-md border-gray-200">
         <button
           onClick={() => setVisibleRangeStart(subDays(visibleRangeStart, 1))}
           className="text-xl px-2 py-1 rounded hover:bg-[var(--toggle-background)]"
@@ -95,12 +112,15 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
 
     for (let i = 0; i < 24; i++) {
       const hour = addHours(dayStart, i);
-      const hourFormatted = format(hour, 'h a');
+      const hourFormatted = format(hour, "h a");
       const isCurrentHour = isCurrentDay && getHours(now) === i;
       const minutes = getMinutes(now);
 
       hours.push(
-        <div key={i} className="relative flex border-t border-gray-200 h-[60px]">
+        <div
+          key={i}
+          className="relative flex border-t border-gray-200 h-[60px]"
+        >
           <div className="w-20 pt-1 pr-3 text-right text-sm text-[var(--text-secondary)]">
             {hourFormatted}
           </div>
@@ -122,8 +142,8 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
       const [hourStr, minuteStr] = appt.time.split(/[: ]/);
       const hour = parseInt(hourStr, 10);
       const minute = parseInt(minuteStr, 10);
-      const isPM = appt.time.toLowerCase().includes('pm') && hour !== 12;
-      const isAM = appt.time.toLowerCase().includes('am') && hour === 12;
+      const isPM = appt.time.toLowerCase().includes("pm") && hour !== 12;
+      const isAM = appt.time.toLowerCase().includes("am") && hour === 12;
       const startHour = isPM ? hour + 12 : isAM ? 0 : hour;
 
       start.setHours(startHour);
@@ -144,8 +164,12 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
             height: `${height}px`,
           }}
         >
-          <div className="font-semibold text-[var(--text-primary)]">{appt.clientName}</div>
-          <div className="text-xs text-[var(--text-secondary)]">{appt.service}</div>
+          <div className="font-semibold text-[var(--text-primary)]">
+            {appt.clientName}
+          </div>
+          <div className="text-xs text-[var(--text-secondary)]">
+            {appt.service}
+          </div>
         </div>
       );
     });
@@ -159,7 +183,7 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
             className="overflow-y-auto border rounded-lg hide-scrollbar"
             style={{ height: containerHeight }}
           >
-            <div style={{ height: `${24 * 60}px`, position: 'relative' }}>
+            <div style={{ height: `${24 * 60}px`, position: "relative" }}>
               {appointmentElements}
               {hours}
             </div>
@@ -168,8 +192,6 @@ const DayView = ({ currentDate, appointments, setCurrentDate }) => {
       </div>
     );
   };
-
   return renderDayView();
 };
-
 export default DayView;
