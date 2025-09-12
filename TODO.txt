@@ -1,5 +1,7 @@
 Todo:
-  - Have a Folder that stores the user,provider and admin views for better organization
+  - When a user row is clicked, show a popup so provider can view info and/or contact user
+  - Work On notification page
+  - 
   
 Done:
 
