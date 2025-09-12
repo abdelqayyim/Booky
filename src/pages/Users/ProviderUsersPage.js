@@ -84,6 +84,58 @@ const ProviderUsersPage = () => {
     rating: 0, // Min rating (can be 0.5 steps)
     services: [], // Array of selected services (e.g. ['Haircut', 'Shave'])
   });
+
+  const [draftFilters, setDraftFilters] = useState(filters);
+  const escapeRegExp = (string) =>
+    string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const nameRegex = new RegExp(escapeRegExp(filters.name), "i");
+  const filterData = () => {
+    // 👇 Use the escaped version once
+    const nameRegex = new RegExp(escapeRegExp(filters.name), "i");
+
+    return currentOption === "History"
+      ? serviceHistory.filter((entry) => {
+          const matchesName = nameRegex.test(entry.userName);
+
+          const matchesRating = entry.rating >= filters.rating;
+
+          const matchesDate =
+            (!filters.fromDate ||
+              new Date(entry.date) >= new Date(filters.fromDate)) &&
+            (!filters.toDate ||
+              new Date(entry.date) <= new Date(filters.toDate));
+
+          const matchesService =
+            filters.services.length === 0 ||
+            filters.services.includes(entry.service);
+
+          return matchesName && matchesRating && matchesDate && matchesService;
+        })
+      : dummyUsers
+          .filter((user) => user.subscribed)
+          .filter((user) => {
+            const matchesName = nameRegex.test(user.name);
+
+            const matchesRating = user.rating >= filters.rating;
+
+            const matchesDate =
+              (!filters.fromDate ||
+                new Date(user.nextBooking) >= new Date(filters.fromDate)) &&
+              (!filters.toDate ||
+                new Date(user.nextBooking) <= new Date(filters.toDate));
+
+            const matchesService =
+              filters.services.length === 0 ||
+              filters.services.includes(user.latestService);
+
+            return (
+              matchesName && matchesRating && matchesDate && matchesService
+            );
+          });
+  };
+
+  const filteredData = useMemo(() => filterData(), [filters, currentOption]);
   const [nameInput, setNameInput] = useState("");
 
   useEffect(() => {
@@ -106,7 +158,7 @@ const ProviderUsersPage = () => {
 
   const StarRatingFilter = () => {
     const handleStarClick = (value) => {
-      setFilters({ ...filters, rating: value });
+      setDraftFilters({ ...filters, rating: value });
     };
 
     const renderStars = () => {
@@ -149,51 +201,46 @@ const ProviderUsersPage = () => {
     );
   };
 
-  const escapeRegExp = (string) =>
-    string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // const filteredData =
+  //   currentOption === "History"
+  //     ? serviceHistory.filter((entry) => {
+  //         const matchesName = nameRegex.test(entry.userName);
 
-  const nameRegex = new RegExp(escapeRegExp(filters.name), "i");
+  //         const matchesRating = entry.rating >= filters.rating;
 
-  const filteredData =
-    currentOption === "History"
-      ? serviceHistory.filter((entry) => {
-          const matchesName = nameRegex.test(entry.userName);
+  //         const matchesDate =
+  //           (!filters.fromDate ||
+  //             new Date(entry.date) >= new Date(filters.fromDate)) &&
+  //           (!filters.toDate ||
+  //             new Date(entry.date) <= new Date(filters.toDate));
 
-          const matchesRating = entry.rating >= filters.rating;
+  //         const matchesService =
+  //           filters.services.length === 0 ||
+  //           filters.services.includes(entry.service);
 
-          const matchesDate =
-            (!filters.fromDate ||
-              new Date(entry.date) >= new Date(filters.fromDate)) &&
-            (!filters.toDate ||
-              new Date(entry.date) <= new Date(filters.toDate));
+  //         return matchesName && matchesRating && matchesDate && matchesService;
+  //       })
+  //     : dummyUsers
+  //         .filter((user) => user.subscribed)
+  //         .filter((user) => {
+  //           const matchesName = nameRegex.test(user.name);
 
-          const matchesService =
-            filters.services.length === 0 ||
-            filters.services.includes(entry.service);
+  //           const matchesRating = user.rating >= filters.rating;
 
-          return matchesName && matchesRating && matchesDate && matchesService;
-        })
-      : dummyUsers
-          .filter((user) => user.subscribed)
-          .filter((user) => {
-            const matchesName = nameRegex.test(user.name);
+  //           const matchesDate =
+  //             (!filters.fromDate ||
+  //               new Date(user.nextBooking) >= new Date(filters.fromDate)) &&
+  //             (!filters.toDate ||
+  //               new Date(user.nextBooking) <= new Date(filters.toDate));
 
-            const matchesRating = user.rating >= filters.rating;
+  //           const matchesService =
+  //             filters.services.length === 0 ||
+  //             filters.services.includes(user.latestService);
 
-            const matchesDate =
-              (!filters.fromDate ||
-                new Date(user.nextBooking) >= new Date(filters.fromDate)) &&
-              (!filters.toDate ||
-                new Date(user.nextBooking) <= new Date(filters.toDate));
-
-            const matchesService =
-              filters.services.length === 0 ||
-              filters.services.includes(user.latestService);
-
-            return (
-              matchesName && matchesRating && matchesDate && matchesService
-            );
-          });
+  //           return (
+  //             matchesName && matchesRating && matchesDate && matchesService
+  //           );
+  //         });
   return (
     <div className="h-full flex flex-col pl-[10px] pt-[5px] bg-transparent w-full">
       {/* Page Title + Toggle + Filter */}
@@ -227,7 +274,7 @@ const ProviderUsersPage = () => {
             onChange={(e) => setNameInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                setFilters({ ...filters, name: nameInput });
+                setDraftFilters({ ...filters, name: nameInput });
               }
             }}
             className="px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 text-[var(--text-primary)]  outline-none bg-[var(--bg-color-secondary)]"
@@ -240,7 +287,7 @@ const ProviderUsersPage = () => {
               type="date"
               value={filters.fromDate}
               onChange={(e) =>
-                setFilters({ ...filters, fromDate: e.target.value })
+                setDraftFilters({ ...filters, fromDate: e.target.value })
               }
               className="px-3 py-2  rounded-lg focus:ring-2 focus:ring-blue-500 text-[var(--text-primary)] bg-[var(--bg-color-secondary)]"
             />
@@ -249,19 +296,19 @@ const ProviderUsersPage = () => {
               type="date"
               value={filters.toDate}
               onChange={(e) =>
-                setFilters({ ...filters, toDate: e.target.value })
+                setDraftFilters({ ...filters, toDate: e.target.value })
               }
               className="px-3 py-2  rounded-lg focus:ring-2 focus:ring-blue-500 text-[var(--text-primary)] bg-[var(--bg-color-secondary)]"
             />
 
             {/* Rating Filter (assumes you have StarRatingFilter inside this file) */}
-            <StarRatingFilter filters={filters} setFilters={setFilters} />
+            <StarRatingFilter filters={filters} setFilters={setDraftFilters} />
           </div>
 
           {/* Services Selection */}
           <div className="flex flex-wrap gap-2">
             {serviceTypes.map((service) => {
-              const isSelected = filters.services.includes(service);
+              const isSelected = draftFilters.services.includes(service);
 
               return (
                 <button
@@ -273,7 +320,7 @@ const ProviderUsersPage = () => {
                       : "bg-[var(--bg-color-secondary)]  hover:bg-[var(--text-secondary)]"
                   }`}
                   onClick={() => {
-                    setFilters((prev) => ({
+                    setDraftFilters((prev) => ({
                       ...prev,
                       services: isSelected
                         ? prev.services.filter((s) => s !== service)
@@ -292,15 +339,19 @@ const ProviderUsersPage = () => {
             <button
               type="button"
               className="w-fit px-4 py-2 rounded-lg border flex items-center gap-2 text-black bg-gray-100 hover:bg-gray-200"
-              onClick={() =>
-                setFilters({
+              onClick={() => {
+                const reset = {
                   name: "",
                   fromDate: "",
                   toDate: "",
                   rating: 0,
                   services: [],
-                })
-              }
+                };
+                setFilters(reset);
+                setDraftFilters(reset);
+                setNameInput("");
+                setDisplayFiletOptions((prev) => !prev);
+              }}
             >
               Reset
             </button>
@@ -308,8 +359,8 @@ const ProviderUsersPage = () => {
               type="button"
               className="w-fit px-4 py-2 rounded-lg border flex items-center gap-2 bg-[var(--primary)] text-white"
               onClick={() => {
-                console.log("Apply filters:", filters);
-                // Trigger actual filtering logic if needed
+                setFilters(draftFilters);
+                setDisplayFiletOptions((prev) => !prev);
               }}
             >
               Apply
@@ -335,10 +386,13 @@ const ProviderUsersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredData.length > 0 ? (
+            {filteredData?.length > 0 ? (
               filteredData.map((entry) =>
                 currentOption === "History" ? (
-                  <tr key={entry.id} className=" hover:bg-[var(--bg-color-secondary)]">
+                  <tr
+                    key={entry.id}
+                    className=" hover:bg-[var(--bg-color-secondary)]"
+                  >
                     <td className="py-3 px-4 font-medium">{entry.userName}</td>
                     <td className="py-3 px-4 text-sm">
                       <div>{entry.email}</div>
@@ -353,7 +407,10 @@ const ProviderUsersPage = () => {
                     </td>
                   </tr>
                 ) : (
-                  <tr key={entry.id} className="border-b hover:bg-[var(--bg-color-secondary)]">
+                  <tr
+                    key={entry.id}
+                    className="border-b hover:bg-[var(--bg-color-secondary)]"
+                  >
                     <td className="py-3 px-4 font-medium">{entry.name}</td>
                     <td className="py-3 px-4 text-sm">
                       <div>{entry.email}</div>
