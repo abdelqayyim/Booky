@@ -56,9 +56,9 @@ const ProviderDashboardPage = (props) => {
   );
 
   return (
-    <div className="h-full flex flex-col px-[25px] bg-transparent overflow-hidden">
+    <div className="h-full flex flex-col px-[25px] bg-transparent overflow-hidden pl-[10px] pt-[5px]">
       {/* Page Title and Filter */}
-      <div className="mb-[10px]">
+      <div className="">
         <h1 className="text-[var(--text-primary)] text-[45px] font-bold">
           Dashboard
         </h1>

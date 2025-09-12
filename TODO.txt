@@ -7,3 +7,9 @@ Done:
 
 Keep in mind:
   - Should only be able to a week's schedule to up 3 months in advance
+
+
+Ideas:
+  - Have a way for users to subscribed to a provider
+  - Have a way for providers to have promotions (then notify users)
+  

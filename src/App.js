@@ -6,7 +6,6 @@ import LandingPage from './pages/LandingPage';
 import NotFound from './pages/NotFound';
 import Layout from './pages/Layout';
 // import DashboardPage from './pages/DashboardPage';
-import UsersPage from './pages/UsersPage';
 import ProvidersPage from './pages/ProvidersPage';
 
 import ClientDashboardPage from './pages/Dashboard/ClientDashboardPage';
@@ -24,6 +23,9 @@ import MonetizationPage from './pages/MonetizationPage';
 import ReportsPage from './pages/ReportsPage';
 import SettingsPages from './pages/SettingsPages';
 import { ROLES } from './redux/ui/uiSlice';
+import ProviderUsersPage from './pages/Users/ProviderUsersPage';
+import ClientUsersPage from './pages/Users/ClientUsersPage';
+import AdminUsersPage from './pages/Users/AdminUsersPage';
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user);
   return (
@@ -40,7 +42,8 @@ function App() {
             <Route path="dashboard" element={ user?.role === ROLES.PROVIDER ? (<ProviderDashboardPage />) : user?.role === ROLES.CLIENT ? (<ClientDashboardPage />) : user?.role === ROLES.ADMIN ? (<AdminDashboardPage /> ) : ( <NotFound /> )}/>
 
             {/* Users Pages */}
-            <Route path="users" element={<UsersPage />} />
+            {/* <Route path="users" element={<UsersPage />} /> */}
+            <Route path="users" element={ user?.role === ROLES.PROVIDER ? (<ProviderUsersPage />) : user?.role === ROLES.CLIENT ? (<ClientUsersPage />) : user?.role === ROLES.ADMIN ? (<AdminUsersPage /> ) : ( <NotFound /> )}/>
 
             {/* Providers Pages */}
             <Route path="providers" element={<ProvidersPage />} />
