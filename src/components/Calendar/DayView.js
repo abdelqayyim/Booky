@@ -72,7 +72,7 @@ const DayView = () => {
       days.push(
         <button
           key={i}
-          onClick={() => dispatch(setCurrentDate(day))}
+          onClick={() => dispatch(setCurrentDate(day.toISOString()))}
           className={`px-3 py-2 rounded-md text-sm font-medium shadow-sm 
             ${
               isSelected
@@ -137,7 +137,7 @@ const DayView = () => {
       );
     }
 
-    const appointmentElements = appointments.map((appt) => {
+    const appointmentElements = appointments?.map((appt) => {
       const start = new Date(currentDate);
       const [hourStr, minuteStr] = appt.time.split(/[: ]/);
       const hour = parseInt(hourStr, 10);

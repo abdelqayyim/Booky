@@ -61,7 +61,7 @@ function Calendar() {
   const [isDefaultOpen, setIsDefaultOpen] = useState(true);
   // const [openOverrides, setOpenOverrides] = useState({}); // key: weekStartDate, value: boolean
 
-  const appointments = useSelector((state) => state.user.appointments);
+  const appointments = useSelector((state) => state.user?.appointments || []);
   const schedules = useSelector((state) => ({
     default: state.user.defaultSchedule,
     overrideSchedule: state.user.overrideSchedule,
@@ -120,16 +120,16 @@ function Calendar() {
   const navigateNext = () => {
     switch (currentCalendarView) {
       case CALENDAR_VIEWS.DAY:
-        dispatch(setCurrentDate(addDays(currentDate, 1)));
+        dispatch(setCurrentDate(addDays(currentDate, 1).toISOString()));
         break;
       case CALENDAR_VIEWS.WEEK:
-        dispatch(setCurrentDate(addWeeks(currentDate, 1)));
+        dispatch(setCurrentDate(addWeeks(currentDate, 1).toISOString()));
         break;
       case CALENDAR_VIEWS.MONTH:
-        dispatch(setCurrentDate(addMonths(currentDate, 1)));
+        dispatch(setCurrentDate(addMonths(currentDate, 1).toISOString()));
         break;
       case CALENDAR_VIEWS.YEAR:
-        dispatch(setCurrentDate(addYears(currentDate, 1)));
+        dispatch(setCurrentDate(addYears(currentDate, 1).toISOString()));
         break;
       default:
         break;
@@ -140,17 +140,17 @@ function Calendar() {
     switch (currentCalendarView) {
       case CALENDAR_VIEWS.DAY:
         const prevDay = subDays(currentDate, 1);
-        dispatch(setCurrentDate(prevDay));
+        dispatch(setCurrentDate(prevDay.toISOString()));
         break;
       case CALENDAR_VIEWS.WEEK:
         const prevWeek = subWeeks(currentDate, 1);
-        dispatch(setCurrentDate(prevWeek));
+        dispatch(setCurrentDate(prevWeek.toISOString()));
         break;
       case CALENDAR_VIEWS.MONTH:
-        dispatch(setCurrentDate(subMonths(currentDate, 1)));
+        dispatch(setCurrentDate(subMonths(currentDate, 1).toISOString()));
         break;
       case CALENDAR_VIEWS.YEAR:
-        dispatch(setCurrentDate(subYears(currentDate, 1)));
+        dispatch(setCurrentDate(subYears(currentDate, 1).toISOString()));
         break;
       default:
         break;
@@ -169,7 +169,7 @@ function Calendar() {
   };
 
   const navigateToday = () => {
-    dispatch(setCurrentDate(new Date()));
+    dispatch(setCurrentDate(new Date().toISOString()));
   };
   const renderHeaderTitle = () => {
     let headerTitle = "";
@@ -461,8 +461,8 @@ function Calendar() {
                     "Friday",
                     "Saturday",
                     "Sunday",
-                  ].map((day) => {
-                    const blocks = schedules.default.days[day] || [];
+                  ]?.map((day) => {
+                    const blocks = schedules.default?.days[day] || [];
                     return (
                       <div
                         key={day}
@@ -494,7 +494,7 @@ function Calendar() {
               {/* Override Schedules */}
               <div>
                 <div className="my-2 font-bold">You Overrides</div>
-                {schedules.overrideSchedule.map((override, i) => (
+                {schedules.overrideSchedule?.map((override, i) => (
                   <OverrideSchedule
                     key={override.weekStartDate}
                     weekStartDate={override.weekStartDate}

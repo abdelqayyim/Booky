@@ -35,7 +35,7 @@ const CancelEventForm = ({ existingEvent = null }) => {
   };
 
   return (
-    <PopUpFormSkeleton formTitle={"Cancel Event"}>
+    <PopUpFormSkeleton formTitle={"Cancel Event"} onClose={() => { }}>
       <div className="space-y-6">
         {/* Event Details */}
         {existingEvent ? (

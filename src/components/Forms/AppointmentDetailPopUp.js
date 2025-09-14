@@ -44,7 +44,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
   };
 
   return (
-    <PopUpFormSkeleton formTitle="Appointment Details">
+    <PopUpFormSkeleton formTitle="Appointment Details" onClose={()=>{}}>
       <div className="space-y-4">
         {/* Header Section with Client Info and Status */}
         <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">

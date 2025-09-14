@@ -2,14 +2,22 @@ import React, { useState, useEffect, useMemo } from "react";
 import Toggle from "../../components/Toggle";
 import { FILTER_SVG, STAR_EMPTY, STAR_HALF, STAR_FULL } from "../constants";
 import Tooltip from "@mui/material/Tooltip";
-
+import ViewCusomterHistory from "../../components/Forms/ViewCusomterHistory";
+import { FORMS } from "../../components/Forms/FormsContainer";
+import { useDispatch } from "react-redux";
+import { setCurrentForm } from "../../redux/ui/uiSlice";
+import {
+  setSelectedUserHistory,
+  setSelectedUserSubscribed,
+} from "../../redux/user/userSlice";
+import { format } from "date-fns";
 const dummyUsers = [
   {
     id: 1,
     name: "John Doe",
     email: "john@example.com",
     phone: "+1234567890",
-    nextBooking: "2025-09-20 14:00",
+    nextBooking: "2025-09-20T14:00:00.000Z",
     rating: 4.5,
     latestService: "Haircut",
     subscribed: false,
@@ -19,20 +27,22 @@ const dummyUsers = [
     name: "Jane Smith",
     email: "jane@example.com",
     phone: "+1987654321",
-    nextBooking: "2025-09-15 10:30",
+    nextBooking: "2025-09-15T10:30:00.000Z",
     rating: 5,
     latestService: "Haircut",
     subscribed: true,
+    subscribedServices: ["Haircut"],
   },
   {
     id: 3,
     name: "Michael Brown",
     email: "michael@example.com",
     phone: "+1098765432",
-    nextBooking: "No upcoming booking",
+    nextBooking: null, // "No upcoming booking" → null for consistency
     rating: 3.8,
     latestService: "Shave",
     subscribed: true,
+    subscribedServices: ["Shave", "Haircut"],
   },
 ];
 
@@ -43,7 +53,8 @@ const serviceHistory = [
     email: "john@example.com",
     phone: "+1234567890",
     service: "Haircut",
-    date: "2025-09-10 14:00",
+    price: 34.99,
+    date: "2025-09-10T14:00:00.000Z",
     rating: 4.5,
   },
   {
@@ -52,7 +63,8 @@ const serviceHistory = [
     email: "jane@example.com",
     phone: "+1987654321",
     service: "Haircut",
-    date: "2025-09-08 10:30",
+    price: 34.99,
+    date: "2025-09-08T10:30:00.000Z",
     rating: 5,
   },
   {
@@ -61,12 +73,14 @@ const serviceHistory = [
     email: "michael@example.com",
     phone: "+1098765432",
     service: "Shave",
-    date: "2025-09-05 09:00",
+    price: 34.99,
+    date: "2025-09-05T09:00:00.000Z",
     rating: 4,
   },
 ];
 
 const ProviderUsersPage = () => {
+  const dispatch = useDispatch();
   const [currentOption, setCurrentOption] = useState("");
 
   const options = useMemo(
@@ -127,7 +141,9 @@ const ProviderUsersPage = () => {
 
             const matchesService =
               filters.services.length === 0 ||
-              filters.services.includes(user.latestService);
+              filters.services.every((service) =>
+                user.subscribedServices?.includes(service)
+              );
 
             return (
               matchesName && matchesRating && matchesDate && matchesService
@@ -201,48 +217,9 @@ const ProviderUsersPage = () => {
     );
   };
 
-  // const filteredData =
-  //   currentOption === "History"
-  //     ? serviceHistory.filter((entry) => {
-  //         const matchesName = nameRegex.test(entry.userName);
-
-  //         const matchesRating = entry.rating >= filters.rating;
-
-  //         const matchesDate =
-  //           (!filters.fromDate ||
-  //             new Date(entry.date) >= new Date(filters.fromDate)) &&
-  //           (!filters.toDate ||
-  //             new Date(entry.date) <= new Date(filters.toDate));
-
-  //         const matchesService =
-  //           filters.services.length === 0 ||
-  //           filters.services.includes(entry.service);
-
-  //         return matchesName && matchesRating && matchesDate && matchesService;
-  //       })
-  //     : dummyUsers
-  //         .filter((user) => user.subscribed)
-  //         .filter((user) => {
-  //           const matchesName = nameRegex.test(user.name);
-
-  //           const matchesRating = user.rating >= filters.rating;
-
-  //           const matchesDate =
-  //             (!filters.fromDate ||
-  //               new Date(user.nextBooking) >= new Date(filters.fromDate)) &&
-  //             (!filters.toDate ||
-  //               new Date(user.nextBooking) <= new Date(filters.toDate));
-
-  //           const matchesService =
-  //             filters.services.length === 0 ||
-  //             filters.services.includes(user.latestService);
-
-  //           return (
-  //             matchesName && matchesRating && matchesDate && matchesService
-  //           );
-  //         });
   return (
     <div className="h-full flex flex-col pl-[10px] pt-[5px] bg-transparent w-full">
+      <ViewCusomterHistory />
       {/* Page Title + Toggle + Filter */}
       <div className="flex flex-row items-center w-auto">
         <h1 className="text-[45px] font-bold">Users</h1>
@@ -302,7 +279,12 @@ const ProviderUsersPage = () => {
             />
 
             {/* Rating Filter (assumes you have StarRatingFilter inside this file) */}
-            <StarRatingFilter filters={filters} setFilters={setDraftFilters} />
+            {currentOption === "History" && (
+              <StarRatingFilter
+                filters={filters}
+                setFilters={setDraftFilters}
+              />
+            )}
           </div>
 
           {/* Services Selection */}
@@ -375,14 +357,20 @@ const ProviderUsersPage = () => {
           <thead>
             <tr className="bg-[var(--component-primary)] text-left border-b">
               <th className="py-3 px-4">Name</th>
-              <th className="py-3 px-4">Email / Phone</th>
+              {/* <th className="py-3 px-4">Email / Phone</th> */}
               <th className="py-3 px-4">Service</th>
+              {currentOption === "History" && (
+                <th className="py-3 px-4">Price</th>
+              )}
+
               <th className="py-3 px-4">
                 {currentOption === "History"
                   ? "Date of Service"
                   : "Next Scheduled Booking"}
               </th>
-              <th className="py-3 px-4">Rating</th>
+              {currentOption === "History" && (
+                <th className="py-3 px-4">Rating</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -392,14 +380,21 @@ const ProviderUsersPage = () => {
                   <tr
                     key={entry.id}
                     className=" hover:bg-[var(--bg-color-secondary)]"
+                    onClick={() => {
+                      dispatch(setSelectedUserHistory(entry));
+                      dispatch(setCurrentForm(FORMS.VIEW_SERVICE_HISTORY));
+                    }}
                   >
                     <td className="py-3 px-4 font-medium">{entry.userName}</td>
-                    <td className="py-3 px-4 text-sm">
+                    {/* <td className="py-3 px-4 text-sm">
                       <div>{entry.email}</div>
                       <div className="text-gray-500">{entry.phone}</div>
-                    </td>
+                    </td> */}
                     <td className="py-3 px-4 text-sm">{entry.service}</td>
-                    <td className="py-3 px-4 text-sm">{entry.date}</td>
+                    <td className="py-3 px-4 text-sm">{entry.price}</td>
+                    <td className="py-3 px-4 text-sm">
+                      {format(new Date(entry.date), "MMM d, yyyy")}
+                    </td>
                     <td className="py-3 px-4">
                       <span className="inline-block bg-yellow-100 text-yellow-800 text-sm px-2 py-1 rounded">
                         {entry.rating} ★
@@ -409,20 +404,38 @@ const ProviderUsersPage = () => {
                 ) : (
                   <tr
                     key={entry.id}
-                    className="border-b hover:bg-[var(--bg-color-secondary)]"
+                    className="hover:bg-[var(--bg-color-secondary)]"
+                    onClick={() => {
+                      dispatch(setSelectedUserSubscribed(entry));
+                      dispatch(setCurrentForm(FORMS.VIEW_SUBSCRIBED_USER));
+                    }}
                   >
                     <td className="py-3 px-4 font-medium">{entry.name}</td>
+
                     <td className="py-3 px-4 text-sm">
-                      <div>{entry.email}</div>
-                      <div className="text-gray-500">{entry.phone}</div>
+                      <div className="flex flex-wrap gap-2">
+                        {entry.subscribedServices?.length > 0 ? (
+                          entry.subscribedServices.map((service, index) => (
+                            <span
+                              key={index}
+                              className="bg-[var(--bg-color)] text-[var(--text-primary)] text-xs font-medium px-3 py-1 rounded-full"
+                            >
+                              {service}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-gray-400 text-xs">
+                            No Subscriptions
+                          </span>
+                        )}
+                      </div>
                     </td>
-                    <td className="py-3 px-4 text-sm">{entry.latestService}</td>
-                    <td className="py-3 px-4 text-sm">{entry.nextBooking}</td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 text-sm">{format(new Date(entry.nextBooking), "MMM d, yyyy")}</td>
+                    {/* <td className="py-3 px-4">
                       <span className="inline-block bg-yellow-100 text-yellow-800 text-sm px-2 py-1 rounded">
                         {entry.rating} ★
                       </span>
-                    </td>
+                    </td> */}
                   </tr>
                 )
               )

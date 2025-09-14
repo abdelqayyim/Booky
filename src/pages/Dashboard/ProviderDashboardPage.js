@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { DOLLAR_SIGN_SVG } from "../constants";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -8,36 +8,43 @@ import StarIcon from "@mui/icons-material/Star";
 import AppointmentCard from "../../components/AppointmentCard";
 import { isSameDay } from "date-fns";
 import DayView from "../../components/Calendar/DayView";
+import { getTodayAppointmentsAndMonthStats } from "../../redux/user/apiRequests";
+import { useDispatch } from "react-redux";
 
 const ProviderDashboardPage = (props) => {
-  const currentDate = useSelector((state) => state.ui.currentDate);
-  const appointments = useSelector((state) => state.user.appointments);
+  const dispatch = useDispatch();
+  const currentUserState = useSelector((state)=>state.user)
+  const currentDate = useSelector((state) => state.ui?.currentDate);
+  const { appointments, monthlyData } = currentUserState;
 
+  useEffect(() => {
+    dispatch(getTodayAppointmentsAndMonthStats());
+}, []);
   const providerStats = [
     {
       title: "Total Bookings",
-      value: 6,
+      value: monthlyData.bookings,
       logo: <CalendarMonthIcon />,
       metric: "12.5% from last month",
       color: "#4f46e5",
     },
     {
       title: "Completed This Month",
-      value: 42,
+      value: monthlyData.completed,
       logo: <CheckCircleIcon />,
       metric: "12.5% from last month",
       color: "#10b981",
     },
     {
       title: "Reviews",
-      value: 4.2,
+      value: monthlyData.reviews,
       logo: <StarIcon />,
       metric: "12.5% from last month",
       color: "#f59e0b",
     },
     {
       title: "Monthly Revenue",
-      value: "$3,840",
+      value: "$" + monthlyData.revenue.toLocaleString(),
       logo: DOLLAR_SIGN_SVG,
       metric: "12.5% from last month",
       color: "#ef4444",
@@ -45,7 +52,7 @@ const ProviderDashboardPage = (props) => {
   ];
 
   const filterAppointmentsByView = (currentDate, appointments) => {
-    return appointments.filter((appt) =>
+    return appointments?.filter((appt) =>
       isSameDay(new Date(appt.date), currentDate)
     );
   };
@@ -80,7 +87,7 @@ const ProviderDashboardPage = (props) => {
           </div>
 
           <div className="overflow-y-auto flex-grow pb-4 hide-scrollbar space-y-4">
-            {filteredAppointments.map((appointment) => (
+            {filteredAppointments && filteredAppointments.map((appointment) => (
               <AppointmentCard
                 key={appointment.id}
                 appointment={appointment}

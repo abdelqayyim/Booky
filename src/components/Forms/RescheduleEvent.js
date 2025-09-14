@@ -38,7 +38,7 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
   };
 
   return (
-    <PopUpFormSkeleton formTitle={"Re-Schedule Event"}>
+    <PopUpFormSkeleton formTitle={"Re-Schedule Event"} onClose={()=>{}}>
       <div className="space-y-6">
         {/* Current Event Info (if available) */}
         {existingEvent && (
@@ -60,14 +60,14 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
 
         {/* Event Type Dropdown */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[var(--text-primary)]">
             Event Type
           </label>
-          <div className="relative">
+          <div className="relative text-[var(--text-primary)]">
             <select
               value={formData.eventType}
               onChange={(e) => handleInputChange('eventType', e.target.value)}
-              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white"
+              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-[var(--bg-color)]  outline-none"
               required
             >
               <option value="">Select event type</option>
@@ -83,7 +83,7 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
 
         {/* Date Picker */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[var(--text-primary)]">
             New Date
           </label>
           <div className="relative">
@@ -91,7 +91,7 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
               type="date"
               value={formData.date}
               onChange={(e) => handleInputChange('date', e.target.value)}
-              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-[var(--bg-color)]   outline-none"
               required
             />
             <Calendar size={20} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -100,7 +100,7 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
 
         {/* Time Picker */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[var(--text-primary)]">
             New Time
           </label>
           <div className="relative">
@@ -108,10 +108,10 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
               type="time"
               value={formData.time}
               onChange={(e) => handleInputChange('time', e.target.value)}
-              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-[var(--bg-color)]  outline-none"
               required
             />
-            <Clock size={20} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <Clock size={20} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-primary)] pointer-events-none" />
           </div>
         </div>
 

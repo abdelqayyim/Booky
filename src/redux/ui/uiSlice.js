@@ -10,7 +10,7 @@ export const ROLES = { ADMIN: "admin", PROVIDER: "provider", CLIENT: "client" };
 const initialState = {
   uiMode: "light",
   currentForm: null,
-  currentDate: new Date(),
+  currentDate: new Date().toISOString(),
 };
 
 const uiSlice = createSlice({
@@ -27,9 +27,14 @@ const uiSlice = createSlice({
     setCurrentForm(state, action) {
       state.currentForm = action.payload;
     },
-    setCurrentDate(state, action) {
-      state.currentDate = action.payload;
-    },
+    setCurrentDate: {
+  reducer(state, action) {
+    state.currentDate = action.payload; // now guaranteed to be a string
+  },
+  prepare(date) {
+    return { payload: date instanceof Date ? date.toISOString() : date };
+  }
+}
   },
 });
 

@@ -72,7 +72,7 @@ const CreateEventForm = () => {
   };
 
   return (
-    <PopUpFormSkeleton formTitle={"Create Event"}>
+    <PopUpFormSkeleton formTitle={"Create Event"} onClose={()=>{}}>
       <div className="space-y-6">
         {/* Service Provider Selection */}
         <div className="space-y-2">

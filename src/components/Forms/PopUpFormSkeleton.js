@@ -4,19 +4,20 @@ import { FORMS } from './FormsContainer';
 import Overlay from '../Overlay';
 import { useState } from 'react';
 
-const PopUpFormSkeleton = ({formTitle, children }) => {
+const PopUpFormSkeleton = ({formTitle, children, onClose }) => {
   const currentForm = useSelector(state => state.ui.currentForm);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(currentForm !== null);
 
   const close = () => {
+    onClose();
     dispatch(setCurrentForm(null));
     setIsOpen(null);
   };
 
   return (
     <Overlay isOpen={isOpen} onClose={close}>
-      <div className="bg-white p-6 rounded-lg shadow-lg text-black text-base flex flex-col w-full max-w-md min-w-[300px]">
+      <div className="bg-[var(--component-primary)] p-6 rounded-lg shadow-lg text-[var(--text-primary)] text-base flex flex-col w-full max-w-md min-w-[300px]">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">{formTitle}</h2>
           <button

@@ -47,7 +47,7 @@ const MonthView = () => {
     const onDateClick = (day) => {
       // setSelectedDate(day);
       if (!isSameMonth(day, currentDate)) {
-          dispatch(setCurrentDate(day));
+          dispatch(setCurrentDate(day.toISOString()));
         }
     };
   
@@ -60,7 +60,7 @@ const MonthView = () => {
           onClick={() => {
             const newDate = new Date(currentDate);
             newDate.setMonth(idx);
-            dispatch(setCurrentDate(newDate));
+            dispatch(setCurrentDate(newDate.toISOString()));
           }}
           className={`
             px-3 py-3 text-sm rounded-md font-medium shadow-sm
