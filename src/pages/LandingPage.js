@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
-import { LOGIN_SVG } from "./constants";
+import { LOGIN_SVG } from "../constants";
 
 const LandingPage = (props) => {
   return (

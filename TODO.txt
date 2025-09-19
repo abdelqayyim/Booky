@@ -15,3 +15,18 @@ Ideas:
   - Have a way for users to subscribed to a provider
   - Have a way for providers to have promotions (then notify users)
   
+
+
+  I am working on a service application, the application does the following:
+
+For User:
+
+1 - User are able to browse services near them (haircuts, cleaning...)
+
+2 - They can book a service (time, location , price etc...)
+
+3 - Users can even subscribe to a service with a provider for example a haircut every 2 weeks with a specific provice
+
+For Providers:
+
+1 - They can accept service requests (or reschedule or cancel)

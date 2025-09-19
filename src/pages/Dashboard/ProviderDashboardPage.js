@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { DOLLAR_SIGN_SVG } from "../constants";
+import { DOLLAR_SIGN_SVG } from "../../constants";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import StatCard from "../../components/StatCard";
@@ -19,7 +19,7 @@ const ProviderDashboardPage = (props) => {
 
   useEffect(() => {
     dispatch(getTodayAppointmentsAndMonthStats());
-}, []);
+}, [dispatch]);
   const providerStats = [
     {
       title: "Total Bookings",
@@ -72,7 +72,10 @@ const ProviderDashboardPage = (props) => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] auto-rows-fr gap-[20px] mb-[15px]">
+      <div className="grid gap-4 w-full 
+  grid-cols-1 
+  sm:grid-cols-2 
+  lg:grid-cols-4">
         {providerStats.map((card, index) => (
           <StatCard key={index + 1} card={card} />
         ))}

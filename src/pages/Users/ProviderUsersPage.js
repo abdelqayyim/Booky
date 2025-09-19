@@ -1,88 +1,68 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Toggle from "../../components/Toggle";
-import { FILTER_SVG, STAR_EMPTY, STAR_HALF, STAR_FULL } from "../constants";
+import { FILTER_SVG, STAR_EMPTY, STAR_HALF, STAR_FULL } from "../../constants";
 import Tooltip from "@mui/material/Tooltip";
 import ViewCusomterHistory from "../../components/Forms/ViewCusomterHistory";
 import { FORMS } from "../../components/Forms/FormsContainer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCurrentForm } from "../../redux/ui/uiSlice";
 import {
   setSelectedUserHistory,
   setSelectedUserSubscribed,
 } from "../../redux/user/userSlice";
 import { format } from "date-fns";
-const dummyUsers = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "+1234567890",
-    nextBooking: "2025-09-20T14:00:00.000Z",
-    rating: 4.5,
-    latestService: "Haircut",
-    subscribed: false,
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
-    phone: "+1987654321",
-    nextBooking: "2025-09-15T10:30:00.000Z",
-    rating: 5,
-    latestService: "Haircut",
-    subscribed: true,
-    subscribedServices: ["Haircut"],
-  },
-  {
-    id: 3,
-    name: "Michael Brown",
-    email: "michael@example.com",
-    phone: "+1098765432",
-    nextBooking: null, // "No upcoming booking" → null for consistency
-    rating: 3.8,
-    latestService: "Shave",
-    subscribed: true,
-    subscribedServices: ["Shave", "Haircut"],
-  },
-];
+import { getServiceHistoryAndSubscribers } from "../../redux/user/apiRequests";
 
-const serviceHistory = [
-  {
-    id: 1,
-    userName: "John Doe",
-    email: "john@example.com",
-    phone: "+1234567890",
-    service: "Haircut",
-    price: 34.99,
-    date: "2025-09-10T14:00:00.000Z",
-    rating: 4.5,
-  },
-  {
-    id: 2,
-    userName: "Jane Smith",
-    email: "jane@example.com",
-    phone: "+1987654321",
-    service: "Haircut",
-    price: 34.99,
-    date: "2025-09-08T10:30:00.000Z",
-    rating: 5,
-  },
-  {
-    id: 3,
-    userName: "Michael Brown",
-    email: "michael@example.com",
-    phone: "+1098765432",
-    service: "Shave",
-    price: 34.99,
-    date: "2025-09-05T09:00:00.000Z",
-    rating: 4,
-  },
-];
+// Outside the component
+const filterData = (
+  currentOption,
+  filters,
+  serviceHistory = [],
+  subscribedUsers = []
+) => {
+  const escapeRegExp = (string) =>
+    string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const nameRegex = new RegExp(escapeRegExp(filters.name), "i");
+
+  const historyList = Array.isArray(serviceHistory) ? serviceHistory : [];
+  const subscribedList = Array.isArray(subscribedUsers) ? subscribedUsers : [];
+
+  return currentOption === "History"
+    ? historyList.filter((entry) => {
+        const matchesName = nameRegex.test(entry.userName);
+        const matchesRating = entry.rating >= filters.rating;
+        const matchesDate =
+          (!filters.fromDate ||
+            new Date(entry.date) >= new Date(filters.fromDate)) &&
+          (!filters.toDate || new Date(entry.date) <= new Date(filters.toDate));
+        const matchesService =
+          filters.services.length === 0 ||
+          filters.services.includes(entry.service);
+        return matchesName && matchesRating && matchesDate && matchesService;
+      })
+    : subscribedList.filter((user) => {
+        const matchesName = nameRegex.test(user.name);
+        const matchesRating = user.rating >= filters.rating;
+        const matchesDate =
+          (!filters.fromDate ||
+            new Date(user.nextBooking) >= new Date(filters.fromDate)) &&
+          (!filters.toDate ||
+            new Date(user.nextBooking) <= new Date(filters.toDate));
+        const matchesService =
+          filters.services.length === 0 ||
+          filters.services.every((service) =>
+            user.subscribedServices?.includes(service)
+          );
+        return matchesName && matchesRating && matchesDate && matchesService;
+      });
+};
 
 const ProviderUsersPage = () => {
   const dispatch = useDispatch();
+  const currentUserState = useSelector((state) => state.user);
+  const { serviceHistory, subscribedUsers } = currentUserState;
   const [currentOption, setCurrentOption] = useState("");
-
   const options = useMemo(
     () => [
       { title: "History", onClick: () => setCurrentOption("History") },
@@ -99,60 +79,15 @@ const ProviderUsersPage = () => {
     services: [], // Array of selected services (e.g. ['Haircut', 'Shave'])
   });
 
-  const [draftFilters, setDraftFilters] = useState(filters);
-  const escapeRegExp = (string) =>
-    string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-  const nameRegex = new RegExp(escapeRegExp(filters.name), "i");
-  const filterData = () => {
-    // 👇 Use the escaped version once
-    const nameRegex = new RegExp(escapeRegExp(filters.name), "i");
-
-    return currentOption === "History"
-      ? serviceHistory.filter((entry) => {
-          const matchesName = nameRegex.test(entry.userName);
-
-          const matchesRating = entry.rating >= filters.rating;
-
-          const matchesDate =
-            (!filters.fromDate ||
-              new Date(entry.date) >= new Date(filters.fromDate)) &&
-            (!filters.toDate ||
-              new Date(entry.date) <= new Date(filters.toDate));
-
-          const matchesService =
-            filters.services.length === 0 ||
-            filters.services.includes(entry.service);
-
-          return matchesName && matchesRating && matchesDate && matchesService;
-        })
-      : dummyUsers
-          .filter((user) => user.subscribed)
-          .filter((user) => {
-            const matchesName = nameRegex.test(user.name);
-
-            const matchesRating = user.rating >= filters.rating;
-
-            const matchesDate =
-              (!filters.fromDate ||
-                new Date(user.nextBooking) >= new Date(filters.fromDate)) &&
-              (!filters.toDate ||
-                new Date(user.nextBooking) <= new Date(filters.toDate));
-
-            const matchesService =
-              filters.services.length === 0 ||
-              filters.services.every((service) =>
-                user.subscribedServices?.includes(service)
-              );
-
-            return (
-              matchesName && matchesRating && matchesDate && matchesService
-            );
-          });
-  };
-
-  const filteredData = useMemo(() => filterData(), [filters, currentOption]);
+  const filteredData = useMemo(() => {
+    return filterData(currentOption, filters, serviceHistory, subscribedUsers);
+  }, [filters, currentOption, serviceHistory, subscribedUsers]);
   const [nameInput, setNameInput] = useState("");
+  const [draftFilters, setDraftFilters] = useState(filters);
+
+  useEffect(() => {
+    dispatch(getServiceHistoryAndSubscribers());
+  }, [dispatch]);
 
   useEffect(() => {
     setCurrentOption(options[0].title);
@@ -160,21 +95,24 @@ const ProviderUsersPage = () => {
 
   // Derive service types based on current option
   const serviceTypes = useMemo(() => {
-    const source =
-      currentOption === "History"
-        ? serviceHistory.map((entry) => entry.service)
-        : dummyUsers
-            .filter((user) =>
-              currentOption === "Subscribed" ? user.subscribed : true
-            )
-            .map((user) => user.latestService);
+    let source = [];
+
+    if (currentOption === "History") {
+      source = Array.isArray(serviceHistory)
+        ? serviceHistory.map((entry) => entry?.service).filter(Boolean)
+        : [];
+    } else {
+      source = Array.isArray(subscribedUsers)
+        ? subscribedUsers.flatMap((user) => user?.subscribedServices || [])
+        : [];
+    }
 
     return Array.from(new Set(source));
-  }, [currentOption]);
+  }, [currentOption, serviceHistory, subscribedUsers]);
 
-  const StarRatingFilter = () => {
+  const StarRatingFilter = ({ filters, setFilters }) => {
     const handleStarClick = (value) => {
-      setDraftFilters({ ...filters, rating: value });
+      setFilters((prev) => ({ ...prev, rating: value }));
     };
 
     const renderStars = () => {
@@ -281,7 +219,7 @@ const ProviderUsersPage = () => {
             {/* Rating Filter (assumes you have StarRatingFilter inside this file) */}
             {currentOption === "History" && (
               <StarRatingFilter
-                filters={filters}
+                filters={draftFilters}
                 setFilters={setDraftFilters}
               />
             )}
@@ -430,7 +368,9 @@ const ProviderUsersPage = () => {
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-sm">{format(new Date(entry.nextBooking), "MMM d, yyyy")}</td>
+                    <td className="py-3 px-4 text-sm">
+                      {format(new Date(entry.nextBooking), "MMM d, yyyy")}
+                    </td>
                     {/* <td className="py-3 px-4">
                       <span className="inline-block bg-yellow-100 text-yellow-800 text-sm px-2 py-1 rounded">
                         {entry.rating} ★

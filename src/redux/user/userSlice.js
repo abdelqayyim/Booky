@@ -1,15 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  addDays,
   isSameDay,
   isSameMonth,
   isWithinInterval,
   startOfWeek,
   endOfWeek,
 } from "date-fns";
-import { getAppointmentsAndSchedules, getTodayAppointmentsAndMonthStats } from "./apiRequests";
-import { mockApi } from "./apiRequests";
-import { monthlyData } from "../../api/mockData";
+import { getAppointmentsAndSchedules, getTodayAppointmentsAndMonthStats, getServiceHistoryAndSubscribers, getDisputes } from "./apiRequests";
 
 export const RESPONSE_STATUS = {
   IDLE: "idle",
@@ -33,9 +30,15 @@ const initialState = {
     reviews: 0,
     revenue: 0
   },
-  selectedAppointment: null,
+  selectedAppointment: null, 
   selectedUserHistory: undefined,
   selectedUserSubscribed: undefined,
+
+  subscribedUsers: [],
+  serviceHistory: [],
+
+  disputes: [],
+
   error: null,
   appointments: null,
   schedules: null,
@@ -128,7 +131,30 @@ const userSlice = createSlice({
   .addCase(getTodayAppointmentsAndMonthStats.rejected, (state, action) => {
     state.status = RESPONSE_STATUS.FAILED;
     state.error = action.error.message;
-  });
+  })
+    .addCase(getServiceHistoryAndSubscribers.pending, (state) => {
+    state.status = RESPONSE_STATUS.LOADING;
+  })
+  .addCase(getServiceHistoryAndSubscribers.fulfilled, (state, action) => {
+    state.status = RESPONSE_STATUS.SUCCEEDED;
+    state.serviceHistory = action.payload.serviceHistory;
+    state.subscribedUsers = action.payload.subscribedUsers;
+  })
+  .addCase(getServiceHistoryAndSubscribers.rejected, (state, action) => {
+    state.status = RESPONSE_STATUS.FAILED;
+    state.error = action.error.message;
+  })
+      .addCase(getDisputes.pending, (state) => {
+    state.status = RESPONSE_STATUS.LOADING;
+  })
+  .addCase(getDisputes.fulfilled, (state, action) => {
+    state.status = RESPONSE_STATUS.SUCCEEDED;
+    state.disputes = action.payload.disputes;
+  })
+  .addCase(getDisputes.rejected, (state, action) => {
+    state.status = RESPONSE_STATUS.FAILED;
+    state.error = action.error.message;
+  })
   },
 });
 

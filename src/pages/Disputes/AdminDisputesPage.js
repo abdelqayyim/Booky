@@ -1,6 +1,6 @@
 import React from 'react'; 
 
-const DisputesPage = (props)=>{
+const AdminDisputesPage = (props)=>{
   return (
     <div className='h-full p-[25px] bg-transparent'>
     {/* Page Title and Filter */}
@@ -14,4 +14,4 @@ const DisputesPage = (props)=>{
   )
 };
 
-export default DisputesPage;
+export default AdminDisputesPage;

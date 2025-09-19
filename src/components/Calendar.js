@@ -25,7 +25,7 @@ import {
   ARROW_DOWN,
   EDIT_BUTTON,
   ADD_BUTTON,
-} from "../pages/constants.js";
+} from "../constants.js";
 import Tooltip from "@mui/material/Tooltip";
 import CustomButton from "./CustomButton.js";
 import { FORMS } from "../components/Forms/FormsContainer.js";

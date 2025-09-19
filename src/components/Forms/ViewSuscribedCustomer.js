@@ -6,7 +6,7 @@ import {
   MAIL_SVG,
   PHONE_SVG,
   CALENDAR_SVG,
-} from "../../pages/constants";
+} from "../../constants";
 import { setSelectedUserSubscribed } from "../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 

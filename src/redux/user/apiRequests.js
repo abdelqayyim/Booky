@@ -7,6 +7,9 @@ import {
   mockDefaultSchedules,
   mockOverrideSchedules,
   monthlyData,
+  dummySubscribedUsers,
+  dummyServiceHistory,
+  dummyDisputes
 } from '../../api/mockData.js';
 
 const delay = (data, time = 500) =>
@@ -43,6 +46,31 @@ export const getTodayAppointmentsAndMonthStats = createAsyncThunk(
     return {
       todayAppointments,
       monthlyData: monthlyData,
+    };
+  }
+);
+
+export const getServiceHistoryAndSubscribers = createAsyncThunk(
+  'user/getServiceHistoryAndSubscribers',
+  async () => {
+    // Simulate API delay
+    await delay(null, 500);
+
+    return {
+      serviceHistory: dummyServiceHistory,
+      subscribedUsers: dummySubscribedUsers,
+    };
+  }
+);
+
+export const getDisputes = createAsyncThunk(
+  'user/getDisputes',
+  async () => {
+    // Simulate API delay
+    await delay(null, 500);
+
+    return {
+      disputes: dummyDisputes,
     };
   }
 );

@@ -11,7 +11,7 @@ import {
   SETTINGS_SVG,
   STOREFRONT_SVG,
   USERS_SVG,
-} from "../pages/constants";
+} from "../constants";
 import NotificationBell from "./NotificationBell";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import SendIcon from "@mui/icons-material/Send";

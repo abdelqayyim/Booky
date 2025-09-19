@@ -225,3 +225,69 @@ export const monthlyData = {
   reviews: 3.2,
   revenue: 2300
 }
+
+export const dummyDisputes = [
+    {
+      id: 'DSP-001',
+      customer: 'Sarah Johnson',
+      service: 'House Cleaning',
+      serviceDate: '2024-09-15',
+      amount: 120,
+      status: 'open',
+      priority: 'high',
+      category: 'Service Quality',
+      createdAt: '2024-09-16T10:30:00',
+      lastUpdate: '2024-09-17T09:15:00',
+      description: 'Customer claims cleaning was incomplete and wants full refund.',
+      messages: [
+        {
+          id: 1,
+          sender: 'customer',
+          message: 'The cleaning service was not completed properly. Several rooms were barely touched.',
+          timestamp: '2024-09-16T10:30:00',
+          attachments: ['before.jpg', 'after.jpg']
+        },
+        {
+          id: 2,
+          sender: 'provider',
+          message: 'I apologize for the inconvenience. Can you please specify which areas were not cleaned to your satisfaction?',
+          timestamp: '2024-09-16T14:20:00'
+        }
+      ]
+    },
+    {
+      id: 'DSP-002',
+      customer: 'Mike Chen',
+      service: 'Haircut',
+      serviceDate: '2024-09-14',
+      amount: 45,
+      status: 'under_review',
+      priority: 'medium',
+      category: 'Payment Issue',
+      createdAt: '2024-09-15T16:45:00',
+      lastUpdate: '2024-09-16T11:30:00',
+      description: 'Payment dispute - customer claims double charge.',
+      messages: [
+        {
+          id: 1,
+          sender: 'customer',
+          message: 'I was charged twice for the same service. Please refund the duplicate charge.',
+          timestamp: '2024-09-15T16:45:00'
+        }
+      ]
+    },
+    {
+      id: 'DSP-003',
+      customer: 'Emma Davis',
+      service: 'Lawn Care',
+      serviceDate: '2024-09-12',
+      amount: 85,
+      status: 'resolved',
+      priority: 'low',
+      category: 'Scheduling',
+      createdAt: '2024-09-13T09:20:00',
+      lastUpdate: '2024-09-14T15:45:00',
+      description: 'Provider arrived 2 hours late, customer requested partial refund.',
+      messages: []
+    }
+  ];

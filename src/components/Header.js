@@ -7,7 +7,7 @@ import {
   LOGIN_SVG,
   SUPPORT_SVG,
   SINGUP_SVG,
-} from "../pages/constants";
+} from "../constants";
 const Header = (props) => {
   // State to manage the mobile menu modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ROLES } from '../../redux/user/userSlice';
-import { CHECKED_CALENDAR_SVG, ACTIVE_USERS_SVG, STOREFRONT_SVG, DOLLAR_SIGN_SVG } from '../constants';
+import { CHECKED_CALENDAR_SVG, ACTIVE_USERS_SVG, STOREFRONT_SVG, DOLLAR_SIGN_SVG } from '../../constants';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import StatCard from '../../components/StatCard';

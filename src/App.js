@@ -16,7 +16,6 @@ import ProviderAppointmentsPage from './pages/Appointments/ProviderAppointmentsP
 import ClientAppointmentsPage from './pages/Appointments/ClientAppointmentsPage';
 import AdminAppointmentsPage from './pages/Appointments/AdminAppointmentsPage';
 
-import DisputesPage from './pages/DisputesPage';
 import ReviewsPage from './pages/ReviewsPage';
 import NotificationsPage from './pages/NotificationsPage';
 import MonetizationPage from './pages/MonetizationPage';
@@ -26,6 +25,9 @@ import { ROLES } from './redux/ui/uiSlice';
 import ProviderUsersPage from './pages/Users/ProviderUsersPage';
 import ClientUsersPage from './pages/Users/ClientUsersPage';
 import AdminUsersPage from './pages/Users/AdminUsersPage';
+import ClientDisputesPage from './pages/Disputes/ClientDisputesPage';
+import ProdivderDisputesPages from './pages/Disputes/ProviderDisputesPage';
+import AdminDisputesPage from './pages/Disputes/AdminDisputesPage';
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user);
   return (
@@ -52,7 +54,8 @@ function App() {
             <Route path="appointments" element={ user?.role === ROLES.PROVIDER ? (<ProviderAppointmentsPage />) : user?.role === ROLES.CLIENT ? (<ClientAppointmentsPage />) : user?.role === ROLES.ADMIN ? (<AdminAppointmentsPage /> ) : ( <NotFound /> )}/>
 
             {/* Disputes Pages */}
-            <Route path="disputes" element={<DisputesPage />} />
+                        <Route path="disputes" element={ user?.role === ROLES.PROVIDER ? (<ProdivderDisputesPages />) : user?.role === ROLES.CLIENT ? (<ClientDisputesPage />) : user?.role === ROLES.ADMIN ? (<AdminDisputesPage /> ) : ( <NotFound /> )}/>
+
 
             {/* Reviews Pages */}
             <Route path="reviews" element={<ReviewsPage />} />

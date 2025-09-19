@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ARROW_UP, ARROW_DOWN } from '../../pages/constants';
+import { ARROW_UP, ARROW_DOWN } from '../../constants';
 import { Tooltip } from '@mui/material';
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Tooltip from "@mui/material/Tooltip";
-import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../pages/constants";
+import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../constants";
 import ThemeToggle from "./ThemeToggle";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -53,11 +53,7 @@ const Sidebar = () => {
     // { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
     { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
     { label: "Users", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
-    { label: "Providers", icon: STOREFRONT_SVG, to: "/", onClick: () => navigate('/providers')},
     { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes')},
-    { label: "Reviews", icon:REVIEWS_SVG, to: "/", onClick: () => navigate('/reviews')},
-    { label: "Monetization", icon: MONETIZATION_SVG, to: "/", onClick: () => navigate('/monetization')},
-    {label: "Reports", icon: REPORTS_SVG, to: "/", onClick: () => navigate('/reports')},
     // { label: "Settings", icon:SETTINGS_SVG, subItems: [
     //     {
     //       label: "Course",

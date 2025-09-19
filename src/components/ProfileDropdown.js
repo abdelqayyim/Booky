@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Dropdown from './Dropdown';
-import { ARROW_RIGHT } from '../pages/constants';
+import { ARROW_RIGHT } from '../constants';
 
 export default function ProfileDropdown() {
   const avatar = (
