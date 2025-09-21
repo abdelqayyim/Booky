@@ -60,25 +60,25 @@ const CancelEventForm = ({ existingEvent = null }) => {
             </div>
           </div>
         ) : (
-          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="p-4 bg-[var(--bg-color)] rounded-lg">
             <div className="flex items-center space-x-2 mb-2">
               <AlertTriangle size={16} className="text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">No Event Selected</span>
+              <span className="text-sm font-medium text-[var(--text-primary)]">No Event Selected</span>
             </div>
-            <p className="text-sm text-gray-600">Please select an event to cancel from your calendar.</p>
+            <p className="text-sm text-[var(--text-primary)]">Please select an event to cancel from your calendar.</p>
           </div>
         )}
 
         {/* Cancellation Reason */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-medium text-[var(--text-primary)]">
             Reason for Cancellation <span className="text-gray-400">(Optional)</span>
           </label>
           <div className="relative">
             <select
               value={cancellationReason}
               onChange={(e) => setCancellationReason(e.target.value)}
-              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 appearance-none bg-white"
+              className="w-full px-4 py-3 pr-10 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 appearance-none bg-[var(--bg-color)]"
             >
               <option value="">Select a reason (optional)</option>
               {cancellationReasons.map((reason) => (
@@ -99,7 +99,7 @@ const CancelEventForm = ({ existingEvent = null }) => {
             </label>
             <textarea
               placeholder="Please provide details about your cancellation..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+              className="w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
               rows="3"
             />
           </div>
@@ -125,7 +125,7 @@ const CancelEventForm = ({ existingEvent = null }) => {
             onChange={(e) => setConfirmCancel(e.target.checked)}
             className="mt-1 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
           />
-          <label htmlFor="confirmCancel" className="text-sm text-gray-700">
+          <label htmlFor="confirmCancel" className="text-sm text-[var(--text-primary)]">
             I understand that this action cannot be undone and I want to cancel this event.
           </label>
         </div>

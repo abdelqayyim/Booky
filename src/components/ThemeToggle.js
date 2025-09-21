@@ -1,27 +1,31 @@
 import { useState, useEffect } from 'react';
 import { DARK_MODE_SVG, LIGHT_MODE_SVG } from '../constants';
+import { toggleUiMode, UIMODES } from '../redux/ui/uiSlice';
+import { useDispatch } from 'react-redux';
 
 export default function ThemeToggle({ showLabel }) {
-  const [isDark, setIsDark] = useState(localStorage.getItem("booky-theme") === "dark"? true : false);
-
+  const dispatch = useDispatch();
+  const [isDark, setIsDark] = useState(localStorage.getItem("booky-theme") === UIMODES.dark? true : false);
+  
   useEffect(() => {
     const html = document.documentElement;
     if (isDark) {
-      html.classList.add('dark');
-      localStorage.setItem('booky-theme', 'dark');
+      html.classList.add(UIMODES.dark);
+      localStorage.setItem('booky-theme', UIMODES.dark);
     } else {
-      html.classList.remove('dark');
-      localStorage.setItem('booky-theme', 'light');
+      html.classList.remove(UIMODES.dark);
+      localStorage.setItem('booky-theme', UIMODES.light);
     }
+    dispatch(toggleUiMode());
   }, [isDark]);
 
   const modeBtns = [
     {
-      label: "Dark",
+      label: UIMODES.dark,
       logo: DARK_MODE_SVG,
     },
     {
-      label: "Light",
+      label: UIMODES.light,
       logo: LIGHT_MODE_SVG,
     },
   ];

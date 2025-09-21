@@ -13,7 +13,9 @@ import StatCard from "../../components/StatCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getDisputes } from "../../redux/user/apiRequests";
 import Dropdown from "../../components/Dropdown";
-
+import { FORMS } from '../../components/Forms/FormsContainer';
+import { setCurrentForm } from "../../redux/ui/uiSlice";
+import { setSelectedDispute } from "../../redux/user/userSlice";
   const LOGOS = {
     total_disputes: NOTE_STACK_SVG,
     open_disputes: WARNING_SVG,
@@ -168,6 +170,8 @@ const ProdivderDisputesPages = (props) => {
                         <button
                           onClick={() => {
                             // Handle view
+                            dispatch(setSelectedDispute(dispute));
+                            dispatch(setCurrentForm(FORMS.DISPUTE_MANAGEMENT))
                           }}
                           className="text-blue-600 hover:text-blue-800"
                         >
@@ -222,7 +226,8 @@ const ProdivderDisputesPages = (props) => {
                       key={d.id}
                       className="hover:bg-[var(--bg-color-secondary)] cursor-pointer"
                       onClick={() => {
-                        // Handle row click
+                        dispatch(setSelectedDispute(d));
+                        dispatch(setCurrentForm(FORMS.DISPUTE_MANAGEMENT))
                       }}
                     >
                       <td className="py-3 px-4 font-medium flex items-center gap-2">

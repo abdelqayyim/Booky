@@ -38,6 +38,7 @@ const initialState = {
   serviceHistory: [],
 
   disputes: [],
+  selectedDispute: undefined,
 
   error: null,
   appointments: null,
@@ -103,6 +104,9 @@ const userSlice = createSlice({
     setSelectedUserSubscribed(state, action) {
       state.selectedUserSubscribed = action.payload
     },
+    setSelectedDispute(state, action) {
+      state.selectedDispute = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -158,6 +162,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { login, logout, setStatus, setError, setSelectedAppointment,setSelectedUserHistory, setSelectedUserSubscribed } =
+export const { login, logout, setStatus, setError, setSelectedAppointment,setSelectedUserHistory, setSelectedUserSubscribed,setSelectedDispute } =
   userSlice.actions;
 export default userSlice.reducer;

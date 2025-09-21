@@ -67,7 +67,7 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
             <select
               value={formData.eventType}
               onChange={(e) => handleInputChange('eventType', e.target.value)}
-              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-[var(--bg-color)]  outline-none"
+              className="w-full px-4 py-3 pr-10  rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-[var(--bg-color)]  outline-none"
               required
             >
               <option value="">Select event type</option>
@@ -91,7 +91,7 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
               type="date"
               value={formData.date}
               onChange={(e) => handleInputChange('date', e.target.value)}
-              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-[var(--bg-color)]   outline-none"
+              className="w-full px-4 py-3 pr-10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-[var(--bg-color)]   outline-none"
               required
             />
             <Calendar size={20} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
@@ -108,7 +108,7 @@ const RescheduleEventForm = ({ existingEvent = null }) => {
               type="time"
               value={formData.time}
               onChange={(e) => handleInputChange('time', e.target.value)}
-              className="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-[var(--bg-color)]  outline-none"
+              className="w-full px-4 py-3 pr-10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-[var(--bg-color)]  outline-none"
               required
             />
             <Clock size={20} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-primary)] pointer-events-none" />

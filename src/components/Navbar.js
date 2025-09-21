@@ -121,6 +121,7 @@ const Navbar = (props) => {
       onClick: () => navigate('/dashboard'),
     },
   ];
+  
   const foldedNarbarBtn = (btn, key) => {
     return (
       <div

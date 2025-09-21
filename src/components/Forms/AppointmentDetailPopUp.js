@@ -47,7 +47,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
     <PopUpFormSkeleton formTitle="Appointment Details" onClose={()=>{}}>
       <div className="space-y-4">
         {/* Header Section with Client Info and Status */}
-        <div className="bg-[var(--bg-color)] rounded-lg p-4 border border-blue-200">
+        <div className="bg-[var(--bg-color)] rounded-lg p-4 ">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-lg font-bold">
@@ -73,7 +73,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
               <label className="block text-xs font-medium text-[var(--text-primary)] mb-1">
                 Date & Time
               </label>
-              <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg border border-gray-200">
+              <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg">
                 <Calendar size={16} className="text-blue-600 mr-2" />
                 <div className="text-sm text-[var(--text-primary)]">
                   <div className="font-medium text-[var(--text-primary)]">{formatDate(appointment.date)}</div>
@@ -87,7 +87,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
               <label className="block text-xs font-medium text-[var(--text-primary)] mb-1">
                 Duration
               </label>
-              <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg border border-gray-200">
+              <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg ">
                 <Clock size={16} className="text-blue-600 mr-2" />
                 <span className="text-sm text-[var(--text-primary)]">{appointment.duration} minutes</span>
               </div>
@@ -99,7 +99,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
                 <label className="block text-xs font-medium text-[var(--text-primary)] mb-1">
                   Phone
                 </label>
-                <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg border border-gray-200">
+                <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg ">
                   <Phone size={16} className="text-blue-600 mr-2" />
                   <span className="text-sm text-[var(--text-primary)]">{appointment.phone}</span>
                 </div>
@@ -112,7 +112,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
                 <label className="block text-xs font-medium text-[var(--text-primary)] mb-1">
                   Price
                 </label>
-                <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg border border-gray-200">
+                <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg ">
                   <DollarSign size={16} className="text-blue-600 mr-2" />
                   <span className="text-sm text-[var(--text-primary)]">${appointment.price}</span>
                 </div>
@@ -127,7 +127,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
               <label className="block text-xs font-medium text-[var(--text-primary)] mb-1">
                 Client
               </label>
-              <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg border border-gray-200">
+              <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg ">
                 <User size={16} className="text-blue-600 mr-2" />
                 <span className="text-sm text-[var(--text-primary)]">{appointment.clientName}</span>
               </div>
@@ -139,7 +139,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
                 <label className="block text-xs font-medium text-[var(--text-primary)] mb-1">
                   Email
                 </label>
-                <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg border border-gray-200">
+                <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg ">
                   <Mail size={16} className="text-blue-600 mr-2" />
                   <span className="text-sm text-[var(--text-primary)]">{appointment.email}</span>
                 </div>
@@ -152,7 +152,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
                 <label className="block text-xs font-medium text-[var(--text-primary)] mb-1">
                   Location
                 </label>
-                <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg border border-gray-200">
+                <div className="flex items-center p-2 bg-[var(--bg-color)] rounded-lg ">
                   <MapPin size={16} className="text-blue-600 mr-2" />
                   <span className="text-sm text-[var(--text-primary)]">{appointment.location}</span>
                 </div>
@@ -167,7 +167,7 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
             <label className="block text-xs font-medium text-[var(--text-primary)] mb-1">
               Notes
             </label>
-            <div className="p-3 bg-[var(--bg-color)] rounded-lg border border-gray-200">
+            <div className="p-3 bg-[var(--bg-color)] rounded-lg ">
               <p className="text-sm text-[var(--text-primary)]">{appointment.notes}</p>
             </div>
           </div>

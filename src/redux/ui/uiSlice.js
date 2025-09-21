@@ -6,22 +6,29 @@ export const RESPONSE_STATUS = {
   SUCCEEDED: "succeeded",
   FAILED: "failed",
 };
+export const UIMODES = {
+  light: "light",
+  dark: "dark"
+}
+const getInitialUiMode = () => {
+  const stored = localStorage.getItem('booky-theme');
+  return stored === UIMODES.dark ? UIMODES.dark : UIMODES.light;
+};
 export const ROLES = { ADMIN: "admin", PROVIDER: "provider", CLIENT: "client" };
 const initialState = {
-  uiMode: "light",
+  uiMode: getInitialUiMode(),
   currentForm: null,
   currentDate: new Date().toISOString(),
 };
-
 const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
     toggleUiMode(state) {
-      if (state.uiMode === "light") {
-        state.uiMode = "dark";
+      if (state.uiMode === UIMODES.light) {
+        state.uiMode = UIMODES.dark;
       } else {
-        state.uiMode = "light";
+        state.uiMode = UIMODES.light;
       }
     },
     setCurrentForm(state, action) {
