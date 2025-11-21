@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Clock, Calendar, User, Phone, Mail, MapPin, DollarSign } from "lucide-react";
 import PopUpFormSkeleton from './PopUpFormSkeleton';
 import { setCurrentForm } from "../../redux/ui/uiSlice";
 import { FORMS } from "./FormsContainer";
 import { useDispatch } from "react-redux";
+import MapView from "../MapView";
 
 const AppointmentDetailPopUp = ({ appointment, onClose }) => {
   const dispatch = useDispatch();
@@ -45,7 +46,8 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
 
   return (
     <PopUpFormSkeleton formTitle="Appointment Details" onClose={()=>{}}>
-      <div className="space-y-4">
+      <div className="flex flex-row gap-2">
+        <div className="space-y-4 flex-row">
         {/* Header Section with Client Info and Status */}
         <div className="bg-[var(--bg-color)] rounded-lg p-4 ">
           <div className="flex items-center justify-between">
@@ -198,7 +200,16 @@ const AppointmentDetailPopUp = ({ appointment, onClose }) => {
             Close
           </button>
         )}
+        </div>
+        
+          {/* RIGHT — Google Map */}
+  <div className="w-[350px] h-[500px]">
+  <MapView location={{ lat: 40.7128, lng: -74.0060 }} />
+</div>
+
       </div>
+
+      
     </PopUpFormSkeleton>
   );
 };

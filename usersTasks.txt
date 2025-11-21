@@ -1,0 +1,26 @@
+This text document is to document what each user should do for organisation sake
+
+ADMIN
+  PAGES
+    - USERS:
+
+PROVIDER
+  PAGES 
+    - DASHBOARD
+      - Ability to view service details (total bookings, completed this month, reviews, monthly revenue)
+      - Ability to see the day's appointments (reschedule/cancel)
+      - Ability to see the calendar (similar to google calendar)
+    - APPOINTMENTS
+      - View upcoming appointments (reschedule/cancel)
+      - Change schedule (for the week/month)
+      - Ability to view calendar (day/week/month/year)
+    - USERS
+      -
+    - DISPUTES
+    - SETTINGS
+      - Ability to add services offered
+      - Ability to change user data (location (have a default), name etc...)
+      - 
+    - Services
+      - Ability for user to create pages for their services.
+CLIENT
