@@ -4,7 +4,13 @@ module.exports = {
       "./src/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
-      extend: {},
+      extend: {
+        fontFamily: {
+          display: ["Manrope", "sans-serif"], // your custom font
+          // optional: add other fonts too
+          body: ["Inter", "sans-serif"],
+      },
+      },
     },
     plugins: [],
   }

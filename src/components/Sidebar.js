@@ -52,8 +52,11 @@ const Sidebar = () => {
     { label: "Dashboard", icon: DASHBOARD_SVG, to: "/", onClick: () => navigate('/dashboard'), },
     // { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
     { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
-    { label: "Users", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
-    { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes')},
+    { label: "Clients", icon: USERS_SVG, to: "/", onClick: () => navigate('/users') },
+    { label: "Analytics", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
+    { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes') },
+    { label: "Settings", icon: SETTINGS_SVG, to: "/", onClick: () => navigate('/settings') },
+    
     // { label: "Settings", icon:SETTINGS_SVG, subItems: [
     //     {
     //       label: "Course",
@@ -105,8 +108,8 @@ const Sidebar = () => {
   return (
     <nav
   ref={sidebar}
-  className={`hidden md:block mr-[5px] ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} 
-      rounded h-full bg-[var(--component-primary)] border-r border-none md:flex md:flex-col
+  className={`hidden md:block ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} 
+       h-full bg-[var(--bg-primary)] border-r border-r-[var(--primary-20)] md:flex md:flex-col
       transition-all duration-300 sticky top-0 overflow-y-auto hide-scrollbar`}
 >
   <div className="flex flex-col justify-between h-full">
@@ -119,7 +122,7 @@ const Sidebar = () => {
           <button
             ref={toggleBtn}
             onClick={toggleSideBar}
-            className="ml-auto p-3 rounded hover:bg-[var(--primary-hover)]"
+            className="ml-auto p-3 rounded hover:bg-[red-50]"
           >
             <div className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}>
               {SIDEBAR_ARROW_SVG}
@@ -143,7 +146,7 @@ const Sidebar = () => {
                   toggleSubMenu(event);
                 }
               }}
-              className={`flex items-center justify-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-hover)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary)] text-white":""}`}
+              className={`flex items-center justify-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-20)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary-20)] font-bold text-[var(--primary)]":""}`}
             >
               {item.icon}
                 <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>
@@ -158,7 +161,7 @@ const Sidebar = () => {
                   <a
                     href="#"
                     onClick={(event) => { subItem.onClick(event); toggleSideBar() }}
-                    className="block p-2 pl-10 hover:bg-[var(--primary)] rounded"
+                    className="block p-2 pl-10 hover:bg-[var(--primary-20)] rounded"
                   >
                     {subItem.label}
                   </a>

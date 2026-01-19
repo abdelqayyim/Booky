@@ -140,8 +140,22 @@ const Navbar = (props) => {
     );
   };
   return (
-    <div className="bg-[var(--component-primary)] w-full h-[50px] px-0 py-0 md:px-[25px] md:py-[5px] flex flex-row  rounded">
-      
+<div className="bg-[var(--bg-primary)] border-b border-b-[var(--primary-20)] w-full h-[50px] px-0 py-0 md:px-[25px] md:py-[5px] flex flex-row rounded-t">
+<input
+  className="
+    w-[200px]
+    pl-10 pr-4 py-2
+    text-[var(--text-primary)]
+    bg-[var(--bg-secondary)]
+    rounded-lg
+    text-sm
+    border border-transparent
+    focus:outline-none focus:ring-1 focus:ring-[rgba(var(--primary-rgb),0.2)] focus:border-[rgba(var(--primary-rgb),0.2)]
+    placeholder:text-gray-600
+  "
+  placeholder="Search bookings, customers..."
+  type="text"
+/>      
       <div className="flex flex-row items-center justify-between md:hidden w-full z-50 relative">
         {/* For Mobile View */}
         <div
@@ -193,31 +207,6 @@ const Navbar = (props) => {
       </div>
 
       <div className="hidden md:flex flex-1 flex-row justify-between items-center">
-        {/* For larger screen view */}
-        <div className="flex flex-row h-full">
-          <button
-            className="mr-4 bg-[var(--primary)] hover:bg-[var(--primary-hover)] flex flex-row 
-                          text-white px-[10px] rounded-[8px] border-none font-[500] cursor-pointer
-                          items-center gap-[8px] transition-colors duration-200 text-xs"
-          >
-            {CHECKMARK_SVG}
-            Approve Provider
-          </button>
-          <button
-  className="relative group bg-transparent hover:bg-transparent flex flex-row text-[var(--secondary)] 
-    px-[10px] rounded-[8px] border border-[var(--secondary)] font-[500] cursor-pointer
-    items-center gap-[8px] transition-colors duration-200 text-xs overflow-hidden"
->
-  {/* Ripple effect */}
-  <div className="absolute inset-0 bg-gray-200 scale-0 rounded-full opacity-0 group-hover:animate-ripple z-0" />
-
-  {/* Button content */}
-  <div className="z-10 flex items-center gap-[8px]">
-    <SendIcon />
-    <div className="text-[var(--secondary)]"> Send Notification </div>
-  </div>
-</button>
-        </div>
 
         <div className="flex-1 flex flex-row justify-end">
         <div

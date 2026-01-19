@@ -20,7 +20,6 @@ import ReviewsPage from './pages/ReviewsPage';
 import NotificationsPage from './pages/NotificationsPage';
 import MonetizationPage from './pages/MonetizationPage';
 import ReportsPage from './pages/ReportsPage';
-import SettingsPages from './pages/SettingsPages';
 import { ROLES } from './redux/ui/uiSlice';
 import ProviderUsersPage from './pages/Users/ProviderUsersPage';
 import ClientUsersPage from './pages/Users/ClientUsersPage';
@@ -28,11 +27,14 @@ import AdminUsersPage from './pages/Users/AdminUsersPage';
 import ClientDisputesPage from './pages/Disputes/ClientDisputesPage';
 import ProdivderDisputesPages from './pages/Disputes/ProviderDisputesPage';
 import AdminDisputesPage from './pages/Disputes/AdminDisputesPage';
+import ProviderSettingsPage from './pages/Settings/ProviderSettingsPage';
+import ClientSettingsPage from './pages/Settings/ClientSettingsPage';
+import AdminSettingPages from './pages/Settings/AdminSettingsPage';
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user);
   return (
     <Router>
-      <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)]">
+      <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
         <Routes>
           {/* Public Route */}
           <Route path="/" element={<LandingPage />} />
@@ -70,7 +72,8 @@ function App() {
             <Route path="reports" element={<ReportsPage />} />
             
             {/* Settings Pages */}
-            <Route path="settings" element={<SettingsPages />} />
+            <Route path="settings" element={ user?.role === ROLES.PROVIDER ? (<ProviderSettingsPage />) : user?.role === ROLES.CLIENT ? (<ClientSettingsPage />) : user?.role === ROLES.ADMIN ? (<AdminSettingPages /> ) : ( <NotFound /> )}/>
+
 
           </Route>
 

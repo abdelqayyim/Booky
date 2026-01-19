@@ -3,56 +3,36 @@
 @tailwind utilities;
 :root, 
 .light-mode{
-  --primary: #4f46e5;
-  --primary-hover: rgba(79, 70, 229, 0.85);
-  --secondary: #000000;
-  --bg-color: #F1F3F4;
-  --bg-color-secondary: #d3d4d5;
+  --bg-primary: #f1f5f9;
+  --bg-secondary: white;
 
-  --component-primary: rgb(255,255,255);
-  --text-primary: rgba(43,46,72,1);
-  --text-secondary: rgba(43,46,72,0.7);
+  --text-primary: black;
+  --text-secondary: #9da3af;
 
-  --text-opposite-primary: rgba(227,227,227,1);
-
-  --toggle-background: #EFEFEF;
-  --toggle-button-background: #FFFFFF;
-
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --light: #f3f4f6;
-  --dark: #111827;
-  --sidebar-width: 250px;
-  --header-height: 60px;
-
-  --appointment-color: #89CFF0;
-}
-.dark {
-  --primary: #4f46e5;
-  --primary-hover: rgba(79, 70, 229, 0.85);
-  --secondary: #E3E3E3;
-  --bg-color: rgba(13,15,17,1);
-  --bg-color-secondary: rgb(30, 35, 40);
-
-  --component-primary: rgba(25,29,35,1);
-  --text-primary: rgba(227,227,227,1);
-  --text-secondary: rgba(227,227,227,0.7);
-
-  --text-opposite-primary: rgba(43,46,72,1);
-
-  --toggle-background: #2c2f36;              /* Dark gray background */
-  --toggle-button-background: #4f46e5;  
+  --success: #39ff14;
+  --accent-gold: #D1AC79;
+  --primary: #007a8a;
+  --primary-20: rgba(0, 122, 138, 0.2);
 
   --success: #34d399;       /* Brighter green */
   --warning: #fbbf24;       /* Brighter amber */
   --danger: #f87171;        /* Brighter red */
-  --light: #1f2937;         /* Dark gray instead of light gray */
-  --dark: #f9fafb;          /* Nearly white instead of nearly black */
-  --sidebar-width: 250px;
-  --header-height: 60px;
+}
+.dark {
+  --bg-primary: #0a0f1a;
+  --bg-secondary: #161d2b;  
 
-  --appointment-color: #4f46e5; 
+  --text-primary: white;
+  --text-secondary: #9da3af;
+
+  --success: #39ff14;
+  --accent-gold: #D1AC79;
+  --primary: #00f5d4;
+  --primary-20: rgba(0, 245, 212,0.2);
+
+  --success: #34d399;       /* Brighter green */
+  --warning: #fbbf24;       /* Brighter amber */
+  --danger: #f87171;        /* Brighter red */
 }
 html, body, #root {
   height: 100%;
