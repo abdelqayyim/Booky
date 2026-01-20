@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Toggle from "../../components/Toggle";
 import { FILTER_SVG, STAR_EMPTY, STAR_HALF, STAR_FULL } from "../../constants";
 import Tooltip from "@mui/material/Tooltip";
@@ -13,7 +13,7 @@ import {
 import { format } from "date-fns";
 import { getServiceHistoryAndSubscribers } from "../../redux/user/apiRequests";
 
-// Outside the component
+/* ----------------------- Helpers ----------------------- */
 const filterData = (
   currentOption,
   filters,
@@ -25,369 +25,230 @@ const filterData = (
 
   const nameRegex = new RegExp(escapeRegExp(filters.name), "i");
 
-  const historyList = Array.isArray(serviceHistory) ? serviceHistory : [];
-  const subscribedList = Array.isArray(subscribedUsers) ? subscribedUsers : [];
-
   return currentOption === "History"
-    ? historyList.filter((entry) => {
-        const matchesName = nameRegex.test(entry.userName);
-        const matchesRating = entry.rating >= filters.rating;
-        const matchesDate =
-          (!filters.fromDate ||
-            new Date(entry.date) >= new Date(filters.fromDate)) &&
-          (!filters.toDate || new Date(entry.date) <= new Date(filters.toDate));
-        const matchesService =
-          filters.services.length === 0 ||
-          filters.services.includes(entry.service);
-        return matchesName && matchesRating && matchesDate && matchesService;
+    ? serviceHistory.filter((entry) => {
+        return (
+          nameRegex.test(entry.userName) &&
+          entry.rating >= filters.rating
+        );
       })
-    : subscribedList.filter((user) => {
-        const matchesName = nameRegex.test(user.name);
-        const matchesRating = user.rating >= filters.rating;
-        const matchesDate =
-          (!filters.fromDate ||
-            new Date(user.nextBooking) >= new Date(filters.fromDate)) &&
-          (!filters.toDate ||
-            new Date(user.nextBooking) <= new Date(filters.toDate));
-        const matchesService =
-          filters.services.length === 0 ||
-          filters.services.every((service) =>
-            user.subscribedServices?.includes(service)
-          );
-        return matchesName && matchesRating && matchesDate && matchesService;
-      });
+    : subscribedUsers.filter((user) =>
+        nameRegex.test(user.name)
+      );
 };
 
+const ITEMS_PER_PAGE = 8;
+
+/* ----------------------- Component ----------------------- */
 const ProviderUsersPage = () => {
   const dispatch = useDispatch();
-  const currentUserState = useSelector((state) => state.user);
-  const { serviceHistory, subscribedUsers } = currentUserState;
-  const [currentOption, setCurrentOption] = useState("");
-  const options = useMemo(
-    () => [
-      { title: "History", onClick: () => setCurrentOption("History") },
-      { title: "Subscribed", onClick: () => setCurrentOption("Subscribed") },
-    ],
-    []
+  const { serviceHistory, subscribedUsers } = useSelector(
+    (state) => state.user
   );
-  const [displayFilterOptions, setDisplayFiletOptions] = useState(false);
-  const [filters, setFilters] = useState({
-    name: "", // For name search
-    fromDate: "", // Start date
-    toDate: "", // End date
-    rating: 0, // Min rating (can be 0.5 steps)
-    services: [], // Array of selected services (e.g. ['Haircut', 'Shave'])
-  });
 
-  const filteredData = useMemo(() => {
-    return filterData(currentOption, filters, serviceHistory, subscribedUsers);
-  }, [filters, currentOption, serviceHistory, subscribedUsers]);
-  const [nameInput, setNameInput] = useState("");
-  const [draftFilters, setDraftFilters] = useState(filters);
+  const [currentOption, setCurrentOption] = useState("History");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  /* 🔍 Live Search */
+  const [searchInput, setSearchInput] = useState("");
+  const [filters, setFilters] = useState({ name: "", rating: 0 });
+
+  /* 🎛️ Filter dropdown */
+  const [showFilters, setShowFilters] = useState(false);
+  const filterRef = useRef(null);
 
   useEffect(() => {
     dispatch(getServiceHistoryAndSubscribers());
   }, [dispatch]);
 
+  /* 🔍 Debounce search */
   useEffect(() => {
-    setCurrentOption(options[0].title);
-  }, [options]);
+    const timer = setTimeout(() => {
+      setFilters((p) => ({ ...p, name: searchInput }));
+      setCurrentPage(1);
+    }, 300);
 
-  // Derive service types based on current option
-  const serviceTypes = useMemo(() => {
-    let source = [];
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
-    if (currentOption === "History") {
-      source = Array.isArray(serviceHistory)
-        ? serviceHistory.map((entry) => entry?.service).filter(Boolean)
-        : [];
-    } else {
-      source = Array.isArray(subscribedUsers)
-        ? subscribedUsers.flatMap((user) => user?.subscribedServices || [])
-        : [];
-    }
-
-    return Array.from(new Set(source));
-  }, [currentOption, serviceHistory, subscribedUsers]);
-
-  const StarRatingFilter = ({ filters, setFilters }) => {
-    const handleStarClick = (value) => {
-      setFilters((prev) => ({ ...prev, rating: value }));
+  /* Close filter on outside click */
+  useEffect(() => {
+    const handler = (e) => {
+      if (filterRef.current && !filterRef.current.contains(e.target)) {
+        setShowFilters(false);
+      }
     };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
-    const renderStars = () => {
-      const stars = [];
+  const filteredData = useMemo(
+    () =>
+      filterData(
+        currentOption,
+        filters,
+        serviceHistory,
+        subscribedUsers
+      ),
+    [filters, currentOption, serviceHistory, subscribedUsers]
+  );
 
-      for (let i = 1; i <= 5; i++) {
-        let starIcon;
+  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
 
-        if (i <= Math.floor(filters.rating)) {
-          starIcon = STAR_FULL;
-        } else if (filters.rating >= i - 0.5) {
-          starIcon = STAR_HALF;
-        } else {
-          starIcon = STAR_EMPTY;
-        }
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredData.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredData, currentPage]);
 
-        stars.push(
+  /* ⭐ Rating Filter */
+  const StarRatingFilter = () => (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map((i) => {
+        const Icon =
+          i <= filters.rating ? STAR_FULL : STAR_EMPTY;
+
+        return (
           <span
             key={i}
-            className="cursor-pointer w-6 h-6 text-yellow-300 hover:text-yellow-400"
-            onClick={() => handleStarClick(i)}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              handleStarClick(i - 0.5);
-            }}
+            onClick={() =>
+              setFilters((p) => ({ ...p, rating: i }))
+            }
+            className="cursor-pointer text-yellow-400"
           >
-            {starIcon}
+            {Icon}
           </span>
         );
-      }
-
-      return stars;
-    };
-
-    return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-600">Min Rating:</span>
-        <div className="flex">{renderStars()}</div>
-      </div>
-    );
-  };
+      })}
+    </div>
+  );
 
   return (
-    <div className="h-full flex flex-col pl-[10px] pt-[5px] bg-transparent w-full">
+    <div className="p-6">
       <ViewCusomterHistory />
-      {/* Page Title + Toggle + Filter */}
-      <div className="flex flex-row items-center w-auto">
-        <h1 className="text-[45px] font-bold">Users</h1>
 
-        <div className="flex flex-row items-center ml-2">
-          <Toggle
-            options={options}
-            height="h-[40px]"
-            width="w-[220px]"
-            currentValue={currentOption}
-          />
-          <Tooltip title="Filter" placement="bottom">
-            <div
-              className="ml-2 p-2 rounded-full hover:bg-gray-200 transition cursor-pointer text-[var(--text-primary)] bg-[var(--bg-color-secondary)]"
-              onClick={() => setDisplayFiletOptions((prev) => !prev)}
-            >
-              {FILTER_SVG}
-            </div>
-          </Tooltip>
-        </div>
+      {/* ---------------- Header ---------------- */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-black">
+          Client Management Directory
+        </h1>
+        <p className="text-slate-500 mt-2">
+          Manage customer history and subscriptions.
+        </p>
       </div>
 
-      {displayFilterOptions && (
-        <div className="text-[var(--text-primary)] p-4 shadow-md mb-6 flex flex-col gap-4   bg-[var(--component-primary)] rounded-[10px]">
-          {/* Search by Name */}
-          <input
-            type="text"
-            value={nameInput}
-            onChange={(e) => setNameInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setDraftFilters({ ...filters, name: nameInput });
-              }
-            }}
-            className="px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 text-[var(--text-primary)]  outline-none bg-[var(--bg-color-secondary)]"
-            placeholder="Search By Name"
-          />
+      {/* ---------------- Table Container ---------------- */}
+      <div className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--primary-20)] overflow-hidden">
 
-          {/* Date Range Filter + Rating */}
-          <div className="flex gap-2 items-center">
+        {/* Table Header Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-6 py-4 border-b-[var(--primary-20)] bg-[var(--bg-secondary)]">
+          <h2 className="text-lg font-bold">All Clients</h2>
+
+          <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
             <input
-              type="date"
-              value={filters.fromDate}
-              onChange={(e) =>
-                setDraftFilters({ ...filters, fromDate: e.target.value })
-              }
-              className="px-3 py-2  rounded-lg focus:ring-2 focus:ring-blue-500 text-[var(--text-primary)] bg-[var(--bg-color-secondary)]"
-            />
-            <span className="text-black">to</span>
-            <input
-              type="date"
-              value={filters.toDate}
-              onChange={(e) =>
-                setDraftFilters({ ...filters, toDate: e.target.value })
-              }
-              className="px-3 py-2  rounded-lg focus:ring-2 focus:ring-blue-500 text-[var(--text-primary)] bg-[var(--bg-color-secondary)]"
+              type="text"
+              placeholder="Search client"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="bg-[var(--bg-primary)] outline-none px-3 py-2 text-sm rounded-lg border border-[var(--primary-20)] w-full sm:w-[220px]"
             />
 
-            {/* Rating Filter (assumes you have StarRatingFilter inside this file) */}
-            {currentOption === "History" && (
-              <StarRatingFilter
-                filters={draftFilters}
-                setFilters={setDraftFilters}
-              />
-            )}
-          </div>
+            {/* Filter Button */}
+            <div className="relative" ref={filterRef}>
+              <button
+                onClick={() => setShowFilters((p) => !p)}
+                className="p-2 rounded-lg border border-[var(--primary-20)] hover:bg-[var(--primary-20)]"
+              >
+                {FILTER_SVG}
+              </button>
 
-          {/* Services Selection */}
-          <div className="flex flex-wrap gap-2">
-            {serviceTypes.map((service) => {
-              const isSelected = draftFilters.services.includes(service);
-
-              return (
-                <button
-                  key={service}
-                  type="button"
-                  className={`px-4 py-2 rounded-lg text-sm  text-[var(--text-primary)] ${
-                    isSelected
-                      ? "bg-[var(--primary)] text-white"
-                      : "bg-[var(--bg-color-secondary)]  hover:bg-[var(--text-secondary)]"
-                  }`}
-                  onClick={() => {
-                    setDraftFilters((prev) => ({
-                      ...prev,
-                      services: isSelected
-                        ? prev.services.filter((s) => s !== service)
-                        : [...prev.services, service],
-                    }));
-                  }}
-                >
-                  {service}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Footer */}
-          <div className="flex flex-row gap-2 mt-2">
-            <button
-              type="button"
-              className="w-fit px-4 py-2 rounded-lg border flex items-center gap-2 text-black bg-gray-100 hover:bg-gray-200"
-              onClick={() => {
-                const reset = {
-                  name: "",
-                  fromDate: "",
-                  toDate: "",
-                  rating: 0,
-                  services: [],
-                };
-                setFilters(reset);
-                setDraftFilters(reset);
-                setNameInput("");
-                setDisplayFiletOptions((prev) => !prev);
-              }}
-            >
-              Reset
-            </button>
-            <button
-              type="button"
-              className="w-fit px-4 py-2 rounded-lg border flex items-center gap-2 bg-[var(--primary)] text-white"
-              onClick={() => {
-                setFilters(draftFilters);
-                setDisplayFiletOptions((prev) => !prev);
-              }}
-            >
-              Apply
-            </button>
+              {/* Filter Dropdown */}
+              {showFilters && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg p-4 z-50">
+                  <p className="text-xs font-bold mb-2">Minimum Rating</p>
+                  <StarRatingFilter />
+                  <button
+                    onClick={() =>
+                      setFilters({ name: "", rating: 0 })
+                    }
+                    className="mt-3 text-xs font-bold text-red-500"
+                  >
+                    Reset
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      )}
 
-      {/* Table Section */}
-      <div className="w-full mr-[10px] overflow-x-auto">
-        <table className="min-w-full bg-[var(--component-primary)] shadow rounded-md">
-          <thead>
-            <tr className="bg-[var(--component-primary)] text-left border-b">
-              <th className="py-3 px-4">Name</th>
-              {/* <th className="py-3 px-4">Email / Phone</th> */}
-              <th className="py-3 px-4">Service</th>
-              {currentOption === "History" && (
-                <th className="py-3 px-4">Price</th>
-              )}
-
-              <th className="py-3 px-4">
-                {currentOption === "History"
-                  ? "Date of Service"
-                  : "Next Scheduled Booking"}
-              </th>
-              {currentOption === "History" && (
-                <th className="py-3 px-4">Rating</th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData?.length > 0 ? (
-              filteredData.map((entry) =>
-                currentOption === "History" ? (
-                  <tr
-                    key={entry.id}
-                    className=" hover:bg-[var(--bg-color-secondary)]"
-                    onClick={() => {
-                      dispatch(setSelectedUserHistory(entry));
-                      dispatch(setCurrentForm(FORMS.VIEW_SERVICE_HISTORY));
-                    }}
-                  >
-                    <td className="py-3 px-4 font-medium">{entry.userName}</td>
-                    {/* <td className="py-3 px-4 text-sm">
-                      <div>{entry.email}</div>
-                      <div className="text-gray-500">{entry.phone}</div>
-                    </td> */}
-                    <td className="py-3 px-4 text-sm">{entry.service}</td>
-                    <td className="py-3 px-4 text-sm">{entry.price}</td>
-                    <td className="py-3 px-4 text-sm">
-                      {format(new Date(entry.date), "MMM d, yyyy")}
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className="inline-block bg-yellow-100 text-yellow-800 text-sm px-2 py-1 rounded">
-                        {entry.rating} ★
-                      </span>
-                    </td>
-                  </tr>
-                ) : (
-                  <tr
-                    key={entry.id}
-                    className="hover:bg-[var(--bg-color-secondary)]"
-                    onClick={() => {
-                      dispatch(setSelectedUserSubscribed(entry));
-                      dispatch(setCurrentForm(FORMS.VIEW_SUBSCRIBED_USER));
-                    }}
-                  >
-                    <td className="py-3 px-4 font-medium">{entry.name}</td>
-
-                    <td className="py-3 px-4 text-sm">
-                      <div className="flex flex-wrap gap-2">
-                        {entry.subscribedServices?.length > 0 ? (
-                          entry.subscribedServices.map((service, index) => (
-                            <span
-                              key={index}
-                              className="bg-[var(--bg-color)] text-[var(--text-primary)] text-xs font-medium px-3 py-1 rounded-full"
-                            >
-                              {service}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-gray-400 text-xs">
-                            No Subscriptions
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-sm">
-                      {format(new Date(entry.nextBooking), "MMM d, yyyy")}
-                    </td>
-                    {/* <td className="py-3 px-4">
-                      <span className="inline-block bg-yellow-100 text-yellow-800 text-sm px-2 py-1 rounded">
-                        {entry.rating} ★
-                      </span>
-                    </td> */}
-                  </tr>
-                )
-              )
-            ) : (
+        {/* ---------------- Table ---------------- */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left min-w-[640px]">
+            <thead className="bg-[var(--bg-primary)] text-xs uppercase text-[var(--text-secondary)]">
               <tr>
-                <td colSpan={5} className="py-6 px-4 text-center text-gray-500">
-                  No data found.
-                </td>
+                <th className="px-6 py-4">Name</th>
+                <th className="px-6 py-4">Service</th>
+                {currentOption === "History" && (
+                  <th className="px-6 py-4">Price</th>
+                )}
+                <th className="px-6 py-4">Date</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody className="divide-y divide-[var(--primary-20)]">
+              {paginatedData.map((entry) => (
+                <tr
+                  key={entry.id}
+                  onClick={() => {
+                    dispatch(setSelectedUserHistory(entry));
+                    dispatch(setCurrentForm(FORMS.VIEW_SERVICE_HISTORY));
+                  }}
+                  className="hover:bg-[var(--primary-20)] cursor-pointer"
+                >
+                  <td className="px-6 py-4 font-semibold">
+                    {entry.userName || entry.name}
+                  </td>
+                  <td className="px-6 py-4">
+                    {entry.service || entry.subscribedServices?.join(", ")}
+                  </td>
+                  {entry.price && (
+                    <td className="px-6 py-4">${entry.price}</td>
+                  )}
+                  <td className="px-6 py-4">
+                    {format(
+                      new Date(entry.date || entry.nextBooking),
+                      "MMM d, yyyy"
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* ---------------- Pagination ---------------- */}
+        {totalPages > 1 && (
+          <div className="flex justify-between items-center px-6 py-4 border-t">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
+              className="px-4 py-2 text-sm border rounded disabled:opacity-40"
+            >
+              Previous
+            </button>
+
+            <span className="text-sm">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => p + 1)}
+              className="px-4 py-2 text-sm border rounded disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

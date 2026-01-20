@@ -138,17 +138,17 @@ const ProviderDashboardPage = (props) => {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[var(--text-primary)] dark:text-white">Recent Activity</h2>
+        <h2 className="text-xl font-bold text-[var(--text-primary)]">Recent Activity</h2>
         <button
           onClick={onClear}
-          className="text-slate-500 text-sm font-medium hover:underline"
+          className="text-[var(--primary)] text-sm font-medium hover:underline"
         >
           Clear
         </button>
       </div>
 
       {/* Activity List */}
-      <div className="rounded-2xl border bg-[var(--bg-secondary)] p-6 shadow-sm">
+      <div className="rounded-2xl border border-[var(--primary-20)] bg-[var(--bg-secondary)] p-6 shadow-sm">
         <div className="relative space-y-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100 dark:before:bg-slate-800">
           {activities.map((activity, idx) => (
             <div key={idx} className="relative pl-8">
@@ -204,11 +204,11 @@ const ProviderDashboardPage = (props) => {
 <div className="space-y-4 lg:col-span-2">
   {/* Header */}
   <div className="flex items-center justify-between">
-    <h2 className="text-xl font-bold text-[var(--text-primary)] dark:text-white">
+    <h2 className="text-xl font-bold text-[var(--text-primary)]">
       Upcoming Bookings
     </h2>
 
-    <button className="text-slate-500 text-sm font-medium hover:underline">
+    <button className="text-[var(--primary)] text-sm font-medium hover:underline">
       View all
     </button>
   </div>

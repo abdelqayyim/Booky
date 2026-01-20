@@ -53,7 +53,7 @@ const Sidebar = () => {
     // { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
     { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
     { label: "Clients", icon: USERS_SVG, to: "/", onClick: () => navigate('/users') },
-    { label: "Analytics", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
+    // { label: "Analytics", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
     { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes') },
     { label: "Settings", icon: SETTINGS_SVG, to: "/", onClick: () => navigate('/settings') },
     

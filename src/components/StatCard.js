@@ -54,18 +54,18 @@ const numberValue = (value, type, sign) => {
 
   return (
     <div>
-      <div class="bento-card bg-[var(--bg-secondary)] dark:bg-slate-900 p-6 rounded-2xl border border-[var(--bg-primary)] dark:border-slate-700 shadow-sm flex flex-col justify-between">
-<div class="flex justify-between items-start">
+      <div className="bento-card bg-[var(--bg-secondary)]  p-6 rounded-2xl border border-[var(--primary-20)]  shadow-sm flex flex-col justify-between">
+<div className="flex justify-between items-start">
 <div>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Occupancy Rate</p>
-<h3 class="text-3xl font-bold text-[var(--text-primary)] mt-1">89%</h3>
+<p className="text-[var(--text-primary)] text-sm font-medium">Occupancy Rate</p>
+<h3 className="text-3xl font-bold text-[var(--text-primary)] mt-1">89%</h3>
 </div>
-<div class="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold px-2 py-1 rounded-lg">
+<div className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold px-2 py-1 rounded-lg">
                                 Stable
                             </div>
 </div>
-<div class="mt-4 flex items-center gap-1 text-xs text-slate-400">
-<span class="material-symbols-outlined text-sm">{METRICS_UP_SVG}</span>
+<div className="mt-4 flex items-center gap-1 text-xs text-[var(--text-secondary)]">
+<span className="material-symbols-outlined text-sm">{METRICS_UP_SVG}</span>
 <span>Average per unit</span>
 </div>
 </div>

@@ -97,14 +97,14 @@ const ProviderAppointmentsPage = (props) => {
     </div> */}
       
 
-      <section className="bg-[var(--bg-secondary)] p-5 rounded-xl border border-[var(--primary-20)] dark:border-gray-700 shadow-sm mt-6">
+      <section className="bg-[var(--bg-secondary)] p-5 rounded-xl border border-[var(--primary-20)] shadow-sm mt-6">
   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
     {/* Filters */}
     <div className="flex flex-wrap items-center gap-4">
       {/* Status Filter */}
       <div className="flex flex-col gap-1.5">
         <span className="text-xs font-bold text-[var(--primary)] ml-1">STATUS</span>
-        <select className="form-select text-sm rounded-lg border border-[var(--primary-20)] bg-[var(--bg-primary)] focus:ring-[var(--primary)] focus:border-[var(--primary)] min-w-[140px] px-3 py-2">
+        <select className="outline-none form-select text-sm rounded-lg border border-[var(--primary-20)] bg-[var(--bg-primary)] focus:ring-[var(--primary)] focus:border-[var(--primary)] min-w-[140px] px-3 py-2">
   <option>All Statuses</option>
   <option>Confirmed</option>
   <option>Pending</option>
@@ -116,7 +116,7 @@ const ProviderAppointmentsPage = (props) => {
       {/* Date Range */}
       <div className="flex flex-col gap-1.5">
         <span className="text-xs font-bold text-[var(--primary)] ml-1">DATE RANGE</span>
-        <button className="flex items-center gap-2 text-sm px-4 py-2 border border-[var(--primary-20)] dark:border-gray-700 rounded-lg bg-[var(--bg-primary)] hover:border-primary transition-colors min-w-[200px]">
+        <button className="flex items-center gap-2 text-sm px-4 py-2 border border-[var(--primary-20)] rounded-lg bg-[var(--bg-primary)] hover:border-primary transition-colors min-w-[200px]">
                 <span className="material-symbols-outlined text-lg">{CALENDAR_SVG}</span>
           <span>Oct 01 - Oct 31, 2023</span>
         </button>
@@ -125,7 +125,7 @@ const ProviderAppointmentsPage = (props) => {
       {/* Service Type */}
       <div className="flex flex-col gap-1.5">
         <span className="text-xs font-bold text-[var(--primary)] ml-1">SERVICE TYPE</span>
-        <select className="form-select text-sm rounded-lg border border-[var(--primary-20)] bg-[var(--bg-primary)] focus:ring-[var(--primary)] focus:border-[var(--primary)] min-w-[140px] px-3 py-2">
+        <select className="outline-none form-select text-sm rounded-lg border border-[var(--primary-20)] bg-[var(--bg-primary)] focus:ring-[var(--primary)] focus:border-[var(--primary)] min-w-[140px] px-3 py-2">
           <option>All Services</option>
           <option>Property Cleaning</option>
           <option>Garden Maintenance</option>
