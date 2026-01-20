@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import Toggle from "../../components/Toggle";
-import { FILTER_SVG, STAR_EMPTY, STAR_HALF, STAR_FULL } from "../../constants";
-import Tooltip from "@mui/material/Tooltip";
+import { FILTER_SVG, STAR_EMPTY, STAR_FULL } from "../../constants";
 import ViewCusomterHistory from "../../components/Forms/ViewCusomterHistory";
 import { FORMS } from "../../components/Forms/FormsContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentForm } from "../../redux/ui/uiSlice";
 import {
   setSelectedUserHistory,
-  setSelectedUserSubscribed,
 } from "../../redux/user/userSlice";
 import { format } from "date-fns";
 import { getServiceHistoryAndSubscribers } from "../../redux/user/apiRequests";
@@ -46,7 +43,7 @@ const ProviderUsersPage = () => {
     (state) => state.user
   );
 
-  const [currentOption, setCurrentOption] = useState("History");
+  const [currentOption] = useState("History");
   const [currentPage, setCurrentPage] = useState(1);
 
   /* 🔍 Live Search */

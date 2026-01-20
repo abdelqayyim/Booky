@@ -1,187 +1,146 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Tooltip from "@mui/material/Tooltip";
-import { SIDEBAR_ARROW_SVG ,CALENDAR_SVG, DASHBOARD_SVG, DISPUTES_SVG, MONETIZATION_SVG, REPORTS_SVG, REVIEWS_SVG, SETTINGS_SVG, STOREFRONT_SVG, USERS_SVG } from "../constants";
+import {
+  SIDEBAR_ARROW_SVG,
+  CALENDAR_SVG,
+  DASHBOARD_SVG,
+  DISPUTES_SVG,
+  REPORTS_SVG,
+  SETTINGS_SVG,
+  USERS_SVG,
+  LOGOUT_SVG,
+} from "../constants";
 import ThemeToggle from "./ThemeToggle";
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import NotificationBell from "./NotificationBell";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ROLES } from "../redux/user/userSlice";
 
 const Sidebar = () => {
-  const userRole = useSelector((state)=>state.user?.user?.role ?? null)
-    const navigate = useNavigate();
+  const userRole = useSelector((state) => state.user?.user?.role ?? null);
+  const navigate = useNavigate();
   const location = useLocation();
-   // Remove the leading slash
-   const currentPath = location.pathname.startsWith('/')
-   ? location.pathname.slice(1)
-     : location.pathname;
-  
- 
-  const sidebar = useRef();
-  const toggleBtn = useRef();
-  const [sideBarOpen, setSidebarOpen] = useState(false);
 
-  const toggleSubMenu = (e) => {
-    const button = e.currentTarget;
-    const parentLi = button.closest("li");
-  
-    parentLi.classList.toggle("open"); // <- toggle custom class
-  
-    if (!sideBarOpen) toggleSideBar();
-  };
+  const currentPath = location.pathname.replace(/^\//, ""); // remove leading slash
 
-  const toggleSideBar = () => {
-    const side = sidebar.current;
-    
-    // If the sidebar is currently open and is now closing
-    if (sideBarOpen) {
-      Array.from(side.querySelectorAll("li.open")).forEach((li) => {
-        li.classList.remove("open");
-      });
+  const sidebarRef = useRef();
+  const toggleBtnRef = useRef();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    const side = sidebarRef.current;
+    if (isOpen) {
+      side.querySelectorAll("li.open").forEach((li) => li.classList.remove("open"));
     }
-  
-    setSidebarOpen((prev) => !prev);
-  
+    setIsOpen((prev) => !prev);
     side.classList.toggle("w-60");
     side.classList.toggle("w-16");
   };
-  
 
-  const providerSidebarItems = [
-    { label: "Dashboard", icon: DASHBOARD_SVG, to: "/", onClick: () => navigate('/dashboard'), },
-    // { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
-    { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
-    { label: "Clients", icon: USERS_SVG, to: "/", onClick: () => navigate('/users') },
-    // { label: "Analytics", icon: USERS_SVG, to: "/", onClick: () => navigate('/users')},
-    { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes') },
-    { label: "Settings", icon: SETTINGS_SVG, to: "/", onClick: () => navigate('/settings') },
-    
-    // { label: "Settings", icon:SETTINGS_SVG, subItems: [
-    //     {
-    //       label: "Course",
-    //       onClick: (e) => {
-    //         e.preventDefault();
-    //         // dispatch(setCurrentForm(FORMS.CREATE_COURSE));
-    //       },
-    //       },
-    //       {
-    //         label: "Hello World",
-    //         onClick: (e) => {
-    //           e.preventDefault();
-    //           // dispatch(setCurrentForm(FORMS.CREATE_COURSE));
-    //         },
-    //       },
-    //     {
-    //       label: "Note",
-    //       onClick: (e) => {
-    //         e.preventDefault();
-    //         // dispatch(setCurrentForm(FORMS.CREATE_NOTE));
-    //       },
-    //   },
-    //   ],
-    // },
-  ];
+  const toggleSubMenu = (e) => {
+    e.currentTarget.closest("li").classList.toggle("open");
+    if (!isOpen) toggleSidebar();
+  };
 
-  const clientSidebarItems = [
-    { label: "Dashboard", icon: DASHBOARD_SVG, to: "/", onClick: () => navigate('/dashboard'), },
-    // { label: "Notifications", icon: <NotificationBell count={3}/>, to: "/", onClick: () => navigate('/notifications') },
-    { label: "Appointments", icon: CALENDAR_SVG, to: "/", onClick: () => navigate('/appointments')},
-    { label: "Disputes", icon: DISPUTES_SVG, to: "/", onClick: () => navigate('/disputes')},
-    {label: "Reports", icon: REPORTS_SVG, to: "/", onClick: () => navigate('/reports')},
-  ];
+  const sidebarItemsByRole = {
+    [ROLES.PROVIDER]: [
+      { label: "Dashboard", icon: DASHBOARD_SVG, onClick: () => navigate("/dashboard") },
+      { label: "Appointments", icon: CALENDAR_SVG, onClick: () => navigate("/appointments") },
+      { label: "Clients", icon: USERS_SVG, onClick: () => navigate("/users") },
+      { label: "Disputes", icon: DISPUTES_SVG, onClick: () => navigate("/disputes") },
+      { label: "Settings", icon: SETTINGS_SVG, onClick: () => navigate("/settings") },
+    ],
+    [ROLES.CLIENT]: [
+      { label: "Dashboard", icon: DASHBOARD_SVG, onClick: () => navigate("/dashboard") },
+      { label: "Appointments", icon: CALENDAR_SVG, onClick: () => navigate("/appointments") },
+      { label: "Disputes", icon: DISPUTES_SVG, onClick: () => navigate("/disputes") },
+      { label: "Reports", icon: REPORTS_SVG, onClick: () => navigate("/reports") },
+    ],
+  };
 
-  const getSidebarItems = () => {
-    switch (userRole) {
-      case ROLES.PROVIDER:
-        return providerSidebarItems;
-        break;
-      case ROLES.CLIENT:
-        return clientSidebarItems;
-      default:
-        return []
-        break;
-    }
-  }
+  const sidebarItems = sidebarItemsByRole[userRole] || [];
 
+  const renderSidebarButton = (item) => (
+    <li key={item.label} className="group">
+      <Tooltip title={isOpen ? "" : item.label} placement="right">
+        <button
+          onClick={(e) => {
+            if (!item.subItems?.length) {
+              item.onClick?.();
+              if (isOpen) toggleSidebar();
+            } else toggleSubMenu(e);
+          }}
+          className={`flex items-center justify-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-20)] text-left
+            ${currentPath === item.label.toLowerCase() ? "bg-[var(--primary-20)] font-bold text-[var(--primary)]" : ""}`}
+        >
+          {item.icon}
+          <span className={isOpen ? "block flex-grow" : "hidden"}>{item.label}</span>
+          {item.subItems?.length && isOpen && (
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor"
+              className="transition-transform duration-200 group-[.open]:rotate-180">
+              <path d="M7 10l5 5 5-5H7z" />
+            </svg>
+          )}
+        </button>
+      </Tooltip>
+
+      {item.subItems?.length > 0 && (
+        <ul className="grid grid-rows-[0fr] group-[.open]:grid-rows-[1fr] transition-all duration-300 overflow-hidden">
+          {item.subItems.map((sub) => (
+            <li key={sub.label}>
+              <a
+                href="#"
+                onClick={(e) => { sub.onClick(e); toggleSidebar(); }}
+                className="block p-2 pl-10 hover:bg-[var(--primary-20)] rounded"
+              >
+                {sub.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  );
 
   return (
     <nav
-  ref={sidebar}
-  className={`hidden md:block ${sideBarOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"} 
-       h-full bg-[var(--bg-primary)] border-r border-r-[var(--primary-20)] md:flex md:flex-col
-      transition-all duration-300 sticky top-0 overflow-y-auto hide-scrollbar`}
->
-  <div className="flex flex-col justify-between h-full">
-    {/* Bigger Screens */}
-    {/* Top section with logo and items */}
-    <ul className="list-none p-2 space-y-2">
-      <li className="flex items-center justify-end mb-4">
-        <img src="https://via.placeholder.com/32" alt="Logo" className="w-8 h-8" />
-        <Tooltip title={sideBarOpen ? "Close" : "Expand"} placement="right">
-          <button
-            ref={toggleBtn}
-            onClick={toggleSideBar}
-            className="ml-auto p-3 rounded hover:bg-[red-50]"
-          >
-            <div className={`transition-transform duration-300 ${sideBarOpen ? "rotate-0" : "rotate-180"}`}>
-              {SIDEBAR_ARROW_SVG}
-            </div>
-          </button>
-        </Tooltip>
-      </li>
+      ref={sidebarRef}
+      className={`hidden md:block ${isOpen ? "md:min-w-[200px]" : "md:min-w-[70px] md:max-w-[70px]"}
+        h-full bg-[var(--bg-primary)] border-r border-r-[var(--primary-20)] md:flex md:flex-col
+        transition-all duration-300 sticky top-0 overflow-y-auto hide-scrollbar`}
+    >
+      <div className="flex flex-col justify-between h-full">
+        {/* Top: Logo + items */}
+        <ul className="list-none p-2 space-y-2">
+          <li className="flex items-center justify-end mb-4">
+            <img src="https://via.placeholder.com/32" alt="Logo" className="w-8 h-8" />
+            <Tooltip title={isOpen ? "Close" : "Expand"} placement="right">
+              <button ref={toggleBtnRef} onClick={toggleSidebar} className="ml-auto p-3 rounded hover:bg-[red-50]">
+                <div className={`transition-transform duration-300 ${isOpen ? "rotate-0" : "rotate-180"}`}>
+                  {SIDEBAR_ARROW_SVG}
+                </div>
+              </button>
+            </Tooltip>
+          </li>
 
-      {getSidebarItems().map((item, index) => (
-          <li key={index} className="group">
-          <Tooltip title={sideBarOpen ? "" : item.label} placement="right">
+          {sidebarItems.map(renderSidebarButton)}
+        </ul>
+
+        {/* Bottom: ThemeToggle + Logout */}
+        <div className="p-2 flex flex-col gap-2">
+          <ThemeToggle showLabel={isOpen} />
+
+          <Tooltip title={isOpen ? "" : "Logout"} placement="right">
             <button
-              onClick={(event) => {
-                if (!item.subItems || item.subItems.length === 0) {
-                  // If there are no sub items then do no expand sidebar
-                  item.onClick?.();
-                  if (sideBarOpen) {
-                    toggleSideBar()
-                  }
-                } else {
-                  toggleSubMenu(event);
-                }
-              }}
-              className={`flex items-center justify-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-20)] text-left ${currentPath === item.label.toLowerCase()? "bg-[var(--primary-20)] font-bold text-[var(--primary)]":""}`}
+              onClick={() => console.log("Logout clicked")} // replace with logout logic
+              className="flex items-center justify-center gap-3 w-full p-2 rounded hover:bg-[var(--primary-20)] text-left"
             >
-              {item.icon}
-                <span className={sideBarOpen ? "block flex-grow" : "hidden"}>{item.label}</span>
-                {item?.subItems && sideBarOpen && <div> <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="currentColor" className="transition-transform duration-200 group-[.open]:rotate-180"> <path d="M7 10l5 5 5-5H7z" /></svg> </div>}
+              {LOGOUT_SVG}
+              <span className={isOpen ? "block flex-grow font-semibold" : "hidden"}>Logout</span>
             </button>
           </Tooltip>
-        
-          <ul className="grid grid-rows-[0fr] group-[.open]:grid-rows-[1fr] transition-all duration-300">
-            <div className="overflow-hidden">
-              {item.subItems?.map((subItem, subIndex) => (
-                <li key={subIndex}>
-                  <a
-                    href="#"
-                    onClick={(event) => { subItem.onClick(event); toggleSideBar() }}
-                    className="block p-2 pl-10 hover:bg-[var(--primary-20)] rounded"
-                  >
-                    {subItem.label}
-                  </a>
-                </li>
-              ))}
-            </div>
-          </ul>
-        </li>
-        
-        ))}
-    </ul>
-
-    {/* Bottom section for ThemeToggle */}
-    <div className="p-2">
-      <ThemeToggle showLabel={sideBarOpen} />
-    </div>
-
-  </div>
-</nav>
-
+        </div>
+      </div>
+    </nav>
   );
 };
 
